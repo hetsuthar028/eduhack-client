@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useEffect, Component, useState } from "react";
 import NavBar from "../navbar/NavBar";
 import "./LandingPage.scss";
 import RCarousel from "../rcarousel/RCarousel";
@@ -8,8 +8,12 @@ import { Grid, makeStyles } from "@material-ui/core";
 import theme from '../ui/Theme'
 import EduhackDetails from "../eduhack-details-landing/EduhackDetails";
 import Footer from "../footer/Footer";
+import axios from 'axios';
 
 const LandingPage = () => {
+
+    const [currentUser, setCurrentUser] = useState(null);
+
     let useStyles = makeStyles({
         pastHackathonGrid: {
             margin: "100px 0 0 0",
@@ -24,21 +28,34 @@ const LandingPage = () => {
         }
     })
     
-    let tempCurrentUser = {
-        name: "Het Suthar",
-        emai: "hetmewada028@gmail.com",
-        userType: "developer",
-        username: "hetsuthar028",
-    };
+    // let tempCurrentUser = {
+    //     name: "Het Suthar",
+    //     emai: "hetmewada028@gmail.com",
+    //     userType: "developer",
+    //     username: "hetsuthar028",
+    // };
 
     let classes = useStyles();
+
+    useEffect(()=>{
+        axios.get('http://localhost:4200/api/user/currentuser', {
+            headers:{
+                authorization: localStorage.getItem('session')
+            }
+        }).then(response=>{
+            if(response.data.currentUser){
+                console.log(response.data.currentUser)
+                setCurrentUser(response.data.currentUser)
+            }
+        })
+    }, []);
 
     return (
         <>
             {/* <NavBar currentUser={this.tempCurrentUser}/> */}
             <Grid container columns={{ xs: 12, sm: 12, md: 12 }}>
                 <Grid item xs={12} sm={12} md={12}>
-                    <NavBar />
+                    <NavBar currentUser={currentUser}/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                     <RCarousel />

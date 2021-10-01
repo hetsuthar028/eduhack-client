@@ -17,8 +17,8 @@ const AppRouter = (props) =>{
         <Router>
             <Route exact path="/" component={LandingPage}/>
             <Route exact path="/auth/signin" component={SignIn}/>
-            <Route path="/auth/signup" component={SignUp}/>
-            <Route path="/auth/signup" component={Dashboard}/>
+            <Route exact path="/auth/signup" component={SignUp}/>
+            <Route exact path="/auth/signup" component={Dashboard}/>
         </Router>
         </div>
         {/* </Typography> */}

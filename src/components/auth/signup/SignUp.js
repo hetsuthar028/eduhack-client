@@ -15,6 +15,8 @@ import {
 import { ThemeProvider, makeStyles } from "@material-ui/core";
 import theme from "../../ui/Theme";
 import { LockOutlined } from "@mui/icons-material";
+import axious from 'axios';
+import axios from "axios";
 
 const initialValues = {
     email: "",
@@ -129,7 +131,7 @@ const SignUp = (props) => {
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        console.log("Values", value);
+        // console.log("Values", value);
         setValues({
             ...values,
             [name]: value,
@@ -153,7 +155,30 @@ const SignUp = (props) => {
         }
     };
 
-    
+    // @TODO - Determine if the user Already exists | If so, send them to the dashboard
+
+
+
+    // Handle Form Submit
+    const handleSubmit = (e) =>{
+        e.preventDefault();
+
+        // @TODO - Try to have some validation here
+
+        console.log("I'm here")
+        // After succesful validation
+        axios.post('http://localhost:4200/api/user/signup', values).then((response)=>{
+            if(response.data.message == "success"){
+                console.log("User Created Succesfully");
+            } else{
+                console.log("Can't create user. Please try again!");
+            }
+        }).catch(err =>{
+            //
+            
+            console.log("Error while performing network request", err);
+        })
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -173,7 +198,7 @@ const SignUp = (props) => {
                             Sign Up
                         </h2>
                     </center>
-                    <form className={classes.root} elevaton={10}>
+                    <form className={classes.root} elevaton={10} onSubmit={handleSubmit} method="POST">
                         <Grid container sm={12} xs={12} md={12}>
                             <Grid item xs={12} sm={12} md={12}>
                                 <Box>
