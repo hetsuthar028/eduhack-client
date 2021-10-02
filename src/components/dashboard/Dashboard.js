@@ -9,13 +9,13 @@ import {
     CardContent,
     CardMedia,
     Typography,
-    Divider
+    Divider,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import axios from "axios";
 import NavBar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
-import Tabs from '../tabs/Tabs';
+import Tabs from "../tabs/Tabs";
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {
@@ -54,13 +54,13 @@ const useStyles = makeStyles((theme) => ({
     },
     readArticlesGrid: {
         margin: "auto",
-        padding: "20px"
-    }, 
+        padding: "20px",
+    },
     codeEditorGrid: {
         margin: "auto",
         padding: "20px",
-        backgroundColor: theme.palette.common.ternaryColor
-    }
+        backgroundColor: theme.palette.common.ternaryColor,
+    },
 }));
 
 // For Testing Purpose
@@ -188,7 +188,13 @@ const Dashboard = () => {
                     className={classes.practiceCodingContainer}
                 >
                     <h2>Practice Coding!</h2>
-                    <Grid container sm={12} md={12} xs={12} spacing={{ xs: 2, md: 3 }}>
+                    <Grid
+                        container
+                        sm={12}
+                        md={12}
+                        xs={12}
+                        spacing={{ xs: 2, md: 3 }}
+                    >
                         <Grid item xs={12} sm={6} md={6}>
                             <Card classes={classes.card}>
                                 <CardActionArea>
@@ -216,7 +222,17 @@ const Dashboard = () => {
                                                     gutterBottom
                                                 >
                                                     <strong>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                                        Lorem ipsum dolor sit
+                                                        amet, consectetur
+                                                        adipiscing elit, sed do
+                                                        eiusmod tempor
+                                                        incididunt ut labore et
+                                                        dolore magna aliqua. Ut
+                                                        enim ad minim veniam,
+                                                        quis nostrud
+                                                        exercitation ullamco
+                                                        laboris nisi ut aliquip
+                                                        ex ea commodo consequat.
                                                     </strong>
                                                 </Typography>
                                                 <Typography
@@ -225,10 +241,19 @@ const Dashboard = () => {
                                                     gutterBottom
                                                 >
                                                     <strong>
-                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                                        Lorem ipsum dolor sit
+                                                        amet, consectetur
+                                                        adipiscing elit, sed do
+                                                        eiusmod tempor
+                                                        incididunt ut labore et
+                                                        dolore magna aliqua. Ut
+                                                        enim ad minim veniam,
+                                                        quis nostrud
+                                                        exercitation ullamco
+                                                        laboris nisi ut aliquip
+                                                        ex ea commodo consequat.
                                                     </strong>
                                                 </Typography>
-                                            
                                             </Grid>
                                         </Grid>
                                     </CardContent>
@@ -241,7 +266,7 @@ const Dashboard = () => {
                         <Grid item xs={12} sm={6} md={6}>
                             <Grid container xs={12} sm={12} md={12}>
                                 <Grid item xs={4}>
-                                    <Card sx={{ display: 'flex' }}>
+                                    <Card sx={{ display: "flex" }}>
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 100, height: 100 }}
@@ -250,22 +275,28 @@ const Dashboard = () => {
                                             image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/1200px-Python.svg.png"
                                             alt="Live from space album cover"
                                         />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <CardContent sx={{ flex: '1 0 auto' }}>
-                                            <Typography component="div" variant="h5">
-                                                Python
-                                            </Typography>
-                                            
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
+                                        >
+                                            <CardContent
+                                                sx={{ flex: "1 0 auto" }}
+                                            >
+                                                <Typography
+                                                    component="div"
+                                                    variant="h5"
+                                                >
+                                                    Python
+                                                </Typography>
                                             </CardContent>
-                                            
                                         </Box>
-                                        </Card>
+                                    </Card>
                                 </Grid>
+                                <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
-                                    
-                                </Grid>
-                                <Grid item xs={4}>
-                                <Card sx={{ display: 'flex' }}>
+                                    <Card sx={{ display: "flex" }}>
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 100, height: 100 }}
@@ -274,24 +305,30 @@ const Dashboard = () => {
                                             image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/1200px-Python.svg.png"
                                             alt="Live from space album cover"
                                         />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <CardContent sx={{ flex: '1 0 auto' }}>
-                                            <Typography component="div" variant="h5">
-                                                Python
-                                            </Typography>
-                                            
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
+                                        >
+                                            <CardContent
+                                                sx={{ flex: "1 0 auto" }}
+                                            >
+                                                <Typography
+                                                    component="div"
+                                                    variant="h5"
+                                                >
+                                                    Python
+                                                </Typography>
                                             </CardContent>
-                                            
                                         </Box>
-                                        </Card>
+                                    </Card>
                                 </Grid>
                             </Grid>
                             <Grid container xs={12} sm={12} md={12}>
+                                <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
-                                    
-                                </Grid>
-                                <Grid item xs={4}>
-                                        <Card sx={{ display: 'flex' }}>
+                                    <Card sx={{ display: "flex" }}>
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 100, height: 100 }}
@@ -300,24 +337,30 @@ const Dashboard = () => {
                                             image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/1200px-Python.svg.png"
                                             alt="Live from space album cover"
                                         />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <CardContent sx={{ flex: '1 0 auto' }}>
-                                            <Typography component="div" variant="h5">
-                                                Python
-                                            </Typography>
-                                            
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
+                                        >
+                                            <CardContent
+                                                sx={{ flex: "1 0 auto" }}
+                                            >
+                                                <Typography
+                                                    component="div"
+                                                    variant="h5"
+                                                >
+                                                    Python
+                                                </Typography>
                                             </CardContent>
-                                            
                                         </Box>
-                                        </Card>
+                                    </Card>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    
-                                </Grid>
+                                <Grid item xs={4}></Grid>
                             </Grid>
                             <Grid container xs={12} sm={12} md={12}>
                                 <Grid item xs={4}>
-                                    <Card sx={{ display: 'flex' }}>
+                                    <Card sx={{ display: "flex" }}>
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 100, height: 100 }}
@@ -326,22 +369,28 @@ const Dashboard = () => {
                                             image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/1200px-Python.svg.png"
                                             alt="Live from space album cover"
                                         />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <CardContent sx={{ flex: '1 0 auto' }}>
-                                            <Typography component="div" variant="h5">
-                                                Python
-                                            </Typography>
-                                            
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
+                                        >
+                                            <CardContent
+                                                sx={{ flex: "1 0 auto" }}
+                                            >
+                                                <Typography
+                                                    component="div"
+                                                    variant="h5"
+                                                >
+                                                    Python
+                                                </Typography>
                                             </CardContent>
-                                            
                                         </Box>
-                                        </Card>
+                                    </Card>
                                 </Grid>
+                                <Grid item xs={4}></Grid>
                                 <Grid item xs={4}>
-                                    
-                                </Grid>
-                                <Grid item xs={4}>
-                                <Card sx={{ display: 'flex' }}>
+                                    <Card sx={{ display: "flex" }}>
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 100, height: 100 }}
@@ -350,30 +399,51 @@ const Dashboard = () => {
                                             image="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Python.svg/1200px-Python.svg.png"
                                             alt="Live from space album cover"
                                         />
-                                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                            <CardContent sx={{ flex: '1 0 auto' }}>
-                                            <Typography component="div" variant="h5">
-                                                Python
-                                            </Typography>
-                                            
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                            }}
+                                        >
+                                            <CardContent
+                                                sx={{ flex: "1 0 auto" }}
+                                            >
+                                                <Typography
+                                                    component="div"
+                                                    variant="h5"
+                                                >
+                                                    Python
+                                                </Typography>
                                             </CardContent>
-                                            
                                         </Box>
-                                        </Card>
+                                    </Card>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-                
             </Grid>
 
-            <Grid container xs={12} sm={12} md={12} className={classes.readArticlesGrid}>
-                <h2 style={{marginLeft: "auto"}}>Read, Remember & Register</h2>
+            <Grid
+                container
+                xs={12}
+                sm={12}
+                md={12}
+                className={classes.readArticlesGrid}
+            >
+                <h2 style={{ marginLeft: "auto" }}>
+                    Read, Remember & Register
+                </h2>
                 <Tabs />
             </Grid>
-            
-            <Grid container xs={12} sm={12} md={12} className={classes.codeEditorGrid}>
+
+            <Grid
+                container
+                xs={12}
+                sm={12}
+                md={12}
+                className={classes.codeEditorGrid}
+            >
                 <h2>Let's start with Coding...</h2>
                 <Grid item xs={12} sm={12} md={12} className={classes.carousel}>
                     <div></div>
