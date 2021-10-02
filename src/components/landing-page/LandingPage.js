@@ -55,7 +55,7 @@ const LandingPage = () => {
             {/* <NavBar currentUser={this.tempCurrentUser}/> */}
             <Grid container columns={{ xs: 12, sm: 12, md: 12 }}>
                 <Grid item xs={12} sm={12} md={12}>
-                    <NavBar currentUser={currentUser}/>
+                    <NavBar currentUser={currentUser} location="landingPage"/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                     <RCarousel />

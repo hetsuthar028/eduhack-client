@@ -5,6 +5,7 @@ const darkGreenColor = "#379683"
 const secondaryColor = "#05386B"
 const lightMainGreenColor = "#8EE4AF"
 const ternaryColor = "#EDF5E1"
+const orangeColor = "#e34e42"
 
 export default createTheme ({
     palette: {
@@ -12,7 +13,8 @@ export default createTheme ({
             mainGreen: `${mainGreenColor}`,
             darkGreen: `${darkGreenColor}`,
             ternaryColor: `${ternaryColor}`,
-            lightMainGreenColor: `${lightMainGreenColor}`
+            lightMainGreenColor: `${lightMainGreenColor}`,
+            orangeColor: `${orangeColor}`
         },
         primary: {
             main: `${mainGreenColor}`,

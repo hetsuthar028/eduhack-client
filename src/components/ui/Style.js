@@ -1,6 +1,4 @@
 import { makeStyles } from "@material-ui/core";
-import { autocompleteClasses } from "@mui/material";
-import { ThemeConsumer } from "styled-components";
 import theme from '../ui/Theme'
 
 const useStyles = makeStyles((theme) =>({
@@ -8,7 +6,10 @@ const useStyles = makeStyles((theme) =>({
         color: `${theme.palette.secondary.main}`
     },
     navButtons: {
-        marginLeft: "auto"
+        marginLeft: "auto",
+        display: "flex",
+        justifyContent: "space-between"
+
     },
     navButton: {
         margin: "0 7px"
@@ -34,7 +35,12 @@ const useStyles = makeStyles((theme) =>({
     },
     cardContent: {
         flowGrow: 1
-    }
+    },
+    navAvatar: {
+        margin: "0",
+        backgroundColor: theme.palette.common.ternaryColor,
+        color: theme.palette.secondary.main
+    },
 
 }));
 

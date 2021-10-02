@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core";
+import { Redirect } from "react-router-dom";
 import {
     TextField,
     Button,
@@ -77,34 +78,50 @@ const SignIn = () => {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
 
-    const validate = () =>{
-        const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    const validate = () => {
+        const re =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-        let temp = {}
+        let temp = {};
 
-        temp.email = re.test(values.email.toLowerCase()) ? "": "Invalid"
-        temp.password = values.password.length > 7? "" : "Password length should be greater than 10."
-        console.log("Temp",temp)
-        setErrors({
-            something: "true"
-        }, () => {return Object.values(temp).every(x => x == "")});
-    }
+        temp.email = re.test(values.email.toLowerCase()) ? "" : "Invalid";
+        temp.password =
+            values.password.length > 7
+                ? ""
+                : "Password length should be greater than 10.";
+        console.log("Temp", temp);
+        setErrors(
+            {
+                something: "true",
+            },
+            () => {
+                return Object.values(temp).every((x) => x == "");
+            }
+        );
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:4200/api/user/signin', {
-            email: values.email,
-            password: values.password
-        }).then(response=>{
-            if(response){
-                // console.log("Logged In", response);
-                localStorage.setItem('session', response.data.data.accessToken);
-            }
-        }).catch(err=>{
-            console.log("Some problem occured. Please try again!")
-        })
-        
+        axios
+            .post("http://localhost:4200/api/user/signin", {
+                email: values.email,
+                password: values.password,
+            })
+            .then((response) => {
+                if (response) {
+                    // console.log("Logged In", response);
+                    localStorage.setItem(
+                        "session",
+                        response.data.data.accessToken
+                    );
+                    return <Redirect to="http://localhost:3000/" />
+                }
+            })
+            .catch((err) => {
+                console.log("Some problem occured. Please try again!");
+            });
+
         // if(!validate())
         //     console.log("Errors", errors);
 

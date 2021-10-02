@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./NavBar.scss";
 import Box from "@mui/material/Box";
 import {
@@ -7,38 +7,70 @@ import {
     Toolbar,
     Typography,
     Button,
+    Avatar
 } from "@material-ui/core";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import useStyles from "../ui/Style";
-import theme from "../ui/Theme";
 
 const NavBar = (props) => {
     const classes = useStyles();
 
     const renderNavButttons = () => {
-        let { currentUser } = props;
+        let { currentUser, location, userType } = props;
         console.log("Current User", currentUser)
-        if (!currentUser) {
-            return (
-                <>
-                    <Button className={classes.navButton}>Hackathons</Button>
-                    <Button className={classes.navButton}>About Us</Button>
-                    <Button className={classes.navButton}>Organize a Hackathon</Button>
-                    <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin">Sign In</Button>
-                    <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button>
-                </>
-            );
-        } else {
-            return (
-                <>
-                    <Button className={classes.navButton}>Hackathons</Button>
-                    <Button className={classes.navButton}>About Us</Button>
-                    <Button className={classes.navButton}>Organize a Hackathon</Button>
-                    <Button variant="contained" className={classes.navButtonContained}>Go to Dashboard</Button>
-                </>
-            );
+        if(location == "landingPage"){
+            if (!currentUser) {
+                return (
+                    <>
+                        <Button className={classes.navButton}>Hackathons</Button>
+                        <Button className={classes.navButton}>About Us</Button>
+                        <Button className={classes.navButton}>Organize a Hackathon</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin">Sign In</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button>
+                    </>
+                );
+            } else {
+                return (
+                    <>
+                        <Button className={classes.navButton}>Hackathons</Button>
+                        <Button className={classes.navButton}>About Us</Button>
+                        <Button className={classes.navButton}>Organize a Hackathon</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/dashboard">Go to Dashboard</Button>
+                    </>
+                );
+            }
         }
+
+        if(location == "dashboard"){
+            if(userType == "developer"){
+                return (
+                    <>
+                        <Button className={classes.navButton}>Code Editor</Button>
+                        <Button className={classes.navButton}>Learn</Button>
+                        <Button className={classes.navButton}>Explore</Button>
+                        <Button className={classes.navButton}>Hackathons</Button>
+                        <Avatar className={classes.navAvatar}><AccountCircleRoundedIcon /></Avatar>
+                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin"></Button> */}
+                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
+                    </>
+                )
+            }
+            else if(userType == "organization"){
+                return (
+                    <>
+                        <Button className={classes.navButton}>Code Editor</Button>
+                        <Button className={classes.navButton}>Learn</Button>
+                        <Button className={classes.navButton}>Explore</Button>
+                        <Button className={classes.navButton}>Hackathons</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin">Organize a Hackathon</Button>
+                        <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar>
+                        
+                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
+                    </>
+                )
+            }
+        }
+        
     };
 
     return (

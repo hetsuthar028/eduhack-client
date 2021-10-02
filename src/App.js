@@ -8,12 +8,12 @@ import { ThemeProvider, Typography, CssBaseline } from "@material-ui/core";
 
 function App() {
     return (
-      <div>
-                    {/* <AuthRouter />
+        <div>
+            {/* <AuthRouter />
                 <DashRouter /> */}
-                <CssBaseline />
-                    <AppRouter />
-                </div>
+            <CssBaseline />
+            <AppRouter />
+        </div>
         //     </Typography>
         // </ThemeProvider>
     );
