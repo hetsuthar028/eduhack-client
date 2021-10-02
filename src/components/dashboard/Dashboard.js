@@ -16,6 +16,7 @@ import axios from "axios";
 import NavBar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
 import Tabs from "../tabs/Tabs";
+import Codeeditor from "../code-editor/CodeEditor";
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {
@@ -71,6 +72,10 @@ const Dashboard = () => {
 
     const classes = useStyles();
 
+    // For Code Editor
+    const [html, setHTML] = useState('');
+    const [python, setPython] = useState('');
+
     useEffect(() => {
         axios
             .get("http://localhost:4200/api/user/currentuser", {
@@ -108,7 +113,7 @@ const Dashboard = () => {
                     md={12}
                     className={classes.upcomingHackathonsContainer}
                 >
-                    <h2>Upcoming Hackathons</h2>
+                    <h1>Upcoming Hackathons</h1>
                     <Grid
                         container
                         spacing={{ xs: 2, md: 3 }}
@@ -187,7 +192,7 @@ const Dashboard = () => {
                     md={12}
                     className={classes.practiceCodingContainer}
                 >
-                    <h2>Practice Coding!</h2>
+                    <h1>Practice Coding!</h1>
                     <Grid
                         container
                         sm={12}
@@ -431,9 +436,9 @@ const Dashboard = () => {
                 md={12}
                 className={classes.readArticlesGrid}
             >
-                <h2 style={{ marginLeft: "auto" }}>
+                <h1 style={{ marginLeft: "auto" }}>
                     Read, Remember & Register
-                </h2>
+                </h1>
                 <Tabs />
             </Grid>
 
@@ -444,9 +449,26 @@ const Dashboard = () => {
                 md={12}
                 className={classes.codeEditorGrid}
             >
-                <h2>Let's start with Coding...</h2>
-                <Grid item xs={12} sm={12} md={12} className={classes.carousel}>
+                <h1>Let's start with Coding...</h1>
+                {/* <Grid item xs={12} sm={12} md={12} className={classes.carousel}>
                     <div></div>
+                </Grid> */}
+                <Grid item xs={12} sm={12} md={12}>
+                    {/* <Codeeditor 
+                        language="xml" 
+                        displayName="HTML" 
+                        value={html}
+                        onChange={setHTML}
+                    /> */}
+                    
+                    {/* <Codeeditor 
+                        language="python"
+                        displayName="Python"
+                        value={python}
+                        onChange={setPython}
+                    /> */}
+                    <Codeeditor />
+
                 </Grid>
             </Grid>
 
