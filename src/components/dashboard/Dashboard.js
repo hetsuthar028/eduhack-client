@@ -80,11 +80,12 @@ const Dashboard = () => {
         axios
             .get("http://localhost:4200/api/user/currentuser", {
                 headers: {
-                    authentication: localStorage.getItem("session"),
-                },
+                    authorization: localStorage.getItem("session"),
+                }
             })
             .then((response) => {
                 if (response.data.currentUser) {
+                    console.log(response.data.currentUser)
                     setCurrentUser(response.data.currentUser);
                 } else {
                     // Push outside of the application
@@ -100,7 +101,6 @@ const Dashboard = () => {
             <NavBar
                 currentUser={currentUser}
                 location="dashboard"
-                userType="developer"
             />
             <Grid container xs={12} sm={12} md={12}>
                 <Grid item xs={12} sm={12} md={12} className={classes.carousel}>

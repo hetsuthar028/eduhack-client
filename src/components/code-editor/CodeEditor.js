@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import "./CodeEditor.css"
+import theme from '../ui/Theme'
 
 const useStyles = makeStyles((theme) => ({
     codeEditorHeader: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
         padding: "15px 40px",
         // margin: "20px"
         marginBottom: "10px",
+        backgroundColor: `${theme.palette.common.lightMainGreenColor}`
     },
 }));
 

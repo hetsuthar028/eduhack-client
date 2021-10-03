@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./NavBar.scss";
 import Box from "@mui/material/Box";
 import {
@@ -11,12 +11,36 @@ import {
 } from "@material-ui/core";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import useStyles from "../ui/Style";
+import axios from 'axios';
 
 const NavBar = (props) => {
     const classes = useStyles();
+    
+    const [currentUser, setCurrentUser] = useState(null);
+    let { location } = props;
+
+    useEffect(() => {
+        axios
+            .get("http://localhost:4200/api/user/currentuser", {
+                headers: {
+                    authorization: localStorage.getItem("session"),
+                }
+            })
+            .then((response) => {
+                if (response.data.currentUser) {
+                    console.log("C User", response.data.currentUser)
+                    setCurrentUser(response.data.currentUser);
+                } else {
+                    // Push outside of the application
+                }
+            })
+            .catch((err) => {
+                console.log("Error in Dashboard - While fetching current user");
+            });
+    }, []);
 
     const renderNavButttons = () => {
-        let { currentUser, location, userType } = props;
+        
         console.log("Current User", currentUser)
         if(location == "landingPage"){
             if (!currentUser) {
@@ -40,9 +64,18 @@ const NavBar = (props) => {
                 );
             }
         }
-
+        console.log("Current User 2", currentUser)
         if(location == "dashboard"){
-            if(userType == "developer"){
+            if(!currentUser){
+                return (
+                    <>
+                    No User
+                    </>
+                )
+            }
+
+            console.log("Current User 3", currentUser)
+            if(currentUser.userType == "developer"){
                 return (
                     <>
                         <Button className={classes.navButton}>Code Editor</Button>
@@ -55,14 +88,14 @@ const NavBar = (props) => {
                     </>
                 )
             }
-            else if(userType == "organization"){
+            else if(currentUser.userType == "organization"){
                 return (
                     <>
                         <Button className={classes.navButton}>Code Editor</Button>
                         <Button className={classes.navButton}>Learn</Button>
                         <Button className={classes.navButton}>Explore</Button>
                         <Button className={classes.navButton}>Hackathons</Button>
-                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin">Organize a Hackathon</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/hackathon/organize/overview">Organize a Hackathon</Button>
                         <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar>
                         
                         {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
@@ -139,6 +172,7 @@ const NavBar = (props) => {
                         </IconButton>
 
                         <div className={classes.navButtons}>
+                            {/* {currentUser !=null? renderNavButttons(): ""} */}
                             {renderNavButttons()}
                         </div>
                     </Toolbar>
