@@ -10,6 +10,7 @@ import { ThemeProvider, Typography } from "@material-ui/core";
 import Organizepage from "../Hackathon/OrganizePage/OrganizePage";
 import Problemstatementform from "../Hackathon/ProblemStatementForm/ProblemStatementForm";
 import Hackathonmain from "../Hackathon/HackathonMain/HackathonMain";
+import Hackathonsubmission from "../Hackathon/HackathonSubmission/HackathonSubmission";
 
 const AppRouter = (props) => {
     return (
@@ -25,6 +26,7 @@ const AppRouter = (props) => {
                     <Route exact path="/hackathon/organize/" component={Organizepage} />
                     <Route exact path="/hackathon/organize/1" component={Problemstatementform} />
                     <Route exact path="/hackathon/:id" component={Hackathonmain} />
+                    <Route exact path="/hackathon/submission/:id" component={Hackathonsubmission} />
                 </Router>
             </div>
             {/* </Typography> */}
