@@ -56,6 +56,8 @@ const Hackathonsubmission = () => {
                 <NavBar location="dashboard" />
 
                 <Grid container sm={12} xs={12} md={12}>
+
+                    {/* Top Carousel */}
                     <Grid
                         item
                         xs={12}
@@ -142,6 +144,7 @@ const Hackathonsubmission = () => {
                         </Grid>
                     </Grid>
 
+                    {/* Problem Statement Title */}
                     <Grid
                         item
                         xs={12}
@@ -152,6 +155,7 @@ const Hackathonsubmission = () => {
                         <Formsectionheader name="Problem Statement" />
                     </Grid>
 
+                    {/* Problem Statement Details */}
                     <Grid
                         item
                         xs={12}

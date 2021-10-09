@@ -281,7 +281,7 @@ const Overviewhackathon = () => {
                     {/* Organize Hackathon Button */}
                     <Grid item xs={12} sm={12} md={12}>
                         <center>
-                            <Button variant="contained" size="large">
+                            <Button variant="contained" size="large" href="http://localhost:3000/hackathon/organize">
                                 Organize Hackathon
                             </Button>
                         </center>

@@ -17,6 +17,7 @@ import NavBar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
 import Tabs from "../tabs/Tabs";
 import Codeeditor from "../code-editor/CodeEditor";
+import Upcominghackathons from "../Hackathon/upcoming-hackathons/UpcomingHackathons";
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {
@@ -85,7 +86,7 @@ const Dashboard = () => {
             })
             .then((response) => {
                 if (response.data.currentUser) {
-                    console.log(response.data.currentUser)
+                    // console.log(response.data.currentUser)
                     setCurrentUser(response.data.currentUser);
                 } else {
                     // Push outside of the application
@@ -114,76 +115,7 @@ const Dashboard = () => {
                     className={classes.upcomingHackathonsContainer}
                 >
                     <h1>Upcoming Hackathons</h1>
-                    <Grid
-                        container
-                        spacing={{ xs: 2, md: 3 }}
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        classes={classes.cardContainer}
-                    >
-                        {upcomingHackathons.map((hackathon) => (
-                            <Grid item xs={12} sm={4} md={3} key={hackathon}>
-                                <Card classes={classes.card}>
-                                    <CardActionArea>
-                                        <CardMedia
-                                            component="img"
-                                            height="160"
-                                            image="https://source.unsplash.com/random"
-                                            alt="Hackathon Image"
-                                        />
-
-                                        <CardContent>
-                                            <Grid
-                                                container
-                                                xs={12}
-                                                sm={12}
-                                                md={12}
-                                            >
-                                                <Grid
-                                                    item
-                                                    xs={12}
-                                                    sm={12}
-                                                    md={12}
-                                                >
-                                                    <Typography
-                                                        variant="h6"
-                                                        gutterBottom
-                                                    >
-                                                        CodeState 2021 OPEN
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid>
-                                                    <Typography
-                                                        variant="subtitle1"
-                                                        color="text.secondary"
-                                                        gutterBottom
-                                                    >
-                                                        <strong>
-                                                            Registration Ends:
-                                                            10/10/2021
-                                                        </strong>
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid>
-                                                    <Typography
-                                                        variant="body2"
-                                                        color="text.secondary"
-                                                        gutterBottom
-                                                    >
-                                                        World's first Student
-                                                        driven hackathon. This
-                                                        hackathon contains
-                                                        various technologies.
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
-                                        </CardContent>
-                                    </CardActionArea>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
+                    <Upcominghackathons />
                 </Grid>
                 <Grid
                     item

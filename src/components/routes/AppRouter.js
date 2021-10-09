@@ -11,6 +11,8 @@ import Organizepage from "../Hackathon/OrganizePage/OrganizePage";
 import Problemstatementform from "../Hackathon/ProblemStatementForm/ProblemStatementForm";
 import Hackathonmain from "../Hackathon/HackathonMain/HackathonMain";
 import Hackathonsubmission from "../Hackathon/HackathonSubmission/HackathonSubmission";
+import Hackathonsummary from "../Hackathon/summary/HackathonSummary";
+import ReactVirtualizedTable from "../table-demo/TableDemo";
 
 const AppRouter = (props) => {
     return (
@@ -25,8 +27,10 @@ const AppRouter = (props) => {
                     <Route exact path="/hackathon/organize/overview" component={Overviewhackathon} />
                     <Route exact path="/hackathon/organize/" component={Organizepage} />
                     <Route exact path="/hackathon/organize/1" component={Problemstatementform} />
-                    <Route exact path="/hackathon/:id" component={Hackathonmain} />
+                    <Route exact path="/hackathon/view/:id" component={Hackathonmain} />
                     <Route exact path="/hackathon/submission/:id" component={Hackathonsubmission} />
+                    <Route exact path="/hackathon/submission/summary/:id" component={Hackathonsummary} />
+                    <Route exact path="/table" component={ReactVirtualizedTable} />
                 </Router>
             </div>
             {/* </Typography> */}
