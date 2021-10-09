@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Container, Grid, Button, TextField, Select, MenuItem, FormControl, InputLabel} from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import Formsectionheader from '../FormSectionHeader/FormSectionHeader';
@@ -12,9 +12,26 @@ const useStyles = makeStyles((theme)=>({
     }
 }));
 
+const initialValues = {
+    probTitle: "",
+    probDescription: "",
+    probRefLinks: ""
+}
+
 const Problemstatementform = (props) => {
 
     const classes = useStyles();
+    const {setOpenPopup, handleSubmit} = props;
+
+    const [probDetails, setProbDetails] = useState(initialValues);
+
+    const handleInputChange = (e) =>{
+        const {name, value} = e.target;
+        setProbDetails({
+            ...probDetails,
+            [name] : value
+        })
+    }
 
     return (
         <div className={classes.parent}>
@@ -26,6 +43,8 @@ const Problemstatementform = (props) => {
                         size="small"
                         type="text"
                         fullWidth
+                        value={probDetails.probTitle}
+                        onChange={handleInputChange}
                         required
                     />
                 </Grid>
@@ -36,6 +55,8 @@ const Problemstatementform = (props) => {
                         size="small"
                         type="text"
                         fullWidth
+                        value={probDetails.probDescription}
+                        onChange={handleInputChange}
                         required
                     />
                 </Grid>
@@ -45,9 +66,11 @@ const Problemstatementform = (props) => {
                 <Grid item sm={12} md={12} sm={12} className={classes.innerGrid}>
                     <TextField
                         label="Reference Links"
-                        name="refLinks"
+                        name="probRefLinks"
                         size="small"
                         type="text"
+                        value={probDetails.probRefLinks}
+                        onChange={handleInputChange}
                         fullWidth
                         required
                     />
@@ -55,8 +78,12 @@ const Problemstatementform = (props) => {
 
                 <Grid item sm={12} md={12} sm={12} className={classes.innerGrid}>
                     <center>
-                    <Button variant="contained" size="large" style={{margin: "10px"}}>Add</Button>
-                    <Button variant="contained" size="large" style={{margin: "10px"}}>Cancel</Button>
+                    <Button variant="contained" size="large" style={{margin: "10px"}} onClick={() => handleSubmit(probDetails)}>Add</Button>
+                    <Button variant="contained" size="large" style={{margin: "10px"}}
+                        onClick={()=>setOpenPopup(false)}    
+                    >
+                        Cancel
+                    </Button>
                     </center>
                 </Grid>
 
