@@ -27,8 +27,9 @@ import secondPrize from "../../../secondPrize.svg";
 import thirdPrize from "../../../thirdPrize.svg";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
 import Popup from "../Popup/Popup";
-import Problemstatementform from '../ProblemStatementForm/ProblemStatementForm';
+import Problemstatementform from "../ProblemStatementForm/ProblemStatementForm";
 import useTable from "../../table/useTable";
+import Sponsorsform from "../SponsorsForm/SponsorsForm";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -51,6 +52,10 @@ const useStyles = makeStyles((theme) => ({
     iconRoot: {
         textAlign: "center",
     },
+
+    imageSponsor: {
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px"
+    }
 }));
 
 // Initial Form Values
@@ -92,21 +97,23 @@ const initialValues = {
 };
 
 const tabelHeadCells = [
-    {id: 'title', label: "Title"},
-    {id: 'description', label: "Description"},
-    {id: 'solutionType', label: "Solution Type"},
-    {id: 'technologies', label: "Technologies"},
-]
+    { id: "title", label: "Title" },
+    { id: "description", label: "Description" },
+    { id: "solutionType", label: "Solution Type" },
+    { id: "technologies", label: "Technologies" },
+];
 
 const Organizepage = () => {
     const classes = useStyles();
 
-    
-
     const [values, setValues] = useState(initialValues);
     const [openPopup, setOpenPopup] = useState(false);
+    const [sponsorOpenPopup, setSponsorOpenPopup] = useState(false);
 
-    const {TblContainer, TblHead, TblPagination} = useTable(values.problemStatements, tabelHeadCells);
+    const { TblContainer, TblHead, TblPagination } = useTable(
+        values.problemStatements,
+        tabelHeadCells
+    );
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -120,10 +127,18 @@ const Organizepage = () => {
     const handleProblemStatementSubmit = (probDetails) => {
         setValues({
             ...values,
-            problemStatements: [...values.problemStatements, probDetails]
+            problemStatements: [...values.problemStatements, probDetails],
+        });
+        setOpenPopup(false);
+        console.log("After adding prob", values);
+    };
+
+    const handleSponsorSubmit = (sponsorDetails) => {
+        setValues({
+            ...values,
+            sponsors: [...values.sponsors, sponsorDetails]
         })
-        setOpenPopup(false)
-        console.log("After adding prob", values)
+        setSponsorOpenPopup(false)
     }
 
     const handleSelectChange = (e) => {
@@ -390,21 +405,36 @@ const Organizepage = () => {
                                 <Grid item xs={12} sm={12} md={12}>
                                     <TblContainer>
                                         <TblHead />
-                                            
+
                                         <TableBody>
-                                            {
-                                                values.problemStatements.map(statement => (
-                                                    <TableRow key={statement.probTitle}>
-                                                        <TableCell>{statement.probTitle}</TableCell>
-                                                        <TableCell>{statement.probDescription}</TableCell>
-                                                        <TableCell>{statement.probRefLinks}</TableCell>
+                                            {values.problemStatements.map(
+                                                (statement) => (
+                                                    <TableRow
+                                                        key={
+                                                            statement.probTitle
+                                                        }
+                                                    >
+                                                        <TableCell>
+                                                            {
+                                                                statement.probTitle
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                statement.probDescription
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                statement.probRefLinks
+                                                            }
+                                                        </TableCell>
                                                     </TableRow>
-                                                ))
-                                            }
+                                                )
+                                            )}
                                         </TableBody>
                                     </TblContainer>
                                     <TblPagination />
-
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -621,6 +651,58 @@ const Organizepage = () => {
                         </Paper>
                     </Grid>
 
+                    {/* Sponsors Title */}
+                    <Formsectionheader name="Sponsors" />
+
+                    {/* Sponsors Form */}
+                    <Grid item xs={12} sm={12} md={12}>
+                        <Paper className={classes.formPaper}>
+                            <Grid container xs={12} md={12} sm={12}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={12}
+                                    md={12}
+                                    style={{ display: "flex" }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        style={{ marginLeft: "auto" }}
+                                        onClick={() =>
+                                            setSponsorOpenPopup(true)
+                                        }
+                                    >
+                                        Add Sponsor
+                                    </Button>
+                                </Grid>
+
+                                {/* We'll add reusable component here */}
+                                {values.sponsors.map((sponsor) => (
+                                    <Grid item xs={12} sm={6} md={2.4} style={{marginTop: "20px"}} key={sponsor.sponsorName}>
+                                    <center>
+                                        <div >
+                                            <a href={sponsor.sponsorWebLink} target="_blank">
+                                            <img
+                                                src="https://source.unsplash.com/random"
+                                                style={{
+                                                    width: "200px",
+                                                    height: "140px",
+                                                    borderRadius: "10px",
+                                                }}
+                                                className={classes.imageSponsor}
+                                            />
+                                            </a>
+                                        </div>
+                                    </center>
+                                </Grid>
+                                ))}
+                                
+                                
+                            </Grid>
+                        </Paper>
+                    </Grid>
+
                     {/* Winning prizes Details Title */}
                     <Formsectionheader name="Winning Prizes" />
 
@@ -760,14 +842,28 @@ const Organizepage = () => {
                         </center>
                     </Grid>
 
-
                     {/* Problem Statement Dialog */}
                     <Popup
-                        openPopup = {openPopup}
+                        openPopup={openPopup}
                         title="Add Problem Statement"
-                        setOpenPopup = {setOpenPopup}
+                        setOpenPopup={setOpenPopup}
                     >
-                        <Problemstatementform setOpenPopup={setOpenPopup} handleSubmit={handleProblemStatementSubmit} />
+                        <Problemstatementform
+                            setOpenPopup={setOpenPopup}
+                            handleSubmit={handleProblemStatementSubmit}
+                        />
+                    </Popup>
+
+                    {/* Sponsors Dialog */}
+                    <Popup
+                        openPopup={sponsorOpenPopup}
+                        title="Add Sponsor"
+                        setOpenPopup={setSponsorOpenPopup}
+                    >
+                        <Sponsorsform
+                            setOpenPopup={setSponsorOpenPopup}
+                            handleSubmit={handleSponsorSubmit}
+                        />
                     </Popup>
                 </form>
             </Grid>
