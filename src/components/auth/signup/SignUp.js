@@ -11,6 +11,7 @@ import {
     Grid,
     Paper,
     Typography,
+    FormHelperText
 } from "@mui/material";
 import { ThemeProvider, makeStyles } from "@material-ui/core";
 import theme from "../../ui/Theme";
@@ -121,20 +122,106 @@ const useStyles = makeStyles({
         marginBottom: theme.spacing(1),
         // color: theme.palette.primary.main
     },
+    errorMessage: {
+        margin: "0px"
+    },
 });
+
+
 
 const SignUp = (props) => {
     const [values, setValues] = useState(initialValues);
+    const [errors, setErrors] = useState({});
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const classes = useStyles();
+
+    const validateForm = (name, fieldValue) => {
+        const fieldErrors = [];
+        const hErrors = {  ...errors };
+
+        const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if(name == "email" && !re.test(fieldValue.toLowerCase())){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Email</p>)
+        }
+
+        if(name == "userName" && fieldValue.length < 8){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        }
+
+        if(name == "fullName" && fieldValue.length < 8){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        }
+
+        if(name == "password" && fieldValue.length < 8){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        }
+
+        if(name == "conformPassword" && fieldValue != values.password){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Password does not match</p>)
+        }
+
+        if(name == "college" && fieldValue.length < 2){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Please add valid College name</p>)
+        }
+
+        if(name == "graduationYear" && (parseInt(fieldValue) < 2000 || parseInt(fieldValue) > 2026)){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Graduation Year should be between 2000 to 2026</p>)
+        }
+
+        if(name == "contact" && fieldValue.toString().length < 10){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        }
+
+        if(name == "address" && fieldValue.length < 10){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid address</p>)
+        }
+
+        return {
+            ...hErrors,
+            [name]: fieldErrors
+        }
+    }
+
+    const checkFormValidation = (formErrors) => {
+        let valid = 1;
+        let tempErrors = {}
+
+        for(const [key, value] of Object.entries(formErrors)){
+            if(value.length){
+                valid = 0;
+                break;
+            }
+        }
+
+        return valid;
+    }
+
+    const getHelperText = (name) => {
+        if(errors[name] && errors[name].length){
+            return errors[name];
+        }
+    }
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
         // console.log("Values", value);
+
+        const inputErrors = {
+            ...errors,
+            ...validateForm(name, value)
+        }
+
         setValues({
             ...values,
             [name]: value,
         });
+
+        setErrors({
+            ...inputErrors
+        })
+
+        setIsFormValid(checkFormValidation(inputErrors))
     };
 
     const handleToggleSwitch = (e) => {
@@ -152,6 +239,9 @@ const SignUp = (props) => {
             });
         }
     };
+
+
+
 
     // @TODO - Determine if the user Already exists | If so, send them to the dashboard
 
@@ -215,6 +305,17 @@ const SignUp = (props) => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText('email')}
+                                    </FormHelperText>
                                 </Box>
                                 <Box>
                                     <TextField
@@ -226,6 +327,17 @@ const SignUp = (props) => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText('userName')}
+                                    </FormHelperText>
                                 </Box>
                                 <Box>
                                     <TextField
@@ -237,6 +349,17 @@ const SignUp = (props) => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText('fullName')}
+                                    </FormHelperText>
                                 </Box>
                                 <Box>
                                     <TextField
@@ -248,6 +371,17 @@ const SignUp = (props) => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText('password')}
+                                    </FormHelperText>
                                 </Box>
                                 <Box>
                                     <TextField
@@ -259,6 +393,17 @@ const SignUp = (props) => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText('conformPassword')}
+                                    </FormHelperText>
                                 </Box>
                                 <Box>
                                     <Typography variant="button">
@@ -292,6 +437,17 @@ const SignUp = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
+                                            <FormHelperText
+                                                component="div"
+                                                error={errors && errors.length > 0}
+                                                style={{
+                                                    paddingLeft: "8px",
+                                                    boxSizing: "border-box",
+                                                    color: "red"
+                                                }}
+                                            >
+                                                {getHelperText('college')}
+                                            </FormHelperText>
                                         </Box>
                                         <Box>
                                             <TextField
@@ -303,6 +459,17 @@ const SignUp = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
+                                            <FormHelperText
+                                                component="div"
+                                                error={errors && errors.length > 0}
+                                                style={{
+                                                    paddingLeft: "8px",
+                                                    boxSizing: "border-box",
+                                                    color: "red"
+                                                }}
+                                            >
+                                                {getHelperText('graduationYear')}
+                                            </FormHelperText>
                                         </Box>
                                     </>
                                 ) : (
@@ -317,6 +484,17 @@ const SignUp = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
+                                            <FormHelperText
+                                                component="div"
+                                                error={errors && errors.length > 0}
+                                                style={{
+                                                    paddingLeft: "8px",
+                                                    boxSizing: "border-box",
+                                                    color: "red"
+                                                }}
+                                            >
+                                                {getHelperText('contact')}
+                                            </FormHelperText>
                                         </Box>
                                         <Box>
                                             <TextField
@@ -328,6 +506,17 @@ const SignUp = (props) => {
                                                 onChange={handleInputChange}
                                                 required
                                             />
+                                            <FormHelperText
+                                                component="div"
+                                                error={errors && errors.length > 0}
+                                                style={{
+                                                    paddingLeft: "8px",
+                                                    boxSizing: "border-box",
+                                                    color: "red"
+                                                }}
+                                            >
+                                                {getHelperText('address')}
+                                            </FormHelperText>
                                         </Box>
                                     </>
                                 )}
@@ -344,6 +533,7 @@ const SignUp = (props) => {
                                                 color: `${theme.palette.common.ternaryColor}`,
                                             }}
                                             type="Submit"
+                                            disabled={!isFormValid}
                                         >
                                             Submit
                                         </Button>

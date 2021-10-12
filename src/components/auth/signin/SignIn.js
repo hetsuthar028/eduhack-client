@@ -13,6 +13,7 @@ import {
     Typography,
     Link,
     Avatar,
+    FormHelperText,
 } from "@mui/material";
 import theme from "../../ui/Theme";
 import { color } from "@mui/system";
@@ -63,6 +64,9 @@ const useStyles = makeStyles({
         marginBottom: theme.spacing(1),
         // color: theme.palette.primary.main
     },
+    errorMessage: {
+        margin: "0px"
+    },
 });
 
 const initialValues = {
@@ -77,6 +81,7 @@ const SignIn = () => {
 
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
+    const [isFormValid, setIsFormValid] = useState(false);
 
     const validate = () => {
         const re =
@@ -115,7 +120,7 @@ const SignIn = () => {
                         "session",
                         response.data.data.accessToken
                     );
-                    return <Redirect to="http://localhost:3000/" />
+                    return <Redirect to="http://localhost:3000/" />;
                 }
             })
             .catch((err) => {
@@ -143,12 +148,78 @@ const SignIn = () => {
         //     });
     };
 
+    const checkFormValidation = (formErrors) => {
+        let valid = 1;
+        let tempErrors = {};
+
+        for (const [key, value] of Object.entries(formErrors)) {
+            if (value.length) {
+                valid = 0;
+                console.log("Valid Changed to 0")
+                break;
+            }
+        }
+
+        return valid;
+    };
+
+    const validateForm = (name, fieldValue) => {
+        const fieldErrors = [];
+        const hErrors = { ...errors };
+
+        const re =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if (name == "email" && !re.test(fieldValue.toLowerCase())) {
+            fieldErrors.push(
+                <p name={name} className={classes.errorMessage}>
+                    Invalid email
+                </p>
+            );
+        }
+        if (name == "password" && fieldValue.length < 8) {
+            fieldErrors.push(
+                <p name={name} className={classes.errorMessage}>
+                    Minlength should be 8
+                </p>
+            );
+        }
+
+        return {
+            ...hErrors,
+            [name]: fieldErrors,
+        };
+    };
+
+    const getHelperText = (name) => {
+        console.log("Errors", errors.name)
+        if (errors[name] && errors[name].length) {
+            
+            return errors[name];
+        }
+        // return errors[name] || " ";
+        // return "Hello World"
+    }
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        const inputErrors = {
+            ...errors,
+            ...validateForm(name, value),
+        };
+
+        console.log("Input Errors", inputErrors)
+
+
         setValues({
             ...values,
             [name]: value,
         });
+
+        setErrors({
+            ...inputErrors,
+        });
+
+        setIsFormValid(checkFormValidation(inputErrors));
     };
 
     return (
@@ -184,10 +255,23 @@ const SignIn = () => {
                                         name="email"
                                         // type="email"
                                         type="text"
+                                        key="email"
                                         value={values.email}
                                         onChange={handleInputChange}
                                         placeholder="Enter Your First Name"
+                                        errors={errors["email"]}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText("email")}
+                                    </FormHelperText>
                                 </Box>
                                 <Box>
                                     <TextField
@@ -198,6 +282,17 @@ const SignIn = () => {
                                         value={values.password}
                                         onChange={handleInputChange}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red"
+                                        }}
+                                    >
+                                        {getHelperText("password")}
+                                    </FormHelperText>
                                 </Box>
                                 <Box
                                     sx={{
@@ -239,6 +334,7 @@ const SignIn = () => {
                                                 color: `${theme.palette.common.ternaryColor}`,
                                             }}
                                             type="Submit"
+                                            disabled={!isFormValid}
                                         >
                                             Submit
                                         </Button>
