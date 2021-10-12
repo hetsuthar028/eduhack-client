@@ -168,7 +168,7 @@ const NavBar = (props) => {
                             sx={{ mr: 2 }}
                             className={classes.navIcon}
                         >
-                            EduHack
+                            <strong>EduHack</strong>
                         </IconButton>
 
                         <div className={classes.navButtons}>
