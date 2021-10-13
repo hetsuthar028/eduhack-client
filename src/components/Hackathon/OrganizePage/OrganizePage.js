@@ -20,6 +20,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    FormHelperText
 } from "@mui/material";
 import "./OrganizePage.css";
 import firstPrize from "../../../firstPrize.svg";
@@ -55,7 +56,10 @@ const useStyles = makeStyles((theme) => ({
 
     imageSponsor: {
         boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px"
-    }
+    },
+    errorMessage: {
+        margin: "0px"
+    },
 }));
 
 // Initial Form Values
@@ -103,6 +107,18 @@ const tabelHeadCells = [
     { id: "technologies", label: "Technologies" },
 ];
 
+const validateURL = (inputURL) => {
+    let url;
+
+    try {
+        url = new URL(inputURL);
+    } catch(_){
+        return false;
+    }
+
+    return url.protocol === "https:";
+}
+
 const Organizepage = () => {
     const classes = useStyles();
 
@@ -110,18 +126,126 @@ const Organizepage = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [sponsorOpenPopup, setSponsorOpenPopup] = useState(false);
 
+    const [errors, setErrors] = useState({});
+    const [isFormValid, setIsFormValid] = useState(false);
+
     const { TblContainer, TblHead, TblPagination } = useTable(
         values.problemStatements,
         tabelHeadCells
     );
 
+    const validateForm = (name, fieldValue) => {
+        const fieldErrors = [];
+        const hErrors = { ...errors };
+
+        if(name == "hackTitle" && fieldValue.length < 8){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        }
+
+        if(name == "hackCompanyName" && fieldValue.length < 5){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        }
+
+        if(name == "regStart" && fieldValue){
+            let currentDate = new Date();
+            let fieldDate = new Date(fieldValue)
+
+            if(currentDate > fieldDate){
+                fieldErrors.push(<p className={classes.errorMessage} name={name}>Starting date should start from tomorrow!</p>)
+            }
+        }
+
+        if(name == "regEnd" && fieldValue){
+            let currentDate = new Date();
+            let fieldDate = new Date(fieldValue)
+            let startDate = new Date(values.regStart)
+            
+            if((fieldDate < currentDate) || (fieldDate <= startDate)){
+                fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Ending Date</p>)
+            }
+        }
+
+        if(name == "hackStart" && fieldValue){
+            
+            let fieldDate = new Date(fieldValue);
+            let regEndDate = new Date(values.regEnd);
+
+            if(fieldDate < regEndDate){
+                fieldErrors.push(<p className={classes.errorMessage} name={name}>Hackathon must start after registration date ends!</p>)
+            }
+        }
+
+        if(name == "hackEnd" && fieldValue){
+            let fieldDate = new Date(fieldValue);
+            let hackStartDate = new Date(values.hackStart);
+
+            if(fieldDate < hackStartDate){
+                fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Ending date</p>);
+            }
+        }
+
+        if(name == "totalApplications" && parseInt(fieldValue) <= 0){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid total number of applications.</p>);
+        }
+
+        if(name == "hackDescription" && (fieldValue.length < 10 || fieldValue.length > 100)){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Description length should be between 10 to 100 characters.</p>)
+        }
+
+        if(name == "submissionGuidelines" && fieldValue.length < 10){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        }
+
+        if((name == "companyWebsite" || name == "facebook" || name == "linkedIn" || name == "instagram" || name == "twitter") && !validateURL(fieldValue)){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Website Link</p>)
+        }
+
+        if((name == "firstPrizeDesc" || name == "secondPrizeDesc" || name == "thirdPrizeDesc") && fieldValue.length < 10){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        }
+
+        return {
+            ...hErrors,
+            [name]: fieldErrors
+        }
+    }
+
+    const checkFormValidation = (formErrors) => {
+        let valid = 1;
+
+        for(const [key, value] of Object.entries(formErrors)){
+            if(value.length){
+                valid = 0;
+                break;
+            }
+        }
+
+        return valid;
+    }
+
+    const getHelperText = (name) => {
+        if(errors[name] && errors[name].length){
+            return errors[name];
+        }
+    }
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        const inputErrors = {
+            ...errors,
+            ...validateForm(name, value),
+        };
 
         setValues({
             ...values,
             [name]: value,
         });
+
+        setErrors({
+            ...inputErrors
+        });
+
+        setIsFormValid(checkFormValidation(inputErrors));
     };
 
     const handleProblemStatementSubmit = (probDetails) => {
@@ -141,12 +265,15 @@ const Organizepage = () => {
         setSponsorOpenPopup(false)
     }
 
+    
+
     const handleSelectChange = (e) => {
         setValues({
             ...values,
             ["submissionFormat"]: e.target.value,
         });
         // console.log("Format", values.submissionFormat)
+        
     };
 
     const handleFormSubmit = (e) => {
@@ -206,6 +333,17 @@ const Organizepage = () => {
                                         value={values.hackTitle}
                                         fullWidth
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("hackTitle")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid
                                     item
@@ -226,6 +364,17 @@ const Organizepage = () => {
                                         value={values.hackCompanyName}
                                         onChange={handleInputChange}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("hackCompanyName")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 {/* 2nd Row */}
@@ -248,6 +397,17 @@ const Organizepage = () => {
                                         InputLabelProps={{ shrink: true }}
                                         onChange={handleInputChange}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("regStart")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 <Grid
@@ -269,6 +429,17 @@ const Organizepage = () => {
                                         InputLabelProps={{ shrink: true }}
                                         onChange={handleInputChange}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("regEnd")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 {/* 3rd Row */}
@@ -291,6 +462,17 @@ const Organizepage = () => {
                                         InputLabelProps={{ shrink: true }}
                                         onChange={handleInputChange}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("hackStart")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid
                                     item
@@ -311,6 +493,17 @@ const Organizepage = () => {
                                         InputLabelProps={{ shrink: true }}
                                         onChange={handleInputChange}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("hackEnd")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 {/* 4th Row */}
@@ -333,6 +526,17 @@ const Organizepage = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("totalApplications")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 <Grid
@@ -363,6 +567,17 @@ const Organizepage = () => {
                                         onChange={handleInputChange}
                                         fullWidth
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("hackDescription")}
+                                    </FormHelperText>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -523,6 +738,17 @@ const Organizepage = () => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("submissionGuidelines")}
+                                    </FormHelperText>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -555,6 +781,17 @@ const Organizepage = () => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("companyWebsite")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid
                                     item
@@ -575,6 +812,17 @@ const Organizepage = () => {
                                         onChange={handleInputChange}
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("facebook")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 {/* 2nd Row */}
@@ -595,8 +843,18 @@ const Organizepage = () => {
                                         fullWidth
                                         value={values.instagram}
                                         onChange={handleInputChange}
-                                        required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("instagram")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid
                                     item
@@ -617,6 +875,17 @@ const Organizepage = () => {
                                         fullWidth
                                         required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("twitter")}
+                                    </FormHelperText>
                                 </Grid>
 
                                 {/* 3rd Row */}
@@ -637,8 +906,18 @@ const Organizepage = () => {
                                         value={values.linkedIn}
                                         onChange={handleInputChange}
                                         fullWidth
-                                        required
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("linkedIn")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid
                                     item
@@ -746,6 +1025,17 @@ const Organizepage = () => {
                                             ),
                                         }}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("firstPrizeDesc")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid item xs={3} sm={3} md={3}></Grid>
 
@@ -785,6 +1075,17 @@ const Organizepage = () => {
                                             ),
                                         }}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("secondPrizeDesc")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid item xs={3} sm={3} md={3}></Grid>
 
@@ -824,6 +1125,17 @@ const Organizepage = () => {
                                             ),
                                         }}
                                     />
+                                    <FormHelperText
+                                        component="div"
+                                        error={errors && errors.length > 0}
+                                        style={{
+                                            paddingLeft: "8px",
+                                            boxSizing: "border-box",
+                                            color: "red",
+                                        }}
+                                    >
+                                        {getHelperText("thirdPrizeDesc")}
+                                    </FormHelperText>
                                 </Grid>
                                 <Grid item xs={3} sm={3} md={3}></Grid>
                             </Grid>
@@ -836,6 +1148,7 @@ const Organizepage = () => {
                                 variant="contained"
                                 size="large"
                                 type="Submit"
+                                disabled={!isFormValid}
                             >
                                 Publish
                             </Button>
