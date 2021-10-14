@@ -12,6 +12,7 @@ import {
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import useStyles from "../ui/Style";
 import axios from 'axios';
+import { useHistory } from 'react-router-dom'
 
 const NavBar = (props) => {
     const classes = useStyles();
@@ -49,7 +50,7 @@ const NavBar = (props) => {
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Button className={classes.navButton}>About Us</Button>
                         <Button className={classes.navButton}>Organize a Hackathon</Button>
-                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin">Sign In</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="/auth/signin">Sign In</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button>
                     </>
                 );

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import {
     TextField,
     Button,
@@ -18,6 +19,7 @@ import theme from "../../ui/Theme";
 import { LockOutlined } from "@mui/icons-material";
 import axious from "axios";
 import axios from "axios";
+import { AppContext } from "../../../AppContext";
 
 const initialValues = {
     email: "",
@@ -135,6 +137,8 @@ const SignUp = (props) => {
     const [isFormValid, setIsFormValid] = useState(false);
 
     const classes = useStyles();
+    const history = useHistory();
+    const { setShowBanner } = useContext(AppContext);
 
     const validateForm = (name, fieldValue) => {
         const fieldErrors = [];
@@ -241,6 +245,12 @@ const SignUp = (props) => {
     };
 
 
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null)
+        }, 4000);
+    }
+
 
 
     // @TODO - Determine if the user Already exists | If so, send them to the dashboard
@@ -249,24 +259,33 @@ const SignUp = (props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // @TODO - Try to have some validation here
-
         console.log("I'm here");
         // After succesful validation
-        axios
+        try{
+            axios
             .post("http://localhost:4200/api/user/signup", values)
             .then((response) => {
                 if (response.data.message == "success") {
+                    setShowBanner({apiSuccessResponse: 'Account created succesfully!'})
+
                     console.log("User Created Succesfully");
+                    return history.push('/auth/signin');
                 } else {
+                    setShowBanner({apiErrorResponse: response.data.warning})
                     console.log("Can't create user. Please try again!");
                 }
             })
             .catch((err) => {
                 //
-
-                console.log("Error while performing network request", err);
+                setShowBanner({apiErrorResponse: err.data})
+                console.log("Error while performing network request", err.data);
             });
+        } catch(err) {
+            setShowBanner({apiErrorResponse: 'Some error occured. Please try again!'})
+        } finally{
+            handleAfterFormResponse();
+        }
+        
     };
 
     return (

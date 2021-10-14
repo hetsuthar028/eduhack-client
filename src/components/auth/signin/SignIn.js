@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import {
     TextField,
     Button,
@@ -18,6 +18,8 @@ import {
 import theme from "../../ui/Theme";
 import { color } from "@mui/system";
 import { LockOutlined } from "@mui/icons-material";
+import { AppContext } from "../../../AppContext";
+import Banner from '../../banner/banner';
 
 const useStyles = makeStyles({
     root: {
@@ -83,6 +85,9 @@ const SignIn = () => {
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
 
+    const history = useHistory();
+    const {setShowBanner} = useContext(AppContext);
+
     const validate = () => {
         const re =
             /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -105,47 +110,40 @@ const SignIn = () => {
         );
     };
 
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null);
+        }, 3000);
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        axios
+        try {
+            axios
             .post("http://localhost:4200/api/user/signin", {
                 email: values.email,
                 password: values.password,
             })
             .then((response) => {
                 if (response) {
-                    // console.log("Logged In", response);
                     localStorage.setItem(
                         "session",
                         response.data.data.accessToken
                     );
-                    return <Redirect to="http://localhost:3000/" />;
+                    setShowBanner({apiSuccessResponse: 'Signed in successfully!'})
+                    return history.push('/');
                 }
             })
             .catch((err) => {
                 console.log("Some problem occured. Please try again!");
+                setShowBanner({apiErrorResponse: 'Invalid credentials, Please try again!'})
+                console.log(err)
             });
+        } catch(err) {
 
-        // if(!validate())
-        //     console.log("Errors", errors);
-
-        // if(validate()){
-        //     window.alert("Valid");
-        // }
-
-        // axios
-        //     .post("http://localhost:4200/api/user/signin", {
-        //         email: "hetmewada0028@gmail.com",
-        //         password: "kjha@s189023",
-        //     })
-        //     .then((response) => {
-        //         console.log("Sign In", response.data);
-        //         localStorage.setItem("session", response.data.data.accessToken);
-        //     })
-        //     .catch((err) => {
-        //         console.log("Error occured while signing in...");
-        //     });
+        } finally {
+            handleAfterFormResponse();
+        }
     };
 
     const checkFormValidation = (formErrors) => {
@@ -365,5 +363,6 @@ const SignIn = () => {
         // <button onClick={handleSubmit}>Sign In</button>
     );
 };
+
 
 export default SignIn;
