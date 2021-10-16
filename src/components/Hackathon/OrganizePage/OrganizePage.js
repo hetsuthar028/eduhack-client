@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
 import theme from "../../ui/Theme";
@@ -20,7 +20,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    FormHelperText
+    FormHelperText,
 } from "@mui/material";
 import "./OrganizePage.css";
 import firstPrize from "../../../firstPrize.svg";
@@ -31,6 +31,8 @@ import Popup from "../Popup/Popup";
 import Problemstatementform from "../ProblemStatementForm/ProblemStatementForm";
 import useTable from "../../table/useTable";
 import Sponsorsform from "../SponsorsForm/SponsorsForm";
+import axios from "axios";
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -55,10 +57,10 @@ const useStyles = makeStyles((theme) => ({
     },
 
     imageSponsor: {
-        boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px"
+        boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 50px",
     },
     errorMessage: {
-        margin: "0px"
+        margin: "0px",
     },
 }));
 
@@ -88,7 +90,7 @@ const initialValues = {
         //     sponsorWebLink: "",
         // },
     ],
-    submissionFormat: [],
+    submissionFormats: [],
     submissionGuidelines: "",
     linkedIn: "",
     facebook: "",
@@ -112,15 +114,16 @@ const validateURL = (inputURL) => {
 
     try {
         url = new URL(inputURL);
-    } catch(_){
+    } catch (_) {
         return false;
     }
 
     return url.protocol === "https:";
-}
+};
 
 const Organizepage = () => {
     const classes = useStyles();
+    const { setShowBanner } = useContext(AppContext);
 
     const [values, setValues] = useState(initialValues);
     const [openPopup, setOpenPopup] = useState(false);
@@ -138,96 +141,154 @@ const Organizepage = () => {
         const fieldErrors = [];
         const hErrors = { ...errors };
 
-        if(name == "hackTitle" && fieldValue.length < 8){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        if (name == "hackTitle" && fieldValue.length < 8) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 8
+                </p>
+            );
         }
 
-        if(name == "hackCompanyName" && fieldValue.length < 5){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        if (name == "hackCompanyName" && fieldValue.length < 5) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 8
+                </p>
+            );
         }
 
-        if(name == "regStart" && fieldValue){
+        if (name == "regStart" && fieldValue) {
             let currentDate = new Date();
-            let fieldDate = new Date(fieldValue)
+            let fieldDate = new Date(fieldValue);
 
-            if(currentDate > fieldDate){
-                fieldErrors.push(<p className={classes.errorMessage} name={name}>Starting date should start from tomorrow!</p>)
+            if (currentDate > fieldDate) {
+                fieldErrors.push(
+                    <p className={classes.errorMessage} name={name}>
+                        Starting date should start from tomorrow!
+                    </p>
+                );
             }
         }
 
-        if(name == "regEnd" && fieldValue){
+        if (name == "regEnd" && fieldValue) {
             let currentDate = new Date();
-            let fieldDate = new Date(fieldValue)
-            let startDate = new Date(values.regStart)
-            
-            if((fieldDate < currentDate) || (fieldDate <= startDate)){
-                fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Ending Date</p>)
+            let fieldDate = new Date(fieldValue);
+            let startDate = new Date(values.regStart);
+
+            if (fieldDate < currentDate || fieldDate <= startDate) {
+                fieldErrors.push(
+                    <p className={classes.errorMessage} name={name}>
+                        Invalid Ending Date
+                    </p>
+                );
             }
         }
 
-        if(name == "hackStart" && fieldValue){
-            
+        if (name == "hackStart" && fieldValue) {
             let fieldDate = new Date(fieldValue);
             let regEndDate = new Date(values.regEnd);
 
-            if(fieldDate < regEndDate){
-                fieldErrors.push(<p className={classes.errorMessage} name={name}>Hackathon must start after registration date ends!</p>)
+            if (fieldDate < regEndDate) {
+                fieldErrors.push(
+                    <p className={classes.errorMessage} name={name}>
+                        Hackathon must start after registration date ends!
+                    </p>
+                );
             }
         }
 
-        if(name == "hackEnd" && fieldValue){
+        if (name == "hackEnd" && fieldValue) {
             let fieldDate = new Date(fieldValue);
             let hackStartDate = new Date(values.hackStart);
 
-            if(fieldDate < hackStartDate){
-                fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Ending date</p>);
+            if (fieldDate < hackStartDate) {
+                fieldErrors.push(
+                    <p className={classes.errorMessage} name={name}>
+                        Invalid Ending date
+                    </p>
+                );
             }
         }
 
-        if(name == "totalApplications" && parseInt(fieldValue) <= 0){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid total number of applications.</p>);
+        if (name == "totalApplications" && parseInt(fieldValue) <= 0) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Invalid total number of applications.
+                </p>
+            );
         }
 
-        if(name == "hackDescription" && (fieldValue.length < 10 || fieldValue.length > 100)){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Description length should be between 10 to 100 characters.</p>)
+        if (
+            name == "hackDescription" &&
+            (fieldValue.length < 10 || fieldValue.length > 100)
+        ) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Description length should be between 10 to 100 characters.
+                </p>
+            );
         }
 
-        if(name == "submissionGuidelines" && fieldValue.length < 10){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        if (name == "submissionGuidelines" && fieldValue.length < 10) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 10
+                </p>
+            );
         }
 
-        if((name == "companyWebsite" || name == "facebook" || name == "linkedIn" || name == "instagram" || name == "twitter") && !validateURL(fieldValue)){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Website Link</p>)
+        if (
+            (name == "companyWebsite" ||
+                name == "facebook" ||
+                name == "linkedIn" ||
+                name == "instagram" ||
+                name == "twitter") &&
+            !validateURL(fieldValue)
+        ) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Invalid Website Link
+                </p>
+            );
         }
 
-        if((name == "firstPrizeDesc" || name == "secondPrizeDesc" || name == "thirdPrizeDesc") && fieldValue.length < 10){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        if (
+            (name == "firstPrizeDesc" ||
+                name == "secondPrizeDesc" ||
+                name == "thirdPrizeDesc") &&
+            fieldValue.length < 10
+        ) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 10
+                </p>
+            );
         }
 
         return {
             ...hErrors,
-            [name]: fieldErrors
-        }
-    }
+            [name]: fieldErrors,
+        };
+    };
 
     const checkFormValidation = (formErrors) => {
         let valid = 1;
 
-        for(const [key, value] of Object.entries(formErrors)){
-            if(value.length){
+        for (const [key, value] of Object.entries(formErrors)) {
+            if (value.length) {
                 valid = 0;
                 break;
             }
         }
 
         return valid;
-    }
+    };
 
     const getHelperText = (name) => {
-        if(errors[name] && errors[name].length){
+        if (errors[name] && errors[name].length) {
             return errors[name];
         }
-    }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -242,7 +303,7 @@ const Organizepage = () => {
         });
 
         setErrors({
-            ...inputErrors
+            ...inputErrors,
         });
 
         setIsFormValid(checkFormValidation(inputErrors));
@@ -260,25 +321,70 @@ const Organizepage = () => {
     const handleSponsorSubmit = (sponsorDetails) => {
         setValues({
             ...values,
-            sponsors: [...values.sponsors, sponsorDetails]
-        })
-        setSponsorOpenPopup(false)
-    }
-
-    
+            sponsors: [...values.sponsors, sponsorDetails],
+        });
+        setSponsorOpenPopup(false);
+    };
 
     const handleSelectChange = (e) => {
         setValues({
             ...values,
-            ["submissionFormat"]: e.target.value,
+            ["submissionFormats"]: e.target.value,
         });
         // console.log("Format", values.submissionFormat)
-        
+    };
+
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null);
+        }, 3000);
     };
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log("All values", values);
+        try {
+            values["submissionFormat"] = values["submissionFormats"].join(", ");
+            let temp = values["hackStart"].split("-");
+            let temp2 = values["hackEnd"].split("-");
+            let temp3 = values["regStart"].split("-");
+            let temp4 = values["regEnd"].split("-");
+            values["hackStart"] = temp[2] + "-" + temp[1] + "-" + temp[0];
+            values["hackEnd"] = temp2[2] + "-" + temp2[1] + "-" + temp2[0];
+            values["regStart"] = temp3[2] + "-" + temp3[1] + "-" + temp3[0];
+            values["regEnd"] = temp4[2] + "-" + temp4[1] + "-" + temp4[0];
+
+            console.log("All values", values);
+            axios
+                .post(
+                    "http://localhost:4400/api/hackathon/create",
+                    {
+                        ...values,
+                    },
+                    {
+                        headers: {
+                            authorization: localStorage.getItem("session"),
+                        },
+                    }
+                )
+                .then((response) => {
+                    setShowBanner({
+                        apiSuccessResponse:
+                            "Hackathon Created Successfully! 👨‍🎓",
+                    });
+
+                    console.log("Got Response, Hackathon Created!!");
+                })
+                .catch((err) => {
+                    setShowBanner({
+                        apiErrorResponse:
+                            "Problem occured while creating a hackathon! 😦",
+                    });
+                    console.log("Error in axios while creating Hackathon");
+                });
+        } catch (err) {
+        } finally {
+            handleAfterFormResponse();
+        }
     };
 
     return (
@@ -641,7 +747,12 @@ const Organizepage = () => {
                                                         </TableCell>
                                                         <TableCell>
                                                             {
-                                                                statement.probRefLinks
+                                                                statement.probSolutionType
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                statement.probAcceptedTechs
                                                             }
                                                         </TableCell>
                                                     </TableRow>
@@ -677,9 +788,9 @@ const Organizepage = () => {
                                         </InputLabel>
                                         <Select
                                             id="demo-simple-select"
-                                            label="submissionFormat"
+                                            label="submissionFormats"
                                             multiple
-                                            value={values.submissionFormat}
+                                            value={values.submissionFormats}
                                             onChange={handleSelectChange}
                                         >
                                             <MenuItem
@@ -958,26 +1069,39 @@ const Organizepage = () => {
 
                                 {/* We'll add reusable component here */}
                                 {values.sponsors.map((sponsor) => (
-                                    <Grid item xs={12} sm={6} md={2.4} style={{marginTop: "20px"}} key={sponsor.sponsorName}>
-                                    <center>
-                                        <div >
-                                            <a href={sponsor.sponsorWebLink} target="_blank">
-                                            <img
-                                                src="https://source.unsplash.com/random"
-                                                style={{
-                                                    width: "200px",
-                                                    height: "140px",
-                                                    borderRadius: "10px",
-                                                }}
-                                                className={classes.imageSponsor}
-                                            />
-                                            </a>
-                                        </div>
-                                    </center>
-                                </Grid>
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        sm={6}
+                                        md={2.4}
+                                        style={{ marginTop: "20px" }}
+                                        key={sponsor.sponsorName}
+                                    >
+                                        <center>
+                                            <div>
+                                                <a
+                                                    href={
+                                                        sponsor.sponsorWebLink
+                                                    }
+                                                    target="_blank"
+                                                >
+                                                    <img
+                                                        src="https://source.unsplash.com/random"
+                                                        style={{
+                                                            width: "200px",
+                                                            height: "140px",
+                                                            borderRadius:
+                                                                "10px",
+                                                        }}
+                                                        className={
+                                                            classes.imageSponsor
+                                                        }
+                                                    />
+                                                </a>
+                                            </div>
+                                        </center>
+                                    </Grid>
                                 ))}
-                                
-                                
                             </Grid>
                         </Paper>
                     </Grid>
