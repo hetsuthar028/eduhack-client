@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
 import theme from "../../ui/Theme";
@@ -124,6 +125,7 @@ const validateURL = (inputURL) => {
 const Organizepage = () => {
     const classes = useStyles();
     const { setShowBanner } = useContext(AppContext);
+    const history = useHistory();
 
     const [values, setValues] = useState(initialValues);
     const [openPopup, setOpenPopup] = useState(false);
@@ -373,6 +375,8 @@ const Organizepage = () => {
                     });
 
                     console.log("Got Response, Hackathon Created!!");
+                    console.log(response.data.add_hackathon_db.uniqueHackathonID)
+                    history.push(`/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`)
                 })
                 .catch((err) => {
                     setShowBanner({
