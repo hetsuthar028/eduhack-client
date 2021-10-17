@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import axios from "axios";
+import './UpcomingHackathons.scss';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -84,7 +85,7 @@ const Upcominghackathons = (props) => {
                             <CardContent>
                                 <Grid container xs={12} sm={12} md={12}>
                                     <Grid item xs={12} sm={12} md={12}>
-                                        <Typography variant="h6" gutterBottom>
+                                        <Typography variant="h6" gutterBottom fontFamily="Open Sans">
                                             {hackathon.title} OPEN
                                         </Typography>
                                     </Grid>
@@ -93,6 +94,7 @@ const Upcominghackathons = (props) => {
                                             variant="subtitle1"
                                             color="text.secondary"
                                             gutterBottom
+                                            fontFamily="Open Sans"
                                         >
                                             <strong>
                                                 Registration Ends:{" "}
@@ -105,6 +107,9 @@ const Upcominghackathons = (props) => {
                                             variant="body2"
                                             color="text.secondary"
                                             gutterBottom
+                                            fontFamily="Open Sans"
+                                            style={{textAlign: "justify", textJustify: "inner-word"}}
+                                            className="line-clamp module"
                                         >
                                             {hackathon.description}
                                         </Typography>
