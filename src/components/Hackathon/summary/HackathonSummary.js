@@ -23,9 +23,9 @@ import {
     Twitter,
 } from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core";
-import firstPrize from "../../../firstPrize.svg";
-import secondPrize from "../../../secondPrize.svg";
-import thirdPrize from "../../../thirdPrize.svg";
+import firstPrize from "../../../static/Icons/firstPrize.svg";
+import secondPrize from "../../../static/Icons/secondPrize.svg";
+import thirdPrize from "../../../static/Icons/thirdPrize.svg";
 import ReactVirtualizedTable from "../../table-demo/TableDemo";
 
 const useStyles = makeStyles((theme) => ({

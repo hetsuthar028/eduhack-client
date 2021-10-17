@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
 import {
@@ -24,11 +24,8 @@ import {
     Twitter,
 } from "@mui/icons-material";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
-import JS from "../../../JS.svg";
-import NodeJS from "../../../NodeJS.svg";
-import Python from "../../../Python.svg";
-import ReactSVG from "../../../ReactSVG.svg";
-import Django from "../../../Django.svg";
+import getIcon from "../../../static/Icons/getIcon";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -43,12 +40,57 @@ const useStyles = makeStyles((theme) => ({
         padding: "20px",
     },
     innerGrid: {
-        padding: "20px",
+        padding: "5px 20px",
+    },
+    technologies: {
+        padding: "10px 20px",
     },
 }));
 
-const Hackathonsubmission = () => {
+const splitString = (inputString, by) => {
+    console.log("Data", inputString);
+    return inputString.split(`${by}`);
+};
+
+const Hackathonsubmission = (props) => {
     const classes = useStyles();
+
+    const [hackathon, setHackathon] = useState({});
+    const [problemStatements, setProblemStatements] = useState([]);
+    const [currentProblemStatement, setCurrentProblemStatement] = useState();
+
+    useEffect(() => {
+        axios
+            .get(
+                `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
+                {
+                    body: {},
+                    headers: {
+                        authorization: localStorage.getItem("session"),
+                    },
+                }
+            )
+            .then((responses) => {
+                setHackathon(responses.data.get_hackathon_db.hackathon);
+                console.log("Responses = ", responses);
+                setProblemStatements(
+                    responses.data.get_problem_statements_db.problemStatements
+                );
+            })
+            .catch((err) => {
+                console.log(
+                    "Error fetching hackathon in Submission page axios"
+                );
+            });
+    }, []);
+
+    const handleSelectChange = (e) => {
+        setCurrentProblemStatement(e.target.value);
+    };
+
+    const renderIcon = (tech) => {
+        return getIcon(tech.toLowerCase());
+    };
 
     return (
         <Typography fontFamily="Open Sans">
@@ -56,7 +98,6 @@ const Hackathonsubmission = () => {
                 <NavBar location="dashboard" />
 
                 <Grid container sm={12} xs={12} md={12}>
-
                     {/* Top Carousel */}
                     <Grid
                         item
@@ -100,7 +141,9 @@ const Hackathonsubmission = () => {
                                         <BusinessOutlined
                                             style={{ placeSelf: "center" }}
                                         />
-                                        Organized by HackCode World Pvt Ltd.
+                                        Organized by{" "}
+                                        {hackathon.organizedBy &&
+                                            hackathon.organizedBy}
                                     </strong>
                                 </Typography>
                             </Grid>
@@ -152,7 +195,7 @@ const Hackathonsubmission = () => {
                         sm={4}
                         className={classes.innerGrid}
                     >
-                        <Formsectionheader name="Problem Statement" />
+                        <Formsectionheader name="Problem Statements" />
                     </Grid>
 
                     {/* Problem Statement Details */}
@@ -165,45 +208,23 @@ const Hackathonsubmission = () => {
                     >
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">
-                                Submission Format
+                                Problem Statements
                             </InputLabel>
                             <Select
                                 id="demo-simple-select"
                                 label="submissionFormat"
-                                multiple
-                                value={[]}
+                                value={currentProblemStatement}
+                                onChange={handleSelectChange}
                             >
-                                <MenuItem
-                                    value="JavaScript"
-                                    name="JavaScript"
-                                    key="JavaScript"
-                                >
-                                    JavaScript
-                                </MenuItem>
-                                <MenuItem
-                                    value="Python"
-                                    name="Python"
-                                    key="Python"
-                                >
-                                    Python
-                                </MenuItem>
-                                <MenuItem value="text/x-csrc" name="C" key="C">
-                                    C
-                                </MenuItem>
-                                <MenuItem
-                                    value="text/x-c++src"
-                                    name="C++"
-                                    key="C++"
-                                >
-                                    C++
-                                </MenuItem>
-                                <MenuItem
-                                    value="text/x-java"
-                                    name="Java"
-                                    key="Java"
-                                >
-                                    Java
-                                </MenuItem>
+                                {problemStatements.map((probState) => (
+                                    <MenuItem
+                                        value={probState.id}
+                                        name={probState.id}
+                                        key={probState.id}
+                                    >
+                                        {probState.title}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
                     </Grid>
@@ -222,26 +243,11 @@ const Hackathonsubmission = () => {
                     {/* Submission Guidlines Details */}
                     <Grid item xs={12} sm={12} md={12}>
                         <ul>
-                            <li>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do Lorem ipsum dolor sit
-                                amet, consectetur adipiscing elit
-                            </li>
-                            <li>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do Lorem ipsum dolor sit
-                                amet, consectetur adipiscing elit
-                            </li>
-                            <li>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do Lorem ipsum dolor sit
-                                amet, consectetur adipiscing elit
-                            </li>
-                            <li>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do Lorem ipsum dolor sit
-                                amet, consectetur adipiscing elit
-                            </li>
+                            {hackathon.submissionGuidelines &&
+                                splitString(
+                                    hackathon.submissionGuidelines,
+                                    ". "
+                                ).map((guideline) => <li>{guideline}</li>)}
                         </ul>
                     </Grid>
 
@@ -258,126 +264,41 @@ const Hackathonsubmission = () => {
                     <Grid item xs={12} md={12} sm={12} />
 
                     {/* Accepted Technologies Details */}
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={JS} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">JavaScript</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={NodeJS} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">Node JS</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={ReactSVG} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">React JS</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={Python} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">Python</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={Django} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">Django</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={Django} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">Django</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={Django} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">Django</Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={2.4}
-                        className={classes.innerGrid}
-                        style={{ display: "flex", placeSelf: "center" }}
-                    >
-                        <Avatar>
-                            <Icon>
-                                <img src={Django} />
-                            </Icon>
-                        </Avatar>
-                        <Typography variant="h6">Django</Typography>
-                    </Grid>
+                    {currentProblemStatement ? (
+                        splitString(
+                            problemStatements.filter(
+                                (statement) =>
+                                    statement.id == currentProblemStatement
+                            )[0].technologies,
+                            ","
+                        ).map((tech) => (
+                            <Grid
+                                item
+                                xs={6}
+                                sm={4}
+                                md={2}
+                                className={classes.technologies}
+                                style={{ display: "flex", placeSelf: "center" }}
+                            >
+                                <Avatar>
+                                    <Icon>
+                                        <img src={renderIcon(tech)} />
+                                    </Icon>
+                                </Avatar>
+                                <Typography variant="h6">{tech}</Typography>
+                            </Grid>
+                        ))
+                    ) : (
+                        <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            className={classes.innerGrid}
+                        >
+                            Please Select Problem Statement
+                        </Grid>
+                    )}
 
                     {/* Reference Material Title */}
                     <Grid item xs={12} md={12} sm={12} />
@@ -393,37 +314,35 @@ const Hackathonsubmission = () => {
                     <Grid item xs={12} md={12} sm={12} />
 
                     {/* Reference Material Details */}
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        className={classes.innerGrid}
-                    >
-                        <Link href="#">
-                            https://mui.com/getting-started/usage/
-                        </Link>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        className={classes.innerGrid}
-                    >
-                        <Link href="#">https://nodejs.dev/learn</Link>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        className={classes.innerGrid}
-                    >
-                        <Link href="#">
-                            https://docs.djangoproject.com/en/3.2/
-                        </Link>
-                    </Grid>
+                    {currentProblemStatement ? (
+                        splitString(
+                            problemStatements.filter(
+                                (statement) =>
+                                    statement.id == currentProblemStatement
+                            )[0].refMaterial,
+                            ", "
+                        ).map((refLink) => (
+                            <Grid
+                                item
+                                xs={12}
+                                sm={12}
+                                md={12}
+                                className={classes.innerGrid}
+                            >
+                                <Link href={refLink}>{refLink}</Link>
+                            </Grid>
+                        ))
+                    ) : (
+                        <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            className={classes.innerGrid}
+                        >
+                            Please Select Problem Statement
+                        </Grid>
+                    )}
 
                     {/* Submission Title */}
                     <Grid item xs={12} md={12} sm={12} />
@@ -439,17 +358,30 @@ const Hackathonsubmission = () => {
                     <Grid item xs={12} md={12} sm={12} />
 
                     {/* Submission Details */}
-                    <Grid item xs={12} sm={12} md={12} className={classes.innerGrid}>
-                        <Button variant="contained" component="label">
-                            Upload File
-                            <input type="file" hidden />
-                        </Button>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        className={classes.innerGrid}
+                    >
+                        
+                        <TextField
+                        type="file" variant="outlined" />
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12} sm={12} md={12} className={classes.innerGrid}>
+                <Grid
+                    item
+                    xs={12}
+                    sm={12}
+                    md={12}
+                    className={classes.innerGrid}
+                >
                     <center>
-                    <Button variant="contained" size="large">Submit</Button>
+                        <Button variant="contained" size="large">
+                            Submit
+                        </Button>
                     </center>
                 </Grid>
 

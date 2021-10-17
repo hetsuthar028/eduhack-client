@@ -24,9 +24,9 @@ import {
     FormHelperText,
 } from "@mui/material";
 import "./OrganizePage.css";
-import firstPrize from "../../../firstPrize.svg";
-import secondPrize from "../../../secondPrize.svg";
-import thirdPrize from "../../../thirdPrize.svg";
+import firstPrize from "../../../static/Icons/firstPrize.svg"; 
+import secondPrize from "../../../static/Icons/secondPrize.svg";
+import thirdPrize from "../../../static/Icons/thirdPrize.svg";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
 import Popup from "../Popup/Popup";
 import Problemstatementform from "../ProblemStatementForm/ProblemStatementForm";

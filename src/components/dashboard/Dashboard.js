@@ -18,11 +18,11 @@ import Footer from "../footer/Footer";
 import Tabs from "../tabs/Tabs";
 import Codeeditor from "../code-editor/CodeEditor";
 import Upcominghackathons from "../Hackathon/upcoming-hackathons/UpcomingHackathons";
-import JS from '../../JS.svg';
-import Python from '../../Python.svg';
-import CPlusPlus from '../../C++.svg';
-import DS from '../../DS.svg';
-import Algorithm from '../../Algorithm.svg';
+import JS from '../../static/Icons/JS.svg';
+import Python from '../../static/Icons/Python.svg';
+import CPlusPlus from '../../static/Icons/C++.svg';
+import DS from '../../static/Icons/DS.svg';
+import Algorithm from '../../static/Icons/Algorithm.svg';
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {

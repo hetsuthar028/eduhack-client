@@ -22,7 +22,7 @@ import theme from "../../ui/Theme";
 import axios from "axios";
 import { AppContext } from "../../../AppContext";
 import "./HackathonMain.scss";
-import firstPrize from '../../../firstPrize.svg'
+import firstPrize from '../../../static/Icons/firstPrize.svg'
 
 const useStyles = makeStyles((theme) => ({
     parent: {
