@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formPaper: {
         padding: "15px",
+        border: ".5px solid #d3d3d3"
     },
     innerGrid: {
         padding: "10px",
@@ -63,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
     errorMessage: {
         margin: "0px",
     },
+    
 }));
 
 // Initial Form Values
@@ -220,13 +222,10 @@ const Organizepage = () => {
             );
         }
 
-        if (
-            name == "hackDescription" &&
-            (fieldValue.length < 10 || fieldValue.length > 100)
-        ) {
+        if (name == "hackDescription" && fieldValue.length < 50) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
-                    Description length should be between 10 to 100 characters.
+                    MinLength should be 50 characters.
                 </p>
             );
         }
@@ -375,8 +374,12 @@ const Organizepage = () => {
                     });
 
                     console.log("Got Response, Hackathon Created!!");
-                    console.log(response.data.add_hackathon_db.uniqueHackathonID)
-                    history.push(`/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`)
+                    console.log(
+                        response.data.add_hackathon_db.uniqueHackathonID
+                    );
+                    history.push(
+                        `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
+                    );
                 })
                 .catch((err) => {
                     setShowBanner({
@@ -394,34 +397,35 @@ const Organizepage = () => {
     return (
         <div>
             <NavBar location="dashboard" />
-
-            <Grid
-                container
-                sm={12}
-                xs={12}
-                md={12}
-                spacing={{ xs: 1, md: 2 }}
-                className={classes.container}
-            >
+            <form method="POST" onSubmit={handleFormSubmit}>
                 <Grid
-                    item
-                    xs={12}
+                    container
                     sm={12}
+                    xs={12}
                     md={12}
-                    className={classes.headerGrid}
+                    spacing={{ xs: 1, md: 2 }}
+                    className={classes.container}
                 >
-                    <Typography variant="h4" fontFamily="Bebas Neue">
-                        Organize A Hackathon
-                    </Typography>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        className={classes.headerGrid}
+                    >
+                        <Typography variant="h3" fontFamily="Bebas Neue">
+                            Organize A Hackathon
+                        </Typography>
 
-                    <Button variant="contained">Save</Button>
-                </Grid>
+                        <Button variant="contained">Save</Button>
+                    </Grid>
 
-                {/* Hackathon Details Title */}
-                <Formsectionheader name="Hackathon" />
-                <form method="POST" onSubmit={handleFormSubmit}>
+                    {/* Hackathon Details Title */}
+                    <Formsectionheader name="Hackathon" />
+
+                    {/* Hackathon Details */}
                     <Grid item xs={12} sm={12} md={12}>
-                        <Paper className={classes.formPaper}>
+                        <Paper className={classes.formPaper} elevation={5}>
                             <Grid container xs={12} md={12} sm={12}>
                                 {/* 1st Row */}
                                 <Grid
@@ -1278,7 +1282,7 @@ const Organizepage = () => {
                                 type="Submit"
                                 disabled={!isFormValid}
                             >
-                                Publish
+                                Publish Hackathon
                             </Button>
                         </center>
                     </Grid>
@@ -1306,9 +1310,8 @@ const Organizepage = () => {
                             handleSubmit={handleSponsorSubmit}
                         />
                     </Popup>
-                </form>
-            </Grid>
-
+                </Grid>
+            </form>
             <Footer />
         </div>
     );

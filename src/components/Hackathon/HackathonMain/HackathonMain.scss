@@ -1,0 +1,26 @@
+ul {
+    list-style: none;
+    counter-reset: my-awesome-counter;
+    padding-left: 0px;
+  }
+  li {
+    counter-increment: my-awesome-counter;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+
+  }
+  li::before {
+    content: counter(my-awesome-counter);
+    background: #662974;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-block;
+    line-height: 2rem;
+    color: white;
+    text-align: center;
+    margin-right: 0.5rem;
+  }
+  

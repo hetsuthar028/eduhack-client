@@ -74,11 +74,11 @@ const Problemstatementform = (props) => {
 
         if (
             name == "probDescription" &&
-            (fieldValue.length < 10 || fieldValue.length > 100)
+            (fieldValue.length < 30)
         ) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
-                    Description length should be between 10 to 100 characters
+                    MinLength should be 30
                 </p>
             );
         }
@@ -134,14 +134,14 @@ const Problemstatementform = (props) => {
     };
 
     const handleProbSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
 
         handleSubmit(probDetails)
     }
 
     return (
         <div className={classes.parent}>
-            <form onSubmit={handleProbSubmit}>
+            <form>
                 <Grid container xs={12} md={12} sm={12}>
                     <Grid
                         item
@@ -326,8 +326,9 @@ const Problemstatementform = (props) => {
                                 variant="contained"
                                 size="large"
                                 style={{ margin: "10px" }}
-                                type="submit"
+                                // type="submit"
                                 disabled={!isFormValid}
+                                onClick={() => {handleProbSubmit()}}
                             >
                                 Add
                             </Button>

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import {
     Box,
     Paper,
@@ -18,6 +19,10 @@ import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
 import theme from "../../ui/Theme";
+import axios from "axios";
+import { AppContext } from "../../../AppContext";
+import "./HackathonMain.scss";
+import firstPrize from '../../../firstPrize.svg'
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -44,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
     },
     probStatDesc: {
         padding: "10px",
+        overflowX: "auto"
+        // wordWrap: "break-word"
+
     },
     probStatementGrid: {
         margin: "10px",
@@ -54,8 +62,57 @@ const useStyles = makeStyles((theme) => ({
 const tempPrizes = [1, 2, 3];
 const tempProblemStatements = [1, 2, 3, 4];
 
-const Hackathonmain = () => {
+const formatDate = (date) => {
+    let tempDate = new Date(date);
+
+    return `${tempDate.getDate()}/${tempDate.getMonth()}/${tempDate.getFullYear()}`
+}
+
+const Hackathonmain = (props) => {
     const classes = useStyles();
+    const [hackathon, setHackathon] = useState({});
+    const [problemStatements, setProblemStatements] = useState([]);
+    const [sponsors, setSponsors] = useState([])
+    const { setShowBanner } = useContext(AppContext);
+    const history = useHistory();
+
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null);
+        }, 3000);
+    }
+
+    useEffect(() => {
+        try{
+            axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,  {
+                body: {
+
+                },
+                headers: {
+                    authorization: localStorage.getItem("session"),
+                },
+            }).then(responses => {
+                console.log("Got Hackathon", responses)
+                setHackathon(responses.data.get_hackathon_db.hackathon)
+                setProblemStatements(responses.data.get_problem_statements_db.problemStatements)
+                setSponsors(responses.data.get_sponsors_db.sponsors)
+                setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
+            }).catch(err => {
+    
+                console.log("Error fetching hackathon", err.response?.data);
+                setShowBanner({apiErrorResponse: err.response?.data})
+                if(err.response.data == "Invalid user"){
+                    return history.push('/auth/signin');
+                }
+                
+            })
+        } catch(err){
+
+        } finally{
+            handleAfterFormResponse();
+        }
+        
+    }, []);
 
     return (
         <div className={classes.parent}>
@@ -108,14 +165,14 @@ const Hackathonmain = () => {
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>15/10/2021</b>
+                                    <b>{formatDate(hackathon.regStart)}</b>
                                 </Typography>
                             </center>
                         </Grid>
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>30/10/2021</b>
+                                    <b>{formatDate(hackathon.regEnd)}</b>
                                 </Typography>
                             </center>
                         </Grid>
@@ -159,14 +216,14 @@ const Hackathonmain = () => {
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b> 15/11/2021 </b>
+                                    <b>{formatDate(hackathon.hackStart)}</b>
                                 </Typography>
                             </center>
                         </Grid>
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>17/10/2021</b>
+                                    <b>{formatDate(hackathon.hackEnd)}</b>
                                 </Typography>
                             </center>
                         </Grid>
@@ -176,7 +233,7 @@ const Hackathonmain = () => {
                     <center>
                         <div component="div">
                             <Typography variant="h6" fontFamily="Open Sans">
-                                Participants Count: 123
+                                Participants Count: {hackathon.participantCount}
                             </Typography>
                         </div>
                         <Button
@@ -202,16 +259,8 @@ const Hackathonmain = () => {
                     sm={12}
                     className={classes.innerGrid}
                 >
-                    <Typography variant="body1" fontFamily="Open Sans">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore
-                        magna aliqua. Ut enim ad minim veniam, quis nostrud
-                        exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in
-                        reprehenderit in voluptate velit esse cillum dolore eu
-                        fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                        non proident, sunt in culpa qui officia deserunt mollit
-                        anim id est laborum.
+                    <Typography variant="h6" fontFamily="Open Sans">
+                        {hackathon.description}
                     </Typography>
                 </Grid>
 
@@ -224,7 +273,7 @@ const Hackathonmain = () => {
                 {/* Winning Prizes Details */}
                 <Container>
                     <Grid container sm={12} xs={12} md={12}>
-                        {tempPrizes.map((tempPrize) => (
+                        {["firstPrizeDesc", "secondPrizeDesc", "thirdPrizeDesc"].map((tempPrize) => (
                             <Grid
                                 item
                                 xs={12}
@@ -236,56 +285,27 @@ const Hackathonmain = () => {
                                     <CardActionArea>
                                         <CardMedia
                                             component="img"
-                                            height="160"
-                                            image="https://source.unsplash.com/random"
+                                            height="200"
+                                            image={firstPrize}
+                                            
                                             alt="Hackathon Image"
                                         />
-
                                         <CardContent>
-                                            <Grid
-                                                container
-                                                xs={12}
-                                                sm={12}
-                                                md={12}
+                                            <Typography 
+                                            variant="h6"
+                                            fontFamily="Open Sans"
                                             >
-                                                <Grid
-                                                    item
-                                                    xs={12}
-                                                    sm={12}
-                                                    md={12}
-                                                >
-                                                    <Typography
-                                                        variant="h6"
-                                                        gutterBottom
-                                                    >
-                                                        CodeState 2021 OPEN
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid>
-                                                    <Typography
-                                                        variant="subtitle1"
-                                                        color="text.secondary"
-                                                        gutterBottom
-                                                    >
-                                                        <strong>
-                                                            Registration Ends:
-                                                            10/10/2021
-                                                        </strong>
-                                                    </Typography>
-                                                </Grid>
-                                                <Grid>
-                                                    <Typography
-                                                        variant="body2"
-                                                        color="text.secondary"
-                                                        gutterBottom
-                                                    >
-                                                        World's first Student
-                                                        driven hackathon. This
-                                                        hackathon contains
-                                                        various technologies.
-                                                    </Typography>
-                                                </Grid>
-                                            </Grid>
+                                                <ul>
+                                                    {
+                                                        hackathon[tempPrize]?.split(", ").map(prize=> (
+                                                            <li>
+                                                                {prize}
+                                                            </li>
+                                                        ))
+                                                    }
+                                                    
+                                                </ul>
+                                            </Typography>                                 
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
@@ -306,7 +326,7 @@ const Hackathonmain = () => {
                         sm={12}
                         className={classes.probStatementGrid}
                     >
-                        <Paper elevation={3}>
+                        <Paper elevation={10} style={{backgroundColor: theme.palette.common.orangeColor, border: "2px solid", borderColor: theme.palette.secondary.main}}>
                             <Grid container sm={12} md={12} xs={12}>
                                 <Grid
                                     item
@@ -315,7 +335,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    <Typography variant="subtitle1" fontFamily="inherit">
+                                    <Typography variant="subtitle1" fontFamily="inherit"  color="white">
                                         <strong>ID</strong>
                                     </Typography>
                                 </Grid>
@@ -333,7 +353,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    <Typography variant="subtitle1"  fontFamily="inherit">
+                                    <Typography variant="subtitle1"  fontFamily="inherit" color="white">
                                         <strong>Title</strong>
                                     </Typography>
                                 </Grid>
@@ -351,7 +371,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    <Typography variant="subtitle1"  fontFamily="inherit">
+                                    <Typography variant="subtitle1"  fontFamily="inherit" color="white">
                                         <strong>Description</strong>
                                     </Typography>
                                 </Grid>
@@ -369,7 +389,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    <Typography variant="subtitle1"  fontFamily="inherit">
+                                    <Typography variant="subtitle1"  fontFamily="inherit" color="white">
                                         <strong>Solution Type</strong>
                                     </Typography>
                                 </Grid>
@@ -387,7 +407,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    <Typography variant="subtitle1"  fontFamily="inherit">
+                                    <Typography variant="subtitle1"  fontFamily="inherit" color="white">
                                         <strong>Technologies</strong>
                                     </Typography>
                                 </Grid>
@@ -396,7 +416,7 @@ const Hackathonmain = () => {
                     </Grid>
 
                 {/* Problem Statements Detaild */}
-                {tempProblemStatements.map((problemStatement) => (
+                {problemStatements.map((problemStatement) => (
                     <Grid
                         item
                         xs={12}
@@ -404,7 +424,7 @@ const Hackathonmain = () => {
                         sm={12}
                         className={classes.probStatementGrid}
                     >
-                        <Paper elevation={3}>
+                        <Paper elevation={5} style={{border: "1px solid", borderColor: theme.palette.primary.main}}>
                             <Grid container sm={12} md={12} xs={12}>
                                 <Grid
                                     item
@@ -413,7 +433,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    A1283H
+                                    {problemStatement.id}
                                 </Grid>
                                 <Grid
                                     item
@@ -429,8 +449,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    Lorem ipsum dolor sit ips aamet, consectetur
-                                    lorem jfhw, ajips sum adipcscing
+                                    {problemStatement.title}
                                 </Grid>
                                 <Grid
                                     item
@@ -446,11 +465,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    Lorem ipsum dolor sit ips aamet, consectetur
-                                    lorem jfhw, ajips lorem jfhw, ajips lorem
-                                    jfhw, ajips lorem jfhw, ajips lorem jfhw,
-                                    ajips lorem jfhw, ajips lorem jfhw, ajips
-                                    lorem jfhw, lorem ...
+                                    {problemStatement.description}
                                 </Grid>
                                 <Grid
                                     item
@@ -466,7 +481,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    Software - Web App
+                                    {problemStatement.solutionType}
                                 </Grid>
                                 <Grid
                                     item
@@ -482,8 +497,7 @@ const Hackathonmain = () => {
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
-                                    HTML, CSS, Bootstrap, JavaScript, Python 3,
-                                    MERN Stack, OAuth, PHP, jQuery, MySQL
+                                    {problemStatement.technologies}
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -497,34 +511,18 @@ const Hackathonmain = () => {
                 <Grid item xs={12} md={12} sm={12}></Grid>
 
                 {/* Sponsors Details */}
-                <Grid item xs={12} sm={6} md={3} className={classes.innerGrid}>
-                    <img
-                        src="https://source.unsplash.com/random"
-                        height={170}
-                        style={{ borderRadius: "2%" }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} className={classes.innerGrid}>
-                    <img
-                        src="https://source.unsplash.com/random"
-                        height={170}
-                        style={{ borderRadius: "2%" }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} className={classes.innerGrid}>
-                    <img
-                        src="https://source.unsplash.com/random"
-                        height={170}
-                        style={{ borderRadius: "2%" }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6} md={3} className={classes.innerGrid}>
-                    <img
-                        src="https://source.unsplash.com/random"
-                        height={170}
-                        style={{ borderRadius: "2%" }}
-                    />
-                </Grid>
+                {
+                    sponsors.map((sponsor) => (
+                        <Grid item xs={12} sm={6} md={3} className={classes.innerGrid}>
+                            <img
+                                src="https://source.unsplash.com/random"
+                                height={170}
+                                width="85%"
+                                style={{ borderRadius: "2%" }}
+                            />
+                        </Grid>
+                    ))
+                }
             </Grid>
             </Typography>
 
