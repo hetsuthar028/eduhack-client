@@ -5,11 +5,7 @@ ul {
   }
   li {
     counter-increment: my-awesome-counter;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-
+    margin: 1rem;
   }
   li::before {
     content: counter(my-awesome-counter);

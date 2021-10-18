@@ -1,10 +1,19 @@
-import PythonSVG from './Python.svg'
+import PythonSVG from './Python.svg';
+import FirstPrizeSVG from './firstPrize.svg'
+import SecondPrizeSVG from './secondPrize.svg'
+import ThirdPrizeSVG from './thirdPrize.svg'
 
 export default function getIcon(iconName){
 
     switch(iconName.toLowerCase()){
         case "python": 
             return PythonSVG
+        case "firstprizedesc":
+            return FirstPrizeSVG
+        case "secondprizedesc":
+            return SecondPrizeSVG
+        case "thirdprizedesc":
+            return ThirdPrizeSVG
         // case "html": 
         //     return Python
         // case "javascript": 

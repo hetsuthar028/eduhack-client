@@ -23,6 +23,7 @@ import axios from "axios";
 import { AppContext } from "../../../AppContext";
 import "./HackathonMain.scss";
 import firstPrize from '../../../static/Icons/firstPrize.svg'
+import getIcon from '../../../static/Icons/getIcon';
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -57,6 +58,10 @@ const useStyles = makeStyles((theme) => ({
         margin: "10px",
         padding: "10px 20px"
     },
+    justifiedText: {
+        textAlign: "justify",
+        textJustify: "inner-word"
+    }
 }));
 
 const tempPrizes = [1, 2, 3];
@@ -82,6 +87,10 @@ const Hackathonmain = (props) => {
         }, 3000);
     }
 
+    const handleParticipate = (e) => {
+        
+    }
+
     useEffect(() => {
         try{
             axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,  {
@@ -98,9 +107,14 @@ const Hackathonmain = (props) => {
                 setSponsors(responses.data.get_sponsors_db.sponsors)
                 setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
             }).catch(err => {
-    
+
                 console.log("Error fetching hackathon", err.response?.data);
-                setShowBanner({apiErrorResponse: err.response?.data})
+                // setShowBanner({apiErrorResponse: err.response?.data})
+                if(err.response.data == "Hackathon doesn't exists!"){
+                    setShowBanner({apiErrorResponse: err.response?.data})
+                    return history.push('/dashboard')
+                }
+
                 if(err.response.data == "Invalid user"){
                     return history.push('/auth/signin');
                 }
@@ -240,6 +254,7 @@ const Hackathonmain = (props) => {
                             variant="contained"
                             style={{ marginTop: "20px" }}
                             size="large"
+                            onClick={handleParticipate}
                         >
                             Participate Now
                         </Button>
@@ -259,7 +274,7 @@ const Hackathonmain = (props) => {
                     sm={12}
                     className={classes.innerGrid}
                 >
-                    <Typography variant="h6" fontFamily="Open Sans">
+                    <Typography variant="h6" fontFamily="Open Sans" className={classes.justifiedText}>
                         {hackathon.description}
                     </Typography>
                 </Grid>
@@ -284,13 +299,13 @@ const Hackathonmain = (props) => {
                                 <Card classes={classes.card}>
                                     <CardActionArea>
                                         <CardMedia
-                                            component="img"
-                                            height="200"
-                                            image={firstPrize}
-                                            
+                                            component="div"
+                                            style={{maxWidth: "100%", maxHeight: "200px", display: "flex"}}
                                             alt="Hackathon Image"
-                                        />
-                                        <CardContent>
+                                        >
+                                            <img src={getIcon(tempPrize)} maxHeight="100%"/>
+                                        </CardMedia>
+                                        <CardContent style={{paddingTop: "0px", paddingBottom: "0px"}}>
                                             <Typography 
                                             variant="h6"
                                             fontFamily="Open Sans"
@@ -318,7 +333,8 @@ const Hackathonmain = (props) => {
                 <Grid item xs={12} md={3} sm={4} className={classes.innerGrid}>
                     <Formsectionheader name="Problem Statements" />
                 </Grid>
-
+                                                    
+                {/* Problem Statements Details */}
                 <Grid
                         item
                         xs={12}
@@ -331,7 +347,7 @@ const Hackathonmain = (props) => {
                                 <Grid
                                     item
                                     xs={6}
-                                    md={0.7}
+                                    md={1.3}
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
@@ -415,7 +431,7 @@ const Hackathonmain = (props) => {
                         </Paper>
                     </Grid>
 
-                {/* Problem Statements Detaild */}
+                {/* Problem Statements Details */}
                 {problemStatements.map((problemStatement) => (
                     <Grid
                         item
@@ -425,11 +441,11 @@ const Hackathonmain = (props) => {
                         className={classes.probStatementGrid}
                     >
                         <Paper elevation={5} style={{border: "1px solid", borderColor: theme.palette.primary.main}}>
-                            <Grid container sm={12} md={12} xs={12}>
+                            <Grid container sm={12} md={12} xs={12} className={classes.justifiedText}>
                                 <Grid
                                     item
                                     xs={6}
-                                    md={0.7}
+                                    md={1.3}
                                     sm={6}
                                     className={classes.probStatDesc}
                                 >
@@ -514,12 +530,20 @@ const Hackathonmain = (props) => {
                 {
                     sponsors.map((sponsor) => (
                         <Grid item xs={12} sm={6} md={3} className={classes.innerGrid}>
-                            <img
-                                src="https://source.unsplash.com/random"
-                                height={170}
-                                width="85%"
-                                style={{ borderRadius: "2%" }}
-                            />
+                            <a 
+                                key={sponsor}
+                                href={sponsor.webLink}
+                                target="_blank"
+                            >
+                            
+                                    <img
+                                        src="https://source.unsplash.com/random"
+                                        height={170}
+                                        width="85%"
+                                        style={{ borderRadius: "2%" }}
+                                    />
+                                
+                            </a>
                         </Grid>
                     ))
                 }

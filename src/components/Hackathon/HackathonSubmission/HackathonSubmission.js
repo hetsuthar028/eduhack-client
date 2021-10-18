@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
 import {
@@ -26,6 +27,7 @@ import {
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
 import getIcon from "../../../static/Icons/getIcon";
 import axios from "axios";
+import { AppContext } from '../../../AppContext';
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -54,6 +56,9 @@ const splitString = (inputString, by) => {
 
 const Hackathonsubmission = (props) => {
     const classes = useStyles();
+    const history = useHistory();
+
+    const { setShowBanner } = useContext(AppContext);
 
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
@@ -78,6 +83,14 @@ const Hackathonsubmission = (props) => {
                 );
             })
             .catch((err) => {
+                if(err.response.data == "Invalid user"){
+                    setShowBanner({apiErrorResponse: err.response.data})
+                    return history.push('/auth/signin')
+                }
+                if(err.response.data == "Hackathon doesn't exists!"){
+                    setShowBanner({apiErrorResponse: err.response.data})
+                    return history.push('/dashboard')
+                }
                 console.log(
                     "Error fetching hackathon in Submission page axios"
                 );
