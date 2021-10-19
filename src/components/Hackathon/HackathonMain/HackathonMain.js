@@ -88,7 +88,53 @@ const Hackathonmain = (props) => {
     }
 
     const handleParticipate = (e) => {
-        
+        e.preventDefault();
+        console.log(props.match.params.id)
+        try{
+            axios.post(`http://localhost:4400/api/hackathon/register/${props.match.params.id}`, {}, {
+                headers: {
+                    authorization: localStorage.getItem('session')
+                }
+            }).then(responses => {
+                if(responses.data.register_user_db == "registered successfully"){
+                    setShowBanner({apiSuccessResponse: "You're successfully registered for the Hackathon"})
+                    console.log("PARAMS", props.match.params.id)
+                    return history.push(`/hackathon/submission/${props.match.params.id}`)
+                }
+                console.log("Registration Request Data", responses.data);
+            }).catch((err) => {
+                console.log("ERROR MESSAGE =", err.response.data)
+                if(err.response.data == "Not Authorized"){
+                    setShowBanner({apiErrorResponse: err.response.data});
+                    return history.push('/dashboard')
+                }
+                if(err.response.data == "Not Authenticated"){
+                    setShowBanner({apiErrorResponse: err.response.data})
+                    return history.push('/auth/signin')
+                }
+                if(err.response.data == "Already registered"){
+                    return setShowBanner({apiErrorResponse: err.response.data})
+                }
+                if(err.response.data == "Participant limit exceeded"){
+                    return setShowBanner({apiErrorResponse: err.response.data})
+                }
+                else {
+
+                    // @WORKAROUND
+                    /* This is just a WORKAROUND for the problem of Can't getting the response from the Backend
+                        system. Remove this else part later on and handle the responses in the THEN block.
+                    */
+                    // setShowBanner({apiSuccessResponse: "You're successfully registered for the Hackathon"})
+                    // history.push(`/hackathon/view/${props.match.params.id}`)
+                }
+                
+                // return 
+            })
+        } catch(err){
+            setShowBanner({apiErrorResponse: "Something went wrong! Please try again"})
+        } finally{
+            handleAfterFormResponse();
+        }
     }
 
     useEffect(() => {

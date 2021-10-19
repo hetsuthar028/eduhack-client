@@ -64,37 +64,49 @@ const Hackathonsubmission = (props) => {
     const [problemStatements, setProblemStatements] = useState([]);
     const [currentProblemStatement, setCurrentProblemStatement] = useState();
 
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null)
+        }, 3000);
+    }
+
     useEffect(() => {
-        axios
-            .get(
-                `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
-                {
-                    body: {},
-                    headers: {
-                        authorization: localStorage.getItem("session"),
-                    },
-                }
-            )
-            .then((responses) => {
-                setHackathon(responses.data.get_hackathon_db.hackathon);
-                console.log("Responses = ", responses);
-                setProblemStatements(
-                    responses.data.get_problem_statements_db.problemStatements
-                );
-            })
-            .catch((err) => {
-                if(err.response.data == "Invalid user"){
-                    setShowBanner({apiErrorResponse: err.response.data})
-                    return history.push('/auth/signin')
-                }
-                if(err.response.data == "Hackathon doesn't exists!"){
-                    setShowBanner({apiErrorResponse: err.response.data})
-                    return history.push('/dashboard')
-                }
-                console.log(
-                    "Error fetching hackathon in Submission page axios"
-                );
-            });
+        try{
+            axios
+                .get(
+                    `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
+                    {
+                        body: {},
+                        headers: {
+                            authorization: localStorage.getItem("session"),
+                        },
+                    }
+                )
+                .then((responses) => {
+                    setHackathon(responses.data.get_hackathon_db.hackathon);
+                    console.log("Responses = ", responses);
+                    setProblemStatements(
+                        responses.data.get_problem_statements_db.problemStatements
+                    );
+                })
+                .catch((err) => {
+                    if(err.response.data == "Invalid user"){
+                        setShowBanner({apiErrorResponse: err.response.data})
+                        return history.push('/auth/signin')
+                    }
+                    if(err.response.data == "Hackathon doesn't exists!"){
+                        setShowBanner({apiErrorResponse: err.response.data})
+                        return history.push('/dashboard')
+                    }
+                    console.log(
+                        "Error fetching hackathon in Submission page axios"
+                    );
+                });
+        } catch(err){
+
+        }finally {
+            handleAfterFormResponse();
+        }
     }, []);
 
     const handleSelectChange = (e) => {
