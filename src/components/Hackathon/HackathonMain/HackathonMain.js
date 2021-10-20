@@ -77,7 +77,8 @@ const Hackathonmain = (props) => {
     const classes = useStyles();
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
-    const [sponsors, setSponsors] = useState([])
+    const [sponsors, setSponsors] = useState([]);
+    const [registrationStatues, setRegistrationStatus] = useState(false);
     const { setShowBanner } = useContext(AppContext);
     const history = useHistory();
 
@@ -85,6 +86,19 @@ const Hackathonmain = (props) => {
         setTimeout(() => {
             setShowBanner(null);
         }, 3000);
+    }
+
+    const checkregistration = async () => {
+        await axios.get(`http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`)
+            .then((responses) => {
+                if(responses.data.message == 'already registered'){
+                    setRegistrationStatus(true)
+                }else {
+                    setRegistrationStatus(false)
+                }
+            }).catch(err => {
+                console.log("Error registration check", err);
+            })
     }
 
     const handleParticipate = (e) => {
@@ -139,6 +153,8 @@ const Hackathonmain = (props) => {
 
     useEffect(() => {
         try{
+            checkregistration()
+
             axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,  {
                 body: {
 
@@ -296,14 +312,26 @@ const Hackathonmain = (props) => {
                                 Participants Count: {hackathon.participantCount}
                             </Typography>
                         </div>
-                        <Button
-                            variant="contained"
-                            style={{ marginTop: "20px" }}
-                            size="large"
-                            onClick={handleParticipate}
-                        >
-                            Participate Now
-                        </Button>
+                        {registrationStatues ?  
+                            <Button
+                                variant="contained"
+                                style={{ marginTop: "20px" }}
+                                size="large"
+                                onClick={() => {history.push(`/hackathon/submission/${props.match.params.id}`)}}
+                            >
+                                View Hackathon
+                            </Button>
+                        :
+                            <Button
+                                variant="contained"
+                                style={{ marginTop: "20px" }}
+                                size="large"
+                                onClick={handleParticipate}
+                            >
+                                Participate Now
+                            </Button>
+                        }
+                        
                     </center>
                 </Grid>
 

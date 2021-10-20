@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import "./NavBar.scss";
 import Box from "@mui/material/Box";
 import {
@@ -12,7 +12,8 @@ import {
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import useStyles from "../ui/Style";
 import axios from 'axios';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import { AppContext } from '../../AppContext';
 
 const NavBar = (props) => {
     const classes = useStyles();
@@ -20,31 +21,35 @@ const NavBar = (props) => {
     const [currentUser, setCurrentUser] = useState(null);
     let { location } = props;
 
+    let { appCurrentUser, updateAppCurrentUser } = useContext(AppContext);
+
     useEffect(() => {
-        axios
-            .get("http://localhost:4200/api/user/currentuser", {
-                headers: {
-                    authorization: localStorage.getItem("session"),
-                }
-            })
-            .then((response) => {
-                if (response.data.currentUser) {
-                    console.log("C User", response.data.currentUser)
-                    setCurrentUser(response.data.currentUser);
-                } else {
-                    // Push outside of the application
-                }
-            })
-            .catch((err) => {
-                console.log("Error in Dashboard - While fetching current user");
-            });
+        updateAppCurrentUser();
+        // setCurrentUser(appCurrentUser)
+        // axios
+        //     .get("http://localhost:4200/api/user/currentuser", {
+        //         headers: {
+        //             authorization: localStorage.getItem("session"),
+        //         }
+        //     })
+        //     .then((response) => {
+        //         if (response.data.currentUser) {
+        //             // console.log("C User", response.data.currentUser)
+        //             setCurrentUser(response.data.currentUser);
+        //         } else {
+        //             // Push outside of the application
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         console.log("Error in Dashboard - While fetching current user");
+        //     });
     }, []);
 
     const renderNavButttons = () => {
         
-        console.log("Current User", currentUser)
+        // console.log("Current User", currentUser)
         if(location == "landingPage"){
-            if (!currentUser) {
+            if (!appCurrentUser) {
                 return (
                     <>
                         <Button className={classes.navButton}>Hackathons</Button>
@@ -65,9 +70,9 @@ const NavBar = (props) => {
                 );
             }
         }
-        console.log("Current User 2", currentUser)
+        // console.log("Current User 2", appCurrentUser)
         if(location == "dashboard"){
-            if(!currentUser){
+            if(!appCurrentUser){
                 return (
                     <>
                     No User
@@ -75,8 +80,8 @@ const NavBar = (props) => {
                 )
             }
 
-            console.log("Current User 3", currentUser)
-            if(currentUser.userType == "developer"){
+            // console.log("Current User 3", appCurrentUser)
+            if(appCurrentUser.userType == "developer"){
                 return (
                     <>
                         <Button className={classes.navButton}>Code Editor</Button>
@@ -89,7 +94,7 @@ const NavBar = (props) => {
                     </>
                 )
             }
-            else if(currentUser.userType == "organization"){
+            else if(appCurrentUser.userType == "organization"){
                 return (
                     <>
                         <Button className={classes.navButton}>Code Editor</Button>

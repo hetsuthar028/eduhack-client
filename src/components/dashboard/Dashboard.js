@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
     Container,
     Box,
@@ -23,6 +23,7 @@ import Python from '../../static/Icons/Python.svg';
 import CPlusPlus from '../../static/Icons/C++.svg';
 import DS from '../../static/Icons/DS.svg';
 import Algorithm from '../../static/Icons/Algorithm.svg';
+import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {
@@ -77,29 +78,31 @@ const Dashboard = () => {
     const [currentUser, setCurrentUser] = useState(null);
 
     const classes = useStyles();
-
+    const { appCurrentUser, updateAppCurrentUser } = useContext(AppContext);
     // For Code Editor
     const [html, setHTML] = useState("");
     const [python, setPython] = useState("");
 
     useEffect(() => {
-        axios
-            .get("http://localhost:4200/api/user/currentuser", {
-                headers: {
-                    authorization: localStorage.getItem("session"),
-                },
-            })
-            .then((response) => {
-                if (response.data.currentUser) {
-                    // console.log(response.data.currentUser)
-                    setCurrentUser(response.data.currentUser);
-                } else {
-                    // Push outside of the application
-                }
-            })
-            .catch((err) => {
-                console.log("Error in Dashboard - While fetching current user");
-            });
+        updateAppCurrentUser();
+        console.log("Dashboard User", appCurrentUser)
+        // axios
+        //     .get("http://localhost:4200/api/user/currentuser", {
+        //         headers: {
+        //             authorization: localStorage.getItem("session"),
+        //         },
+        //     })
+        //     .then((response) => {
+        //         if (response.data.currentUser) {
+        //             // console.log(response.data.currentUser)
+        //             setCurrentUser(response.data.currentUser);
+        //         } else {
+        //             // Push outside of the application
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         console.log("Error in Dashboard - While fetching current user");
+        //     });
     }, []);
 
     return (

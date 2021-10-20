@@ -86,7 +86,18 @@ const SignIn = () => {
     const [isFormValid, setIsFormValid] = useState(false);
 
     const history = useHistory();
-    const {setShowBanner} = useContext(AppContext);
+    const {setShowBanner, appCurrentUser, updateAppCurrentUser} = useContext(AppContext);
+
+
+    useEffect(() => {
+        
+        updateAppCurrentUser();
+        console.log("Sign User", updateAppCurrentUser())
+        if(appCurrentUser){
+            setShowBanner({apiSuccessResponse: 'You\'re already signed in!'})
+            return history.push('/dashboard')
+        }
+    }, []);
 
     const validate = () => {
         const re =
@@ -130,7 +141,8 @@ const SignIn = () => {
                         "session",
                         response.data.data.accessToken
                     );
-                    setShowBanner({apiSuccessResponse: 'Signed in successfully!'})
+                    setShowBanner({apiSuccessResponse: 'Signed in successfully!'});
+                    updateAppCurrentUser();
                     return history.push('/');
                 }
             })
