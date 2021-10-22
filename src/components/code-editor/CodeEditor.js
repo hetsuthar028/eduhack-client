@@ -4,7 +4,6 @@ import "codemirror/theme/material.css";
 import "codemirror/mode/python/python";
 import "codemirror/mode/javascript/javascript";
 import "codemirror/mode/clike/clike";
-
 import { Controlled as ControlledEditor } from "react-codemirror2";
 import {
     Box,
@@ -20,6 +19,8 @@ import {
 import { makeStyles } from "@material-ui/core";
 import "./CodeEditor.css"
 import theme from '../ui/Theme'
+import axios from 'axios';
+import getIcon from '../../static/Icons/getIcon'
 
 const useStyles = makeStyles((theme) => ({
     codeEditorHeader: {
@@ -41,6 +42,7 @@ const Codeeditor = (props) => {
     const [codeEditorLanguage, setCodeEditorLanguage] = useState("JavaScript");
     const [title, setTitle] = useState('JavaScript')
     const [code, setCode] = useState("");
+    const [output, setOutput] = useState("");
 
     const handleChangeLanguage = (e) => {
         
@@ -75,6 +77,32 @@ const Codeeditor = (props) => {
         setCode(value);
         // onChange(value)
     };
+
+    const handleCodeSubmit = async () => {
+        
+        let payload = {
+            language: codeEditorLanguage,
+            content: code
+        }
+
+        console.log("FROM CODE", payload)
+
+        await axios.post('http://localhost:9200/api/coding/run/code', payload)
+            .then((response) => {
+                if(response){
+                    // let { data } = response;
+                    console.log(response)
+                    console.log("OP", response.data.message.output)
+                    setOutput(response.data.message.output)
+                } else {
+                    // setOutput("Error, please try again!")
+                    console.log("Error connecting to server!")
+                }
+            }).catch((err) => {
+                setOutput(err.response.data.resp)
+                console.log("ERROR :: ", err.response)
+            })
+    }
 
     return (
         <div className="editor-container">
@@ -152,8 +180,32 @@ const Codeeditor = (props) => {
                     />
 
                 <center>
-                    <Button variant="contained" style={{margin: "20px 0"}} size="large">Execute Code</Button>
+                    <Button variant="contained" style={{margin: "20px 0"}} size="large" onClick={handleCodeSubmit}>Execute Code</Button>
                 </center>
+                    <Paper elevation={5} style={{padding: "10px 15px",}}>
+                        <Grid item xs={12} sm={12} md={12} style={{alignItems: "center", display: "flex"}}>
+                            <img src={getIcon('python')} height="35px" width="35px"/>
+                            <Typography
+                                fontFamily="Open Sans"
+                                variant="h6"
+                                style={{padding: "0px 10px"}}
+                            >
+                                    Pending
+                            </Typography>
+                        </Grid>
+                        <pre >
+                        <Grid container>
+                            <Grid item xs={12} md={12} sm={12} >
+                                
+                                {
+                                    output
+                                }
+                                
+                            </Grid>
+                        </Grid> 
+                        </pre>
+                    </Paper>
+                    
                 </Grid>
 
                 {/* Add Submit Buttons here */}
