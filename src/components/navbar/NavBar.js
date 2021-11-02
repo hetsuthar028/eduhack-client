@@ -163,7 +163,7 @@ const NavBar = (props) => {
         // </div>
         <Typography color="textPrimary">
             <Box sx={{ flowGrow: 1 }} padding="0">
-                <AppBar position="static" color="primary">
+                <AppBar position="static" color="primary" elevation={0}>
                     <Toolbar>
                         <IconButton
                             size="large"

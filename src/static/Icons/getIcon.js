@@ -1,7 +1,10 @@
 import PythonSVG from './Python.svg';
-import FirstPrizeSVG from './firstPrize.svg'
-import SecondPrizeSVG from './secondPrize.svg'
-import ThirdPrizeSVG from './thirdPrize.svg'
+import FirstPrizeSVG from './firstPrize.svg';
+import SecondPrizeSVG from './secondPrize.svg';
+import ThirdPrizeSVG from './thirdPrize.svg';
+import CircleIcon from '@mui/icons-material/Circle';
+import FailedSvg from './Failed.svg';
+import SuccessSvg from './Success.svg';
 
 export default function getIcon(iconName){
 
@@ -14,6 +17,12 @@ export default function getIcon(iconName){
             return SecondPrizeSVG
         case "thirdprizedesc":
             return ThirdPrizeSVG
+        case 'circle':
+            return <CircleIcon style={{color: "red"}} />
+        case 'failed': 
+            return FailedSvg
+        case 'success':
+            return SuccessSvg
         // case "html": 
         //     return Python
         // case "javascript": 

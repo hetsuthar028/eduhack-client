@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/material.css";
 import "codemirror/mode/python/python";
@@ -14,13 +14,15 @@ import {
     Select,
     MenuItem,
     Typography,
-    Button
+    Button,
+    Avatar
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import "./CodeEditor.css"
 import theme from '../ui/Theme'
 import axios from 'axios';
-import getIcon from '../../static/Icons/getIcon'
+import getIcon from '../../static/Icons/getIcon';
+import CircleIcon from '@mui/icons-material/Circle';
 
 const useStyles = makeStyles((theme) => ({
     codeEditorHeader: {
@@ -43,6 +45,11 @@ const Codeeditor = (props) => {
     const [title, setTitle] = useState('JavaScript')
     const [code, setCode] = useState("");
     const [output, setOutput] = useState("");
+    const [status, setStatus] = useState("");
+    const [jobId, setJobId] = useState("");
+
+    const [ tempQuestionData, setTempQuestionData ] = useState({});
+
 
     const handleChangeLanguage = (e) => {
         
@@ -73,16 +80,38 @@ const Codeeditor = (props) => {
     };
 
     const handleChange = (editor, data, value) => {
-        console.log(data);
+        // console.log(data);
         setCode(value);
         // onChange(value)
     };
+    
+    let intervalId;
+
+    useEffect(() => {
+        if(props.defaultCode != undefined || props.defaultCode){
+            console.log("Def code", props.defaultCode)
+            setCode(props.defaultCode);
+        }
+
+        if(props.question !=undefined && props.question){
+            console.log("Question inside CodeEditor", props.question);
+            setTempQuestionData(props.question);
+        }
+    }, []);
 
     const handleCodeSubmit = async () => {
-        
+
         let payload = {
             language: codeEditorLanguage,
             content: code
+        }
+
+        if(Object.keys(tempQuestionData).length !=0 && tempQuestionData){
+            console.log()
+            payload["questionId"] = tempQuestionData["_id"];
+
+            // @WorkAround
+            payload["userEmail"] = "hetmewada028@gmail.com" 
         }
 
         console.log("FROM CODE", payload)
@@ -92,10 +121,57 @@ const Codeeditor = (props) => {
                 if(response){
                     // let { data } = response;
                     console.log(response)
-                    console.log("OP", response.data.message.output)
-                    setOutput(response.data.message.output)
+                    console.log("OP", response.data.jobId)
+                    setJobId(response.data.jobId)
+
+
+
+                    intervalId = setInterval(async () => {
+                        const { data: statusRes} = await axios.get(`http://localhost:9200/api/coding/status/${payload.language}/${response.data.jobId}`)
+
+                        const {success, job, error} = statusRes;
+                        console.log(statusRes);
+
+                        if(success){
+                            const { status: jobStatus, output: jobOutput } = job;
+                            setStatus(jobStatus);
+                            if(jobStatus === "pending") return;
+                            // if(Object.keys(tempQuestionData).length !=0 && tempQuestionData){
+                            //     let newOutput = (
+                            //         <>
+                            //         {jobOutput.map((op, idx) => (
+                            //             <>
+                            //             {op = JSON.parse(op)}
+                            //             {op.success == true ? (<>
+                            //                 <Typography variant="body1">Test Case - {idx + 1}</Typography>
+                            //                 <Avatar src={getIcon('success')}></Avatar>
+                            //             </>) : (<>
+                            //                 <Typography variant="body1">Test Case - {idx + 1}</Typography>
+                            //                 <Avatar src={getIcon('failed')}></Avatar>
+                            //             </>)}
+                            //             </>
+                            //         ))}
+                            //         </>
+                            //     )
+                            //     console.log("New output", newOutput)
+                            //     setOutput("");
+                            //     clearInterval(intervalId);
+                            // } else {
+                            //     setOutput(jobOutput);
+                            //     clearInterval(intervalId);
+                            // }
+                            setOutput(jobOutput);
+                            clearInterval(intervalId);
+                        } else{
+                            setStatus('Error: Please try again!');
+                            console.err(error);
+                            clearInterval(intervalId);
+                            setOutput(error);
+                        }
+                        console.log(statusRes);
+                    }, 1000);
                 } else {
-                    // setOutput("Error, please try again!")
+                    setOutput("Error, please try again!")
                     console.log("Error connecting to server!")
                 }
             }).catch((err) => {
@@ -184,16 +260,19 @@ const Codeeditor = (props) => {
                 </center>
                     <Paper elevation={5} style={{padding: "10px 15px",}}>
                         <Grid item xs={12} sm={12} md={12} style={{alignItems: "center", display: "flex"}}>
-                            <img src={getIcon('python')} height="35px" width="35px"/>
+                            <Avatar style={{height:"30px", width:"30px", backgroundColor: "green"}}> </Avatar>
                             <Typography
                                 fontFamily="Open Sans"
                                 variant="h6"
                                 style={{padding: "0px 10px"}}
                             >
-                                    Pending
+                                    {status}
                             </Typography>
                         </Grid>
-                        <pre >
+                        <Grid item xs={12} sm={12} md={12} style={{alignItems: "center", display: "flex"}}>
+                            {jobId && `Job ID: ${jobId}`}
+                        </Grid>
+                        <pre style={{whiteSpace: "pre-wrap", wordWrap: "break-word", justifyContent: "center"}}>
                         <Grid container>
                             <Grid item xs={12} md={12} sm={12} >
                                 

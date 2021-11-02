@@ -13,6 +13,8 @@ import Hackathonmain from "../Hackathon/HackathonMain/HackathonMain";
 import Hackathonsubmission from "../Hackathon/HackathonSubmission/HackathonSubmission";
 import Hackathonsummary from "../Hackathon/summary/HackathonSummary";
 import ReactVirtualizedTable from "../table-demo/TableDemo";
+import Codinglistmain from "../coding-list-page/CodingListMain";
+import Codingmain from "../coding-main/CodingMain";
 
 const AppRouter = (props) => {
     return (
@@ -31,6 +33,8 @@ const AppRouter = (props) => {
                     <Route exact path="/hackathon/submission/:id" component={Hackathonsubmission} />
                     <Route exact path="/hackathon/submission/summary/:id" component={Hackathonsummary} />
                     <Route exact path="/table" component={ReactVirtualizedTable} />
+                    <Route exact path="/coding/practice/:language" component={Codinglistmain} />
+                    <Route exact path="/coding/question/:id" component={Codingmain} />
                 </Router>
             </div>
             {/* </Typography> */}
