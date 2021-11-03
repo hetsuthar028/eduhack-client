@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import NavBar from '../navbar/NavBar';
 import Footer from '../footer/Footer';
 import { Grid, Typography } from '@mui/material';
@@ -17,10 +18,38 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const Codinglistmain = () => {
+const Codinglistmain = (props) => {
 
     const classes = useStyles();
+    const [category, setCategory] = useState('');
+    const history = useHistory();
 
+    useEffect(() => {
+        let pathname = props.location.pathname.split("/");
+        // "/coding/practice/javascript"
+        // "/coding/practice/python"
+        // "/coding/practice/data-structures"
+
+        switch(pathname[3]){
+            case "javascript": 
+                setCategory('javascript');
+                break;
+            case "python": 
+                setCategory('python');
+                break;
+            case "c++": 
+                setCategory('c++');
+                break;
+            case "data-structures": 
+                setCategory('data-structures');
+                break;
+            case "algorithms": 
+                setCategory('algorithms');
+                break;
+            default :
+                history.push('/dashboard');
+        }
+    })
     
 
     return (        
@@ -54,12 +83,17 @@ const Codinglistmain = () => {
                             className={classes.sectionHeader}
                             variant="h6"
                         >
-                            Python
+                            {`${category.charAt(0).toUpperCase()}${category.slice(1)}`}
                         </Typography>
                     </Grid>
 
+                    <Grid item xs={12} sm={12} md={12}>
                     {/* Questions List */}
-                    <Questionlist />
+                    {
+                        category && <Questionlist category={category} />
+                    }
+                    </Grid>
+                    
                 </Grid>
             </div>
             <Footer />

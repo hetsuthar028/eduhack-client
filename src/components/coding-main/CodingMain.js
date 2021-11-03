@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import NavBar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
 import { Grid, Typography, Avatar, Paper } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Codeeditor from "../code-editor/CodeEditor";
 import axios from "axios";
+import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles(() => ({
     container: {
@@ -32,6 +34,8 @@ const useStyles = makeStyles(() => ({
 
 const Codingmain = (props) => {
     const classes = useStyles();
+    const history = useHistory();
+    const { setShowBanner } = useContext(AppContext);
 
     const [ question, setQuestion ] = useState({});
     const [ defaultCode, setDefaultCode ] = useState("");
@@ -41,16 +45,40 @@ const Codingmain = (props) => {
         return temp;
     }
 
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null)
+        }, 3000);
+    }
+
     useEffect(() => {
         console.log("UseEffect in Coding Main")
         axios.get(`http://localhost:9200/api/coding/get/question?id=${props.match.params.id}`)
             .then((response) => {
-                response.data.questionData[0].inputExample = formatExamples(response.data.questionData[0].inputExample)
-                // response.data.questionData[0].outputExample = 
-                setQuestion(response.data.questionData[0])
-                console.log("Got question", response);
+                if(response){
+                    try{
+                        console.log("Got question", response);
+                        response.data.questionData[0].inputExample = formatExamples(response.data.questionData[0].inputExample)
+                        // response.data.questionData[0].outputExample = 
+                        setQuestion(response.data.questionData[0])
+                    }
+                    catch(err){
+                        setShowBanner({apiErrorResponse: "Invalid question"});
+                        return history.goBack();
+                    }
+                    finally{
+                        handleAfterFormResponse();
+                    }
+                    
+                } else {
+                    setShowBanner({apiErrorResponse: "Invalid question"});
+                    handleAfterFormResponse();
+                    // return history.goBack();
+                }
+                
             }).catch((err) => {
-                console.log("Error fetching question @CodingMain")
+
+                console.log("Error fetching question @CodingMain", err)
             });
 
         axios.get(`http://localhost:9200/api/coding/get/defaultFile/javascript`)

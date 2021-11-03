@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from 'react-router';
 import {
     Container,
     Box,
@@ -76,7 +77,7 @@ let upcomingHackathons = [1, 2, 3, 4];
 
 const Dashboard = () => {
     const [currentUser, setCurrentUser] = useState(null);
-
+    const history = useHistory();
     const classes = useStyles();
     const { appCurrentUser, updateAppCurrentUser } = useContext(AppContext);
     // For Code Editor
@@ -104,6 +105,10 @@ const Dashboard = () => {
         //         console.log("Error in Dashboard - While fetching current user");
         //     });
     }, []);
+
+    const navigateToCoding = (category) => {
+        history.push(`/coding/practice/${category}`)
+    }
 
     return (
         <div className={classes.dashboardContainer}>
@@ -233,221 +238,231 @@ const Dashboard = () => {
                             <Grid item xs={12} sm={6} md={6}>
                                 <Grid container xs={12} sm={12} md={12}>
                                     <Grid item xs={4} style={{margin: "10px 0"}}>
-                                        <Card sx={{ display: "flex" }}>
-                                            <Grid
-                                                container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
-                                                style={{
-                                                    alignItems: "center",
-                                                    justifyItems: "center",
-                                                }}
-                                            >
-                                                <Grid item xs={6} md={6} sm={6}>
-                                                    <CardMedia
-                                                        component="img"
-                                                        style={{
-                                                            padding: "10px",
-                                                        }}
-                                                        image={Python}
-                                                        alt="Live from space album cover"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={6} sm={6} md={6}>
-                                                    <CardContent
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            component="div"
-                                                            variant="h6"
-                                                            fontFamile="Open Sans"
+                                        <Card sx={{ display: "flex" }} onClick={() => {navigateToCoding('python')}}>
+                                            <CardActionArea>
+                                                <Grid
+                                                    container
+                                                    sm={12}
+                                                    md={12}
+                                                    xs={12}
+                                                    style={{
+                                                        alignItems: "center",
+                                                        justifyItems: "center",
+                                                    }}
+                                                >
+                                                    <Grid item xs={6} md={6} sm={6}>
+                                                        <CardMedia
+                                                            component="img"
+                                                            style={{
+                                                                padding: "10px",
+                                                            }}
+                                                            image={Python}
+                                                            alt="Live from space album cover"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={6} sm={6} md={6}>
+                                                        <CardContent
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
                                                         >
-                                                            <center>
-                                                                Python
-                                                            </center>
-                                                        </Typography>
-                                                    </CardContent>
+                                                            <Typography
+                                                                component="div"
+                                                                variant="h6"
+                                                                fontFamile="Open Sans"
+                                                            >
+                                                                <center>
+                                                                    Python
+                                                                </center>
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
+                                            </CardActionArea>
                                         </Card>
                                     </Grid>
                                     <Grid item xs={4} style={{margin: "10px 0"}}></Grid>
                                     <Grid item xs={4} style={{margin: "10px 0"}}>
-                                        <Card sx={{ display: "flex" }}>
-                                            <Grid
-                                                container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
-                                                style={{
-                                                    alignItems: "center",
-                                                    justifyItems: "center",
-                                                }}
-                                            >
-                                                <Grid item xs={6} md={6} sm={6}>
-                                                    <CardMedia
-                                                        component="img"
-                                                        style={{
-                                                            padding: "10px",
-                                                        }}
-                                                        image={JS}
-                                                        alt="Live from space album cover"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={6} sm={6} md={6}>
-                                                    <CardContent
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            component="div"
-                                                            variant="h6"
-                                                            fontFamile="Open Sans"
+                                        <Card sx={{ display: "flex" }} onClick={() => {navigateToCoding('javascript')}}>
+                                            <CardActionArea>
+                                                <Grid
+                                                    container
+                                                    sm={12}
+                                                    md={12}
+                                                    xs={12}
+                                                    style={{
+                                                        alignItems: "center",
+                                                        justifyItems: "center",
+                                                    }}
+                                                >
+                                                    <Grid item xs={6} md={6} sm={6}>
+                                                        <CardMedia
+                                                            component="img"
+                                                            style={{
+                                                                padding: "10px",
+                                                            }}
+                                                            image={JS}
+                                                            alt="Live from space album cover"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={6} sm={6} md={6}>
+                                                        <CardContent
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
                                                         >
-                                                            <center>
-                                                                JavaScript
-                                                            </center>
-                                                        </Typography>
-                                                    </CardContent>
+                                                            <Typography
+                                                                component="div"
+                                                                variant="h6"
+                                                                fontFamile="Open Sans"
+                                                            >
+                                                                <center>
+                                                                    JavaScript
+                                                                </center>
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
+                                            </CardActionArea>
                                         </Card>
                                     </Grid>
                                 </Grid>
                                 <Grid container xs={12} sm={12} md={12}>
                                     <Grid item xs={4} style={{margin: "10px 0"}}></Grid>
                                     <Grid item xs={4} style={{margin: "10px 0"}}>
-                                        <Card sx={{ display: "flex" }}>
-                                            <Grid
-                                                container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
-                                                style={{
-                                                    alignItems: "center",
-                                                    justifyItems: "center",
-                                                }}
-                                            >
-                                                <Grid item xs={6} md={6} sm={6}>
-                                                    <CardMedia
-                                                        component="img"
-                                                        style={{
-                                                            padding: "10px",
-                                                        }}
-                                                        image={CPlusPlus}
-                                                        alt="Live from space album cover"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={6} sm={6} md={6}>
-                                                    <CardContent
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            component="div"
-                                                            variant="h6"
-                                                            fontFamile="Open Sans"
+                                        <Card sx={{ display: "flex" }} onClick={() => {navigateToCoding('c++')}}>
+                                            <CardActionArea>
+                                                <Grid
+                                                    container
+                                                    sm={12}
+                                                    md={12}
+                                                    xs={12}
+                                                    style={{
+                                                        alignItems: "center",
+                                                        justifyItems: "center",
+                                                    }}
+                                                >
+                                                    <Grid item xs={6} md={6} sm={6}>
+                                                        <CardMedia
+                                                            component="img"
+                                                            style={{
+                                                                padding: "10px",
+                                                            }}
+                                                            image={CPlusPlus}
+                                                            alt="Live from space album cover"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={6} sm={6} md={6}>
+                                                        <CardContent
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
                                                         >
-                                                            <center>
-                                                               C++
-                                                            </center>
-                                                        </Typography>
-                                                    </CardContent>
+                                                            <Typography
+                                                                component="div"
+                                                                variant="h6"
+                                                                fontFamile="Open Sans"
+                                                            >
+                                                                <center>
+                                                                C++
+                                                                </center>
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
+                                            </CardActionArea>
                                         </Card>
                                     </Grid>
                                     <Grid item xs={4} style={{margin: "10px 0"}}></Grid>
                                 </Grid>
                                 <Grid container xs={12} sm={12} md={12}>
                                     <Grid item xs={4} style={{margin: "10px 0"}}>
-                                        <Card sx={{ display: "flex" }}>
-                                            <Grid
-                                                container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
-                                                style={{
-                                                    alignItems: "center",
-                                                    justifyItems: "center",
-                                                }}
-                                            >
-                                                <Grid item xs={6} md={6} sm={6}>
-                                                    <CardMedia
-                                                        component="img"
-                                                        style={{
-                                                            padding: "10px",
-                                                        }}
-                                                        image={DS}
-                                                        alt="Live from space album cover"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={6} sm={6} md={6}>
-                                                    <CardContent
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            component="div"
-                                                            variant="h6"
-                                                            fontFamile="Open Sans"
+                                        <Card sx={{ display: "flex" }} onClick={() => {navigateToCoding('data-structures')}}>
+                                            <CardActionArea>
+                                                <Grid
+                                                    container
+                                                    sm={12}
+                                                    md={12}
+                                                    xs={12}
+                                                    style={{
+                                                        alignItems: "center",
+                                                        justifyItems: "center",
+                                                    }}
+                                                >
+                                                    <Grid item xs={6} md={6} sm={6}>
+                                                        <CardMedia
+                                                            component="img"
+                                                            style={{
+                                                                padding: "10px",
+                                                            }}
+                                                            image={DS}
+                                                            alt="Live from space album cover"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={6} sm={6} md={6}>
+                                                        <CardContent
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
                                                         >
-                                                            <center>
-                                                                Data Structures
-                                                            </center>
-                                                        </Typography>
-                                                    </CardContent>
+                                                            <Typography
+                                                                component="div"
+                                                                variant="h6"
+                                                                fontFamile="Open Sans"
+                                                            >
+                                                                <center>
+                                                                    Data Structures
+                                                                </center>
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
+                                            </CardActionArea>
                                         </Card>
                                     </Grid>
                                     <Grid item xs={4} style={{margin: "10px 0"}}></Grid>
                                     <Grid item xs={4} style={{margin: "10px 0"}}>
-                                        <Card sx={{ display: "flex" }}>
-                                            <Grid
-                                                container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
-                                                style={{
-                                                    alignItems: "center",
-                                                    justifyItems: "center",
-                                                }}
-                                            >
-                                                <Grid item xs={6} md={6} sm={6}>
-                                                    <CardMedia
-                                                        component="img"
-                                                        style={{
-                                                            padding: "10px",
-                                                        }}
-                                                        image={Algorithm}
-                                                        alt="Live from space album cover"
-                                                    />
-                                                </Grid>
-                                                <Grid item xs={6} sm={6} md={6}>
-                                                    <CardContent
-                                                        style={{
-                                                            padding: "0px",
-                                                        }}
-                                                    >
-                                                        <Typography
-                                                            component="div"
-                                                            variant="h6"
-                                                            fontFamile="Open Sans"
+                                        <Card sx={{ display: "flex" }} onClick={() => {navigateToCoding('algorithms')}}>
+                                            <CardActionArea>
+                                                <Grid
+                                                    container
+                                                    sm={12}
+                                                    md={12}
+                                                    xs={12}
+                                                    style={{
+                                                        alignItems: "center",
+                                                        justifyItems: "center",
+                                                    }}
+                                                >
+                                                    <Grid item xs={6} md={6} sm={6}>
+                                                        <CardMedia
+                                                            component="img"
+                                                            style={{
+                                                                padding: "10px",
+                                                            }}
+                                                            image={Algorithm}
+                                                            alt="Live from space album cover"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={6} sm={6} md={6}>
+                                                        <CardContent
+                                                            style={{
+                                                                padding: "0px",
+                                                            }}
                                                         >
-                                                            <center>
-                                                                Algorithms
-                                                            </center>
-                                                        </Typography>
-                                                    </CardContent>
+                                                            <Typography
+                                                                component="div"
+                                                                variant="h6"
+                                                                fontFamile="Open Sans"
+                                                            >
+                                                                <center>
+                                                                    Algorithms
+                                                                </center>
+                                                            </Typography>
+                                                        </CardContent>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
+                                            </CardActionArea>
                                         </Card>
                                     </Grid>
                                 </Grid>
