@@ -76,35 +76,35 @@ const useStyles = makeStyles((theme) => ({
 let upcomingHackathons = [1, 2, 3, 4];
 
 const Dashboard = () => {
-    const [currentUser, setCurrentUser] = useState(null);
+    const [currentUser, setCurrentUser] = useState({});
     const history = useHistory();
     const classes = useStyles();
-    const { appCurrentUser, updateAppCurrentUser } = useContext(AppContext);
+    const { appCurrentUser, updateAppCurrentUser, setShowBanner } = useContext(AppContext);
     // For Code Editor
     const [html, setHTML] = useState("");
     const [python, setPython] = useState("");
 
     useEffect(() => {
-        updateAppCurrentUser();
-        console.log("Dashboard User", appCurrentUser)
-        // axios
-        //     .get("http://localhost:4200/api/user/currentuser", {
-        //         headers: {
-        //             authorization: localStorage.getItem("session"),
-        //         },
-        //     })
-        //     .then((response) => {
-        //         if (response.data.currentUser) {
-        //             // console.log(response.data.currentUser)
-        //             setCurrentUser(response.data.currentUser);
-        //         } else {
-        //             // Push outside of the application
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log("Error in Dashboard - While fetching current user");
-        //     });
+        axios.get(`http://localhost:4200/api/user/currentuser`, {
+            headers: {
+                authorization: localStorage.getItem('session')
+            }
+        })
+        .then(responses => {
+            console.log("C User Dash Resp", responses.data.currentUser)
+            setCurrentUser(responses.data.currentUser);
+        }).catch((err) => {
+            console.log("ERR Current User in Dashboard", err);
+            setShowBanner({apiErrorResponse: "Error fetching data! Please try again."})
+        })
     }, []);
+
+    useEffect(() => {
+        if(!currentUser){
+            setShowBanner({ apiErrorResponse: 'You must be signed in to view dashboard.' })
+            return history.push('/auth/signin');
+        }
+    }, [currentUser]);
 
     const navigateToCoding = (category) => {
         history.push(`/coding/practice/${category}`)

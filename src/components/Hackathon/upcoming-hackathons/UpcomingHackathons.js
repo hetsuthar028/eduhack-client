@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useHistory } from "react-router";
 import {
     Grid,
     Container,
@@ -13,6 +14,7 @@ import {
 import { makeStyles } from "@material-ui/core";
 import axios from "axios";
 import './UpcomingHackathons.scss';
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -30,11 +32,22 @@ const Upcominghackathons = (props) => {
     const { hackathon } = props;
     const [upcomingHackathons, setUpcomingHackathons] = useState([]);
     const classes = useStyles();
+    const history = useHistory();
+
+    const { setShowBanner } = useContext(AppContext);
+
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null);
+        }, 3000);
+    }
 
     const getData = async () => {
-        const response = await axios
+
+        try{
+            const response = await axios
             .get("http://localhost:4400/api/hackathon/get/upcomingHackathons", {
-                header: {
+                headers: {
                     authorization: localStorage.getItem("session"),
                 },
             })
@@ -48,6 +61,14 @@ const Upcominghackathons = (props) => {
                     get_upcoming_hackathons.upcomingHackathons
                 );
             // });
+        } catch(err){
+            // setShowBanner({ apiErrorResponse: err.response.data })
+            console.log("Error in Upcoming Hackathon", err.response);
+        }
+        finally{
+            handleAfterFormResponse();
+        }
+        
     };
 
     useEffect(() => {
@@ -61,6 +82,10 @@ const Upcominghackathons = (props) => {
         return finalDate
     }
 
+    const handleCardClick = (hackId) => {
+        history.push(`/hackathon/view/${hackId}`)
+    }
+
     return (
         <Grid
             container
@@ -72,9 +97,9 @@ const Upcominghackathons = (props) => {
         >
             {upcomingHackathons.map(({ ...hackathon }) => (
                 
-                <Grid item xs={12} sm={4} md={3} key={hackathon.title}>
+                <Grid item xs={12} sm={4} md={3} key={hackathon.title} key={hackathon.id}>
                     <Card classes={classes.card}>
-                        <CardActionArea>
+                        <CardActionArea onClick={() => {handleCardClick(hackathon.id)}}>
                             <CardMedia
                                 component="img"
                                 height="160"
@@ -89,20 +114,21 @@ const Upcominghackathons = (props) => {
                                             {hackathon.title} OPEN
                                         </Typography>
                                     </Grid>
-                                    <Grid>
+                                    <Grid item xs={12} sm={12} md={12}>
                                         <Typography
-                                            variant="subtitle1"
+                                            variant="subtitle2"
                                             color="text.secondary"
                                             gutterBottom
                                             fontFamily="Open Sans"
+                                            style={{color: 'green'}}
                                         >
                                             <strong>
-                                                Registration Ends:{" "}
-                                                {getProperDateFormat(hackathon.regEnd)}
+                                                Hackathon Starts:{" "}
+                                                {getProperDateFormat(hackathon.hackStart)}
                                             </strong>
                                         </Typography>
                                     </Grid>
-                                    <Grid>
+                                    <Grid item xs={12} sm={12} md={12}>
                                         <Typography
                                             variant="body2"
                                             color="text.secondary"

@@ -54,7 +54,7 @@ const Codeeditor = (props) => {
 
     const handleChangeLanguage = (e) => {
         
-        let response = window.confirm("WARNING: You're about to change the language of code editor. This may remove your currently written code!")
+        let response = window.confirm("WARNING: You're about to change the language of code editor.\n\nThis may remove your currently written code!")
         if(response){
             setCodeEditorLanguage(e.target.value);
             switch(e.target.value){
@@ -141,7 +141,7 @@ const Codeeditor = (props) => {
 
                         if(success){
                             const { status: jobStatus, output: jobOutput } = job;
-                            setStatus(jobStatus);
+                            setStatus(`${jobStatus.charAt(0)}${jobStatus.slice(1)}`);
                             if(jobStatus === "pending") return;
                             // if(Object.keys(tempQuestionData).length !=0 && tempQuestionData){
                             //     let newOutput = (

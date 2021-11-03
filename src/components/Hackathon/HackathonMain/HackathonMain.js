@@ -78,7 +78,7 @@ const Hackathonmain = (props) => {
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
     const [sponsors, setSponsors] = useState([]);
-    const [registrationStatues, setRegistrationStatus] = useState(false);
+    const [registrationStatus, setRegistrationStatus] = useState(false);
     const { setShowBanner } = useContext(AppContext);
     const history = useHistory();
 
@@ -312,7 +312,7 @@ const Hackathonmain = (props) => {
                                 Participants Count: {hackathon.participantCount}
                             </Typography>
                         </div>
-                        {registrationStatues ?  
+                        {registrationStatus ?  
                             <Button
                                 variant="contained"
                                 style={{ marginTop: "20px" }}
