@@ -34,6 +34,9 @@ import useTable from "../../table/useTable";
 import Sponsorsform from "../SponsorsForm/SponsorsForm";
 import axios from "axios";
 import { AppContext } from "../../../AppContext";
+import fs from 'fs';
+import csv from 'csv-parser';
+import Papa from 'papaparse';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -136,10 +139,32 @@ const Organizepage = () => {
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
 
+    const [probStatementCSV, setProbStatementCSV] = useState(null);
+    const [csvResult, setCsvResult] = useState([]);
+
     const { TblContainer, TblHead, TblPagination } = useTable(
         values.problemStatements,
         tabelHeadCells
     );
+
+    const handleCSVUpload = (event) => {
+        console.log("D", event.target.files[0]);
+        setProbStatementCSV(event.target.files[0]);
+    }
+
+    const results = [];
+    useEffect(() => {
+        if(probStatementCSV !=null){
+            // fs.createReadStream(probStatementCSV)
+            //     .pipe(csv({}))
+            //     .on('data', (data) => { results.push(data) })
+            //     .on('end', () => {
+            //         console.log("File results", results);
+            //     })
+            // getCsvData();
+            console.log("CSV", probStatementCSV);
+        }
+    }, [probStatementCSV])
 
     const validateForm = (name, fieldValue) => {
         const fieldErrors = [];
@@ -711,6 +736,23 @@ const Organizepage = () => {
                                     md={12}
                                     style={{ display: "flex" }}
                                 >
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        style={{ marginLeft: "auto" }}
+                                        onClick={() => setOpenPopup(true)}
+                                    >
+                                        CSV Format
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        style={{ marginLeft: "auto" }}
+                                        onClick={() => {document.getElementById('csvUpload').click()}}
+                                    >
+                                        Import from CSV
+                                    </Button>
+                                    <input id="csvUpload" type="file" accept=".csv" style={{visibility: 'hidden' }} onChange={handleCSVUpload}/>
                                     <Button
                                         variant="contained"
                                         size="small"

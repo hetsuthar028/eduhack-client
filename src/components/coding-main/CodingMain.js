@@ -143,7 +143,7 @@ const Codingmain = (props) => {
                                     variant="body2"
                                     fontWeight="bold"
                                 >
-                                    Python
+                                    {question.category && `${question.category.charAt(0).toUpperCase()}${question.category.slice(1)}`}
                                 </Typography>
 
                                 <Typography
@@ -162,7 +162,7 @@ const Codingmain = (props) => {
                                     variant="body2"
                                     fontWeight="bold"
                                 >
-                                    A123512
+                                    {question._id}
                                 </Typography>
                             </Grid>
 

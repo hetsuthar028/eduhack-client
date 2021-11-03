@@ -23,6 +23,7 @@ import theme from '../ui/Theme'
 import axios from 'axios';
 import getIcon from '../../static/Icons/getIcon';
 import CircleIcon from '@mui/icons-material/Circle';
+import stub from './defaultStub';
 
 const useStyles = makeStyles((theme) => ({
     codeEditorHeader: {
@@ -53,35 +54,37 @@ const Codeeditor = (props) => {
 
     const handleChangeLanguage = (e) => {
         
-        setCodeEditorLanguage(e.target.value);
-
-        switch(e.target.value){
-            case "text/x-csrc": 
-                setTitle("C")
-                break;
-            
-            case "text/x-java": 
-                setTitle("Java")
-                break;
-            
-            case "text/x-c++src": 
-                setTitle("C++")
-                break;
-            
-            case "Python": 
-                setTitle("Python")
-                break;
-            
-            case "JavaScript": 
-                setTitle("JavaScript")
-                break;
-        }
-        
+        let response = window.confirm("WARNING: You're about to change the language of code editor. This may remove your currently written code!")
+        if(response){
+            setCodeEditorLanguage(e.target.value);
+            switch(e.target.value){
+                case "text/x-csrc": 
+                    setTitle("C")
+                    break;
+                
+                case "text/x-java": 
+                    setTitle("Java")
+                    break;
+                
+                case "text/x-c++src": 
+                    setTitle("C++")
+                    break;
+                
+                case "Python": 
+                    setTitle("Python")
+                    break;
+                
+                case "JavaScript": 
+                    setTitle("JavaScript")
+                    break;
+            }
+        }   
     };
 
     const handleChange = (editor, data, value) => {
         // console.log(data);
         setCode(value);
+        stub[codeEditorLanguage] = value;
         // onChange(value)
     };
     
@@ -98,6 +101,10 @@ const Codeeditor = (props) => {
             setTempQuestionData(props.question);
         }
     }, []);
+
+    useEffect(() => {
+        setCode(stub[codeEditorLanguage])
+    }, [codeEditorLanguage]);
 
     const handleCodeSubmit = async () => {
 
