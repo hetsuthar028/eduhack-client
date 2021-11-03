@@ -7,9 +7,8 @@ const useStyles = makeStyles((theme) =>({
     },
     navButtons: {
         marginLeft: "auto",
-        display: "flex",
-        justifyContent: "space-between"
-
+        textAlign: "right",
+        placeSelf: "center"
     },
     navButton: {
         margin: "0 7px"
@@ -22,7 +21,6 @@ const useStyles = makeStyles((theme) =>({
     cardContainer: {
         padding: '20px 0',
         margin: "0px",
-        width: "100vw"
         
     },
     card: {

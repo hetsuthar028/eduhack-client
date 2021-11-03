@@ -7,7 +7,8 @@ import {
     Toolbar,
     Typography,
     Button,
-    Avatar
+    Avatar,
+    Grid
 } from "@material-ui/core";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import useStyles from "../ui/Style";
@@ -162,29 +163,39 @@ const NavBar = (props) => {
         //     </div>
         // </div>
         <Typography color="textPrimary">
-            <Box sx={{ flowGrow: 1 }} padding="0">
+            <Grid container>
+            {/* <Box sx={{ flowGrow: 1 }} padding="0"> */}
+            <Grid item xs={12} sm={12} md={12}>
                 <AppBar position="static" color="primary" elevation={0}>
-                    <Toolbar>
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            aria-lebel="web logo"
-                            disableRipple
-                            sx={{ mr: 2 }}
-                            className={classes.navIcon}
-                        >
-                            <strong>EduHack</strong>
-                        </IconButton>
-
-                        <div className={classes.navButtons}>
+                    <Toolbar >
+                        <Grid container>
+                            <Grid item xs={6} sm={3} md={2}>
+                                <IconButton
+                                    size="large"
+                                    edge="start"
+                                    color="inherit"
+                                    aria-lebel="web logo"
+                                    disableRipple
+                                    sx={{ mr: 2 }}
+                                    className={classes.navIcon}
+                                >
+                                    <strong>EduHack</strong>
+                                </IconButton>
+                            </Grid>
+                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons}>
                             {/* {currentUser !=null? renderNavButttons(): ""} */}
-                            {renderNavButttons()}
-                        </div>
+                                {renderNavButttons()}
+                            </Grid>
+                        </Grid>
+                        
+
+                        
                     </Toolbar>
                 </AppBar>
-            </Box>
-        </Typography>
+                </Grid>
+            {/* </Box> */}
+            </Grid>
+         </Typography>
     );
 };
 

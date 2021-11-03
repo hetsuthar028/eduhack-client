@@ -28,9 +28,8 @@ import { AppContext } from "../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {
-        width: "100%",
+        width: "100vw",
         height: "100vh",
-        // backgroundColor: "#444"
     },
     carousel: {
         height: "400px",
@@ -111,10 +110,10 @@ const Dashboard = () => {
     }
 
     return (
-        <div className={classes.dashboardContainer}>
-            <Typography fontFamily="Open Sans">
+        <div >
+            {/* <Typography fontFamily="Open Sans"> */}
                 <NavBar currentUser={currentUser} location="dashboard" />
-                <Grid container xs={12} sm={12} md={12}>
+                <Grid container>
                     <Grid
                         item
                         xs={12}
@@ -514,7 +513,7 @@ const Dashboard = () => {
                 </Grid>
 
                 <Footer />
-            </Typography>
+            {/* </Typography> */}
         </div>
     );
 };

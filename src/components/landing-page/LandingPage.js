@@ -9,6 +9,7 @@ import theme from '../ui/Theme'
 import EduhackDetails from "../eduhack-details-landing/EduhackDetails";
 import Footer from "../footer/Footer";
 import axios from 'axios';
+import Carousel from "../carousel/Carousel";
 
 const LandingPage = () => {
 
@@ -16,7 +17,7 @@ const LandingPage = () => {
 
     let useStyles = makeStyles({
         pastHackathonGrid: {
-            margin: "100px 0 0 0",
+            margin: "30px 0 0 0",
             padding: "0",
             backgroundColor: theme.palette.common.lightMainGreenColor,
             width: "100%"
@@ -51,14 +52,13 @@ const LandingPage = () => {
     }, []);
 
     return (
-        <>
-            {/* <NavBar currentUser={this.tempCurrentUser}/> */}
-            <Grid container columns={{ xs: 12, sm: 12, md: 12 }}>
+            <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
                     <NavBar currentUser={currentUser} location="landingPage"/>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
-                    <RCarousel />
+                    {/* <RCarousel /> */}
+                    <Carousel />
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} className={classes.pastHackathonGrid}>
                     <PastHackathonLanding />
@@ -73,7 +73,7 @@ const LandingPage = () => {
                 {/* <RCarousel />
             <PastHackathonLanding /> */}
             </Grid>
-        </>
+        
     );
 };
 
