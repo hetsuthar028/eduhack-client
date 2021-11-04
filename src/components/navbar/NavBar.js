@@ -20,7 +20,7 @@ const NavBar = (props) => {
     const classes = useStyles();
     
     const [currentUser, setCurrentUser] = useState(null);
-    let { location } = props;
+    let { location, navClickHandler } = props;
 
     let { appCurrentUser, updateAppCurrentUser } = useContext(AppContext);
 
@@ -85,22 +85,20 @@ const NavBar = (props) => {
             if(appCurrentUser.userType == "developer"){
                 return (
                     <>
-                        <Button className={classes.navButton}>Code Editor</Button>
-                        <Button className={classes.navButton}>Learn</Button>
-                        <Button className={classes.navButton}>Explore</Button>
+                        <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button>
+                        <Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button>
+                        <Button className={classes.navButton} onClick={() => navClickHandler("practice")}>Practice</Button>
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Avatar className={classes.navAvatar}><AccountCircleRoundedIcon /></Avatar>
-                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signin"></Button> */}
-                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
                     </>
                 )
             }
             else if(appCurrentUser.userType == "organization"){
                 return (
                     <>
-                        <Button className={classes.navButton}>Code Editor</Button>
-                        <Button className={classes.navButton}>Learn</Button>
-                        <Button className={classes.navButton}>Explore</Button>
+                        <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button>
+                        <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Learn</Button>
+                        <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Explore</Button>
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/hackathon/organize/overview">Organize a Hackathon</Button>
                         <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar>
@@ -166,7 +164,7 @@ const NavBar = (props) => {
             <Grid container>
             {/* <Box sx={{ flowGrow: 1 }} padding="0"> */}
             <Grid item xs={12} sm={12} md={12}>
-                <AppBar position="static" color="primary" elevation={0}>
+                <AppBar position="static" color="primary" elevation={0} >
                     <Toolbar >
                         <Grid container>
                             <Grid item xs={6} sm={3} md={2}>
@@ -176,13 +174,13 @@ const NavBar = (props) => {
                                     color="inherit"
                                     aria-lebel="web logo"
                                     disableRipple
-                                    sx={{ mr: 2 }}
+                                    sx={{ mr: 1 }}
                                     className={classes.navIcon}
                                 >
                                     <strong>EduHack</strong>
                                 </IconButton>
                             </Grid>
-                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons}>
+                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto"}}>
                             {/* {currentUser !=null? renderNavButttons(): ""} */}
                                 {renderNavButttons()}
                             </Grid>

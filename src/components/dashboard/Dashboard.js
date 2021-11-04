@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useHistory } from 'react-router';
 import {
     Container,
@@ -83,6 +83,26 @@ const Dashboard = () => {
     const [html, setHTML] = useState("");
     const [python, setPython] = useState("");
 
+    const codeEditorRef = useRef(null);
+    const articleRef = useRef(null);
+    const questionsRef = useRef(null);
+    const hackathonsRef = useRef(null);
+
+    const navClickHandler = (sectionName) => {
+        console.log("Click handled for", sectionName)
+        switch(sectionName){
+            case "codeeditor":
+                codeEditorRef.current.scrollIntoView()
+                break;
+            case "practice":
+                questionsRef.current.scrollIntoView()
+                break;
+            case "learn":
+                articleRef.current.scrollIntoView()
+                break;
+        }
+    }
+
     useEffect(() => {
         axios.get(`http://localhost:4200/api/user/currentuser`, {
             headers: {
@@ -112,7 +132,7 @@ const Dashboard = () => {
     return (
         <div >
             {/* <Typography fontFamily="Open Sans"> */}
-                <NavBar currentUser={currentUser} location="dashboard" />
+                <NavBar currentUser={currentUser} location="dashboard" navClickHandler={navClickHandler} />
                 <Grid container>
                     <Grid
                         item
@@ -139,6 +159,7 @@ const Dashboard = () => {
                         sm={12}
                         md={12}
                         className={classes.practiceCodingContainer}
+                        ref={questionsRef}
                     >
                         <h1>Practice Coding!</h1>
                         <Grid
@@ -476,6 +497,7 @@ const Dashboard = () => {
                     sm={12}
                     md={12}
                     className={classes.readArticlesGrid}
+                    ref={articleRef}
                 >
                     <h1 style={{ marginLeft: "auto" }}>
                         Read, Remember & Register
@@ -489,6 +511,7 @@ const Dashboard = () => {
                     sm={12}
                     md={12}
                     className={classes.codeEditorGrid}
+                    ref={codeEditorRef}
                 >
                     <h1>Let's start with Coding...</h1>
                     {/* <Grid item xs={12} sm={12} md={12} className={classes.carousel}>

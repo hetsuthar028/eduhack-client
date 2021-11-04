@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) =>({
     navButtons: {
         marginLeft: "auto",
         textAlign: "right",
-        placeSelf: "center"
+        // placeSelf: "center"
     },
     navButton: {
         margin: "0 7px"
