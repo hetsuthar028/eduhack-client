@@ -180,7 +180,7 @@ const NavBar = (props) => {
                                     <strong>EduHack</strong>
                                 </IconButton>
                             </Grid>
-                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto"}}>
+                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center"}}>
                             {/* {currentUser !=null? renderNavButttons(): ""} */}
                                 {renderNavButttons()}
                             </Grid>

@@ -58,7 +58,7 @@ const LandingPage = () => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                     {/* <RCarousel /> */}
-                    <Carousel />
+                    <Carousel defaultSliders={true} />
                 </Grid>
                 <Grid item xs={12} sm={12} md={12} className={classes.pastHackathonGrid}>
                     <PastHackathonLanding />

@@ -79,6 +79,7 @@ const Hackathonmain = (props) => {
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
     const [sponsors, setSponsors] = useState([]);
+    const [sliders, setSliders] = useState([]);
     const [registrationStatus, setRegistrationStatus] = useState(false);
     const { setShowBanner } = useContext(AppContext);
     const history = useHistory();
@@ -164,14 +165,15 @@ const Hackathonmain = (props) => {
                     authorization: localStorage.getItem("session"),
                 },
             }).then(responses => {
-                console.log("Got Hackathon", responses)
-                setHackathon(responses.data.get_hackathon_db.hackathon)
-                setProblemStatements(responses.data.get_problem_statements_db.problemStatements)
-                setSponsors(responses.data.get_sponsors_db.sponsors)
+                console.log("Got Hackathon", responses);
+                setHackathon(responses.data.get_hackathon_db.hackathon);
+                setProblemStatements(responses.data.get_problem_statements_db.problemStatements);
+                setSponsors(responses.data.get_sponsors_db.sponsors);
+                setSliders(responses.data.get_sliders_db.sliders);
                 setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
             }).catch(err => {
 
-                console.log("Error fetching hackathon", err.response?.data);
+                console.log("Error fetching hackathon", err);
                 // setShowBanner({apiErrorResponse: err.response?.data})
                 if(err.response.data == "Hackathon doesn't exists!"){
                     setShowBanner({apiErrorResponse: err.response?.data})
@@ -200,7 +202,7 @@ const Hackathonmain = (props) => {
             <Grid container sm={12} xs={12} md={12}>
                 {/* Carousel */}
                 <Grid item xs={12} sm={12} md={12}>
-                    <Carousel />
+                    <Carousel sliders={sliders} defaultSliders={false} />
                 </Grid>
 
                 {/* Top Grid - Dates */}

@@ -142,7 +142,7 @@ const Dashboard = () => {
                         md={12}
                         
                     >
-                        <Carousel />
+                        <Carousel defaultSliders={true} />
                     </Grid>
                     <Grid
                         item
