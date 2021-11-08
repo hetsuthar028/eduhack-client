@@ -15,6 +15,7 @@ import Hackathonsummary from "../Hackathon/summary/HackathonSummary";
 import ReactVirtualizedTable from "../table-demo/TableDemo";
 import Codinglistmain from "../coding-list-page/CodingListMain";
 import Codingmain from "../coding-main/CodingMain";
+import Tempupload from "../TempUpload";
 
 const AppRouter = (props) => {
     return (
@@ -35,6 +36,7 @@ const AppRouter = (props) => {
                     <Route exact path="/table" component={ReactVirtualizedTable} />
                     <Route exact path="/coding/practice/:language" component={Codinglistmain} />
                     <Route exact path="/coding/question/:id" component={Codingmain} />
+                    <Route exact path="/temp/upload" component={Tempupload} />
                 </Router>
             </div>
             {/* </Typography> */}

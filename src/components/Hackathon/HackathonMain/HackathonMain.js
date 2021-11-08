@@ -24,6 +24,7 @@ import { AppContext } from "../../../AppContext";
 import "./HackathonMain.scss";
 import firstPrize from '../../../static/Icons/firstPrize.svg'
 import getIcon from '../../../static/Icons/getIcon';
+import Carousel from '../../carousel/Carousel';
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -198,8 +199,8 @@ const Hackathonmain = (props) => {
             <Typography fontFamily="Open Sans">
             <Grid container sm={12} xs={12} md={12}>
                 {/* Carousel */}
-                <Grid item xs={12} sm={12} md={12} className={classes.carousel}>
-                    <div></div>
+                <Grid item xs={12} sm={12} md={12}>
+                    <Carousel />
                 </Grid>
 
                 {/* Top Grid - Dates */}

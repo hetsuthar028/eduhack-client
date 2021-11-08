@@ -25,6 +25,7 @@ import CPlusPlus from '../../static/Icons/C++.svg';
 import DS from '../../static/Icons/DS.svg';
 import Algorithm from '../../static/Icons/Algorithm.svg';
 import { AppContext } from "../../AppContext";
+import Carousel from '../carousel/Carousel';
 
 const useStyles = makeStyles((theme) => ({
     dashboardContainer: {
@@ -139,9 +140,9 @@ const Dashboard = () => {
                         xs={12}
                         sm={12}
                         md={12}
-                        className={classes.carousel}
+                        
                     >
-                        <div></div>
+                        <Carousel />
                     </Grid>
                     <Grid
                         item
@@ -150,7 +151,7 @@ const Dashboard = () => {
                         md={12}
                         className={classes.upcomingHackathonsContainer}
                     >
-                        <h1>Upcoming Hackathons</h1>
+                        <h1 style={{paddingBottom: "15px"}}>Upcoming Hackathons</h1>
                         <Upcominghackathons />
                     </Grid>
                     <Grid
@@ -161,7 +162,7 @@ const Dashboard = () => {
                         className={classes.practiceCodingContainer}
                         ref={questionsRef}
                     >
-                        <h1>Practice Coding!</h1>
+                        <h1 style={{paddingBottom: "15px"}}>Practice Coding!</h1>
                         <Grid
                             container
                             sm={12}
@@ -513,7 +514,7 @@ const Dashboard = () => {
                     className={classes.codeEditorGrid}
                     ref={codeEditorRef}
                 >
-                    <h1>Let's start with Coding...</h1>
+                    <h1 style={{paddingBottom: "15px"}}>Let's start with Coding...</h1>
                     {/* <Grid item xs={12} sm={12} md={12} className={classes.carousel}>
                     <div></div>
                 </Grid> */}

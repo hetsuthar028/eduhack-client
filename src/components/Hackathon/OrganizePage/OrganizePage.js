@@ -37,6 +37,7 @@ import { AppContext } from "../../../AppContext";
 import fs from 'fs';
 import csv from 'csv-parser';
 import Papa from 'papaparse';
+import Slidersform from "../SlidersForm/SlidersForm";
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -106,6 +107,10 @@ const initialValues = {
     firstPrizeDesc: "",
     secondPrizeDesc: "",
     thirdPrizeDesc: "",
+    sliders: [
+        // sliderTitle: "",
+        // sliderSubtitle: "",
+    ],
 };
 
 const tabelHeadCells = [
@@ -135,6 +140,7 @@ const Organizepage = () => {
     const [values, setValues] = useState(initialValues);
     const [openPopup, setOpenPopup] = useState(false);
     const [sponsorOpenPopup, setSponsorOpenPopup] = useState(false);
+    const [sliderOpenPopup, setSliderOpenPopup] = useState(false)
 
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
@@ -352,6 +358,15 @@ const Organizepage = () => {
         setSponsorOpenPopup(false);
     };
 
+    const handleSliderSubmit = (sliderDetails) => {
+        setValues({
+            ...values,
+            sliders: [...values.sliders, sliderDetails],
+        });
+
+        setSliderOpenPopup(false);
+    }
+
     const handleSelectChange = (e) => {
         setValues({
             ...values,
@@ -378,41 +393,61 @@ const Organizepage = () => {
             values["hackEnd"] = temp2[2] + "-" + temp2[1] + "-" + temp2[0];
             values["regStart"] = temp3[2] + "-" + temp3[1] + "-" + temp3[0];
             values["regEnd"] = temp4[2] + "-" + temp4[1] + "-" + temp4[0];
+            
+            let {sliders} = values;
+            let newForm = new FormData();
+            sliders.map((slide) => {
+                console.log("Inv Image", slide.sliderImage)
+                newForm.append("userImage", slide.sliderImage)
+            })
 
-            console.log("All values", values);
-            axios
-                .post(
-                    "http://localhost:4400/api/hackathon/create",
-                    {
-                        ...values,
-                    },
-                    {
+                    axios.post('http://localhost:4400/api/hackathon/tempUpload', newForm, {
                         headers: {
-                            authorization: localStorage.getItem("session"),
-                        },
-                    }
-                )
-                .then((response) => {
-                    setShowBanner({
-                        apiSuccessResponse:
-                            "Hackathon Created Successfully! 👨‍🎓",
-                    });
+                            'Content-type': 'multipart/form-data',
+                        }
+                    }).then((resp) => {
+                        
+                        values["localUploadedFilesPath"] = resp.data.files;
+                        console.log("All values", values);
+                        axios.post(
+                                "http://localhost:4400/api/hackathon/create",
+                                {
+                                    ...values,
+                                },
+                                {
+                                    headers: {
+                                        authorization: localStorage.getItem("session"),
+                                    },
+                                }
+                            )
+                        .then((response) => {
+                            setShowBanner({
+                                apiSuccessResponse:
+                                    "Hackathon Created Successfully! 👨‍🎓",
+                            });
 
-                    console.log("Got Response, Hackathon Created!!");
-                    console.log(
-                        response.data.add_hackathon_db.uniqueHackathonID
-                    );
-                    history.push(
-                        `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
-                    );
-                })
-                .catch((err) => {
-                    setShowBanner({
-                        apiErrorResponse:
-                            "Problem occured while creating a hackathon! 😦",
-                    });
-                    console.log("Error in axios while creating Hackathon");
-                });
+                            console.log("Got Response, Hackathon Created!!");
+                            console.log(
+                                response.data.add_hackathon_db.uniqueHackathonID
+                            );
+                            history.push(
+                                `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
+                            );
+                        })
+                        .catch((err) => {
+                            setShowBanner({
+                                apiErrorResponse:
+                                    "Problem occured while creating a hackathon! 😦",
+                            });
+                            console.log("Error in axios while creating Hackathon", err);
+                        });
+                            console.log("Resp after uploading")
+
+
+                    }).catch((err) => {
+                        console.log("ERR1", err);
+                    })
+            
         } catch (err) {
         } finally {
             handleAfterFormResponse();
@@ -1156,6 +1191,39 @@ const Organizepage = () => {
                         </Paper>
                     </Grid>
 
+                    {/* Posters Title */}
+                    <Formsectionheader name="Hackathon Sliders" />
+                    <Grid item xs={12} sm={12} md={12}>
+                        <Paper className={classes.formPaper}>
+                            <Grid container xs={12} md={12} sm={12}>
+                                <Grid
+                                    item
+                                    xs={12}
+                                    sm={12}
+                                    md={12}
+                                    style={{ display: "flex" }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        style={{ marginLeft: "auto" }}
+                                        onClick={() =>
+                                            setSliderOpenPopup(true)
+                                        }
+                                    >
+                                        Add Slider
+                                    </Button>
+                                </Grid>
+
+                                {/* We'll add reusable component here */}
+                                {values.sliders.map((slider) => (
+                                    <p>{slider.sliderTitle}</p>
+                                ))}
+                            </Grid>
+                        </Paper>
+                    </Grid>
+
+
                     {/* Winning prizes Details Title */}
                     <Formsectionheader name="Winning Prizes" />
 
@@ -1352,6 +1420,19 @@ const Organizepage = () => {
                             handleSubmit={handleSponsorSubmit}
                         />
                     </Popup>
+
+                    {/* Slider Dialog */}
+                    <Popup
+                        openPopup={sliderOpenPopup}
+                        title="Add Slider"
+                        setOpenPopup={setSliderOpenPopup}
+                    >
+                        <Slidersform
+                            setOpenPopup={setSliderOpenPopup}
+                            handleSubmit={handleSliderSubmit}
+                        />
+                    </Popup>
+
                 </Grid>
             </form>
             <Footer />
