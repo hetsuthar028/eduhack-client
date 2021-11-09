@@ -394,58 +394,75 @@ const Organizepage = () => {
             values["regStart"] = temp3[2] + "-" + temp3[1] + "-" + temp3[0];
             values["regEnd"] = temp4[2] + "-" + temp4[1] + "-" + temp4[0];
             
-            let {sliders} = values;
-            let newForm = new FormData();
+            let {sliders, sponsors} = values;
+            let slidersFormData = new FormData();
+            let sponsorsFormData = new FormData();
+
             sliders.map((slide) => {
                 console.log("Inv Image", slide.sliderImage)
-                newForm.append("userImage", slide.sliderImage)
+                slidersFormData.append("userImage", slide.sliderImage)
+            });
+
+            sponsors.map((sponsor) => {
+                console.log("Inv Sponsor Image", sponsor.sponsorImageLink)
+                sponsorsFormData.append("userImage", sponsor.sponsorImageLink)
             })
 
-                    axios.post('http://localhost:4400/api/hackathon/tempUpload', newForm, {
+                    axios.post('http://localhost:4400/api/hackathon/tempUpload', slidersFormData, {
                         headers: {
                             'Content-type': 'multipart/form-data',
                         }
                     }).then((resp) => {
                         
-                        values["localUploadedFilesPath"] = resp.data.files;
-                        console.log("All values", values);
-                        axios.post(
-                                "http://localhost:4400/api/hackathon/create",
-                                {
-                                    ...values,
-                                },
-                                {
-                                    headers: {
-                                        authorization: localStorage.getItem("session"),
-                                    },
-                                }
-                            )
-                        .then((response) => {
-                            setShowBanner({
-                                apiSuccessResponse:
-                                    "Hackathon Created Successfully! 👨‍🎓",
-                            });
+                        values["localUploadedSlidersFilesPath"] = resp.data.filePaths;
+                        console.log("Updated - All values", values);
 
-                            console.log("Got Response, Hackathon Created!!");
-                            console.log(
-                                response.data.add_hackathon_db.uniqueHackathonID
-                            );
-                            history.push(
-                                `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
-                            );
-                        })
-                        .catch((err) => {
-                            setShowBanner({
-                                apiErrorResponse:
-                                    "Problem occured while creating a hackathon! 😦",
+                        axios.post('http://localhost:4400/api/hackathon/tempUpload', sponsorsFormData, {
+                            headers: {
+                                'Content-type': 'multipart/form-data'
+                            }
+                        }).then((response) => {
+                            values["localUploadedSponsorsFilesPath"] = response.data.filePaths;
+                            console.log("Updated - All values 2", values);
+                            axios.post(
+                                    "http://localhost:4400/api/hackathon/create",
+                                    {
+                                        ...values,
+                                    },
+                                    {
+                                        headers: {
+                                            authorization: localStorage.getItem("session"),
+                                        },
+                                    }
+                                )
+                            .then((response) => {
+                                setShowBanner({
+                                    apiSuccessResponse:
+                                        "Hackathon Created Successfully! 👨‍🎓",
+                                });
+    
+                                console.log("Got Response, Hackathon Created!!");
+                                console.log(
+                                    response.data.add_hackathon_db.uniqueHackathonID
+                                );
+                                history.push(
+                                    `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
+                                );
+                            })
+                            .catch((err) => {
+                                setShowBanner({
+                                    apiErrorResponse:
+                                        "Problem occured while creating a hackathon! 😦",
+                                });
+                                console.log("Error in axios while creating Hackathon", err);
                             });
-                            console.log("Error in axios while creating Hackathon", err);
-                        });
-                            console.log("Resp after uploading")
-                            setShowBanner({apiSuccessResponse: "Your hackathon is being created! ⏳🤩"})
-                            // setTimeout(() => {
-                            //     setShowBanner(null);
-                            // }, 2000);
+                                console.log("Resp after uploading")
+                                setShowBanner({apiSuccessResponse: "Your hackathon is being created! ⏳🤩"})
+                                // setTimeout(() => {
+                                //     setShowBanner(null);
+                                // }, 2000);
+                        })
+
 
                     }).catch((err) => {
                         console.log("ERR1", err);

@@ -178,10 +178,10 @@ const Slidersform = (props) => {
                     <Grid item xs={3} sm={3} md={3} />
 
                     <Grid item xs={6} sm={6} md={6} className={classes.innerGrid}>
-                        <Button variant="outlined" fullWidth onClick={() => {document.getElementById("sponsorImageUpload").click()}}>
+                        <Button variant="outlined" fullWidth onClick={() => {document.getElementById("sliderImageUpload").click()}}>
                             Upload Image
                         </Button>
-                        <input id="sponsorImageUpload" type="file" accept=".png, .jpg, .jpeg" style={{visibility: 'hidden' }} onChange={handleImageInput}/>
+                        <input id="sliderImageUpload" type="file" accept=".png, .jpg, .jpeg" style={{visibility: 'hidden' }} onChange={handleImageInput}/>
                         <FormHelperText
                             component="div"
                             error={errors && errors.length > 0}

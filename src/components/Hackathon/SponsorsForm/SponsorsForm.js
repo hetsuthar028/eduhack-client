@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const initialValues = {
     sponsorName: "",
-    sponsorImageLink: "https://source.unsplash.com/random",
+    sponsorImageLink: {},
     sponsorWebLink: "",
 };
 
@@ -108,6 +108,15 @@ const Sponsorsform = (props) => {
         setIsFormValid(checkFormValidation(inputErrors))
     };
 
+    const handleImageChange = (e) => {
+        console.log("Uploaded sponsor Image", e.target.files[0]);
+
+        setSponsorDetails({
+            ...sponsorDetails,
+            ["sponsorImageLink"]: e.target.files[0],
+        });
+    }
+
     return (
         <div className={classes.parent}>
             <form onSubmit={() => handleSubmit(sponsorDetails)}>
@@ -174,9 +183,10 @@ const Sponsorsform = (props) => {
                     <Grid item md={3} />
 
                     <Grid item md={6} className={classes.innerGrid}>
-                        <Button variant="outlined" fullWidth>
+                        <Button variant="outlined" fullWidth onClick={() => {document.getElementById("sponsorImageUpload").click()}}>
                             Upload Image
                         </Button>
+                        <input id="sponsorImageUpload" type="file" accept=".png, .jpg, .jpeg" style={{visibility: "hidden"}} onChange={handleImageChange}/>
                         <FormHelperText
                             component="div"
                             error={errors && errors.length > 0}
