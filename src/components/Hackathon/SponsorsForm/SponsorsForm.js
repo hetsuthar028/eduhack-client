@@ -70,8 +70,8 @@ const Sponsorsform = (props) => {
         let fieldErrors = [];
         let hErrors = { ...errors };
 
-        if(name == "sponsorName" && fieldValue.length < 10){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        if(name == "sponsorName" && fieldValue.length < 3){
+            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 3</p>)
         }
 
         if(name == "sponsorImageLink" && !fieldValue){
