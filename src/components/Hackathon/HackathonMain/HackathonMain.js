@@ -71,7 +71,7 @@ const tempProblemStatements = [1, 2, 3, 4];
 const formatDate = (date) => {
     let tempDate = new Date(date);
 
-    return `${tempDate.getDate()}/${tempDate.getMonth()}/${tempDate.getFullYear()}`
+    return `${tempDate.getDate()}/${tempDate.getMonth() + 1}/${tempDate.getFullYear()}`
 }
 
 const Hackathonmain = (props) => {
