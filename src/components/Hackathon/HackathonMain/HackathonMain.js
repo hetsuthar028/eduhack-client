@@ -175,13 +175,15 @@ const Hackathonmain = (props) => {
 
                 console.log("Error fetching hackathon", err);
                 // setShowBanner({apiErrorResponse: err.response?.data})
-                if(err.response.data == "Hackathon doesn't exists!"){
+                if(err.response?.data == "Hackathon doesn't exists!"){
                     setShowBanner({apiErrorResponse: err.response?.data})
                     return history.push('/dashboard')
                 }
 
-                if(err.response.data == "Invalid user"){
+                if(err.response?.data == "Invalid user"){
                     return history.push('/auth/signin');
+                } else {
+                  console.log("Error connecting to Server!");
                 }
                 
             })

@@ -442,7 +442,10 @@ const Organizepage = () => {
                             console.log("Error in axios while creating Hackathon", err);
                         });
                             console.log("Resp after uploading")
-
+                            setShowBanner({apiSuccessResponse: "Your hackathon is being created! ⏳🤩"})
+                            // setTimeout(() => {
+                            //     setShowBanner(null);
+                            // }, 2000);
 
                     }).catch((err) => {
                         console.log("ERR1", err);
