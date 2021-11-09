@@ -378,7 +378,7 @@ const Organizepage = () => {
     const handleAfterFormResponse = () => {
         setTimeout(() => {
             setShowBanner(null);
-        }, 3000);
+        }, 5000);
     };
 
     const handleFormSubmit = (e) => {
@@ -457,7 +457,7 @@ const Organizepage = () => {
                                 console.log("Error in axios while creating Hackathon", err);
                             });
                                 console.log("Resp after uploading")
-                                setShowBanner({apiSuccessResponse: "Your hackathon is being created! ⏳🤩"})
+                                setShowBanner({apiSuccessResponse: "Your hackathon is being created! ⏳🤩 \nYou'll be automatically redirected to your hackathon page once it is created!"})
                                 // setTimeout(() => {
                                 //     setShowBanner(null);
                                 // }, 2000);

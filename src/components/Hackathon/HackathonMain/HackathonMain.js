@@ -616,10 +616,10 @@ const Hackathonmain = (props) => {
                             >
                             
                                     <img
-                                        src="https://source.unsplash.com/random"
-                                        height={170}
-                                        width="85%"
-                                        style={{ borderRadius: "2%" }}
+                                        src={sponsor.imageLink}
+                                        height={150}
+                                        width="90%"
+                                        style={{ borderRadius: "2%", boxShadow: "5px 5px 10px #ccc", padding: "5px"}}
                                     />
                                 
                             </a>
