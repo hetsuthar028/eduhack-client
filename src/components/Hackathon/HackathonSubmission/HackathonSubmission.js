@@ -28,6 +28,7 @@ import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
 import getIcon from "../../../static/Icons/getIcon";
 import axios from "axios";
 import { AppContext } from '../../../AppContext';
+import Carousel from "../../carousel/Carousel";
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -62,6 +63,7 @@ const Hackathonsubmission = (props) => {
 
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
+    const [sliders, setSliders] = useState([]);
     const [currentProblemStatement, setCurrentProblemStatement] = useState();
 
     const handleAfterFormResponse = () => {
@@ -71,12 +73,12 @@ const Hackathonsubmission = (props) => {
     }
 
     useEffect(() => {
+        console.log("Submission page", props.match.params.id);
         try{
             axios
                 .get(
                     `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
                     {
-                        body: {},
                         headers: {
                             authorization: localStorage.getItem("session"),
                         },
@@ -88,13 +90,14 @@ const Hackathonsubmission = (props) => {
                     setProblemStatements(
                         responses.data.get_problem_statements_db.problemStatements
                     );
+                    setSliders(responses.data.get_sliders_db.sliders)
                 })
                 .catch((err) => {
-                    if(err.response.data == "Invalid user"){
+                    if(err.response?.data == "Invalid user"){
                         setShowBanner({apiErrorResponse: err.response.data})
                         return history.push('/auth/signin')
                     }
-                    if(err.response.data == "Hackathon doesn't exists!"){
+                    if(err.response?.data == "Hackathon doesn't exists!"){
                         setShowBanner({apiErrorResponse: err.response.data})
                         return history.push('/dashboard')
                     }
@@ -103,7 +106,7 @@ const Hackathonsubmission = (props) => {
                     );
                 });
         } catch(err){
-
+            console.log("Error in Catch", err);
         }finally {
             handleAfterFormResponse();
         }
@@ -122,16 +125,15 @@ const Hackathonsubmission = (props) => {
             <div className={classes.parent}>
                 <NavBar location="dashboard" />
 
-                <Grid container sm={12} xs={12} md={12}>
+                <Grid container>
                     {/* Top Carousel */}
                     <Grid
                         item
                         xs={12}
                         sm={12}
                         md={12}
-                        className={classes.carousel}
                     >
-                        <Grid container xs={12} sm={12} md={12}>
+                        {/* <Grid container>
                             <Grid
                                 item
                                 xs={6}
@@ -209,7 +211,8 @@ const Hackathonsubmission = (props) => {
                                 <Twitter style={{ margin: "5px" }} />
                                 <LinkedIn style={{ margin: "5px" }} />
                             </Grid>
-                        </Grid>
+                        </Grid> */}
+                        <Carousel defaultSliders={false} sliders={sliders} />
                     </Grid>
 
                     {/* Problem Statement Title */}
@@ -303,14 +306,14 @@ const Hackathonsubmission = (props) => {
                                 sm={4}
                                 md={2}
                                 className={classes.technologies}
-                                style={{ display: "flex", placeSelf: "center" }}
+                                style={{ display: "flex", placeSelf: "center"}}
                             >
-                                <Avatar>
+                                <Avatar style={{backgroundColor: "#F0FFF0", boxShadow: "5px 5px 5px #ccc", margin: "0 10px"}}>
                                     <Icon>
-                                        <img src={renderIcon(tech)} />
+                                        <img src={renderIcon(tech.trim())} style={{width: "100%"}}/>
                                     </Icon>
                                 </Avatar>
-                                <Typography variant="h6">{tech}</Typography>
+                                <Typography variant="h6" style={{placeSelf: "center"}}>{tech}</Typography>
                             </Grid>
                         ))
                     ) : (
