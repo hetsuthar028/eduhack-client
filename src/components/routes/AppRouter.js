@@ -29,7 +29,6 @@ const AppRouter = (props) => {
                     <Route exact path="/dashboard" component={Dashboard} />
                     <Route exact path="/hackathon/organize/overview" component={Overviewhackathon} />
                     <Route exact path="/hackathon/organize/" component={Organizepage} />
-                    <Route exact path="/hackathon/organize/1" component={Problemstatementform} />
                     <Route exact path="/hackathon/view/:id" component={Hackathonmain} />
                     <Route exact path="/hackathon/submission/:id" component={Hackathonsubmission} />
                     <Route exact path="/hackathon/submission/summary/:id" component={Hackathonsummary} />

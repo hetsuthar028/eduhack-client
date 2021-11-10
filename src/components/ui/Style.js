@@ -37,7 +37,8 @@ const useStyles = makeStyles((theme) =>({
     navAvatar: {
         margin: "0",
         backgroundColor: theme.palette.common.ternaryColor,
-        color: theme.palette.secondary.main
+        color: theme.palette.secondary.main,
+        placeSelf: "center"
     },
 
 }));

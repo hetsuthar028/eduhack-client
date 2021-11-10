@@ -159,7 +159,36 @@ const Organizepage = () => {
     }
 
     const results = [];
+
     useEffect(() => {
+        try{
+
+            axios.get(`http://localhost:4200/api/user/currentuser`, {
+                headers: {
+                    authorization: localStorage.getItem('session')
+                }
+            })
+            .then(responses => {
+                console.log("C User Org Resp", responses.data.currentUser)
+                // setCurrentUser(responses.data.currentUser);
+                if(!responses.data.currentUser || responses.data.currentUser === undefined){
+                    setShowBanner({apiErrorResponse: "You must be signed in!"});
+                    return history.push('/auth/signin')
+                }
+                if(responses.data.currentUser.userType == "developer"){ 
+                    setShowBanner({apiErrorResponse: "You're not allowed to create hackathons!\nPlease SignIn using an Organization account."})
+                    return history.push('/dashboard');
+                }
+            }).catch((err) => {
+                console.log("ERR Current User in Dashboard", err);
+                setShowBanner({apiErrorResponse: "Error fetching data! Please try again. 2"})
+            })
+        } catch(err){
+            console.log("Error catched in Org Page", err);
+        } finally{
+            handleAfterFormResponse();
+        }
+
         if(probStatementCSV !=null){
             // fs.createReadStream(probStatementCSV)
             //     .pipe(csv({}))

@@ -65,7 +65,7 @@ const NavBar = (props) => {
                     <>
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Button className={classes.navButton}>About Us</Button>
-                        <Button className={classes.navButton}>Organize a Hackathon</Button>
+                        <Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/dashboard">Go to Dashboard</Button>
                     </>
                 );
@@ -104,7 +104,7 @@ const NavBar = (props) => {
                         <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Learn</Button>
                         <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Explore</Button>
                         <Button className={classes.navButton}>Hackathons</Button>
-                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/hackathon/organize/overview">Organize a Hackathon</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button>
                         <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar>
                         
                         {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
@@ -136,7 +136,7 @@ const NavBar = (props) => {
                                     <strong>EduHack</strong>
                                 </IconButton>
                             </Grid>
-                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center"}}>
+                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center", display: "flex", placeContent: "end"}}>
                             {/* {currentUser !=null? renderNavButttons(): ""} */}
                                 {renderNavButttons()}
                             </Grid>
