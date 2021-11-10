@@ -55,7 +55,7 @@ const NavBar = (props) => {
                     <>
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Button className={classes.navButton}>About Us</Button>
-                        <Button className={classes.navButton}>Organize a Hackathon</Button>
+                        <Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="/auth/signin">Sign In</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button>
                     </>
@@ -76,7 +76,11 @@ const NavBar = (props) => {
             if(!appCurrentUser){
                 return (
                     <>
-                    No User
+                        <Button className={classes.navButton}>Hackathons</Button>
+                        <Button className={classes.navButton}>About Us</Button>
+                        <Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="/auth/signin">Sign In</Button>
+                        <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button>
                     </>
                 )
             }
@@ -112,54 +116,6 @@ const NavBar = (props) => {
     };
 
     return (
-        // <div class="nav">
-        //     <input type="checkbox" id="nav-check" />
-        //     <div class="nav-header">
-        //         <div class="nav-title">MysteryCode</div>
-        //     </div>
-        //     <div class="nav-btn">
-        //         <label for="nav-check">
-        //             <span></span>
-        //             <span></span>
-        //             <span></span>
-        //         </label>
-        //     </div>
-
-        //     <div class="nav-links">
-        //         <ul>
-        //             <li>
-        //                 <a href="#" target="_blank">
-        //                     Home
-        //                 </a>
-        //             </li>
-        //             <li>
-        //                 <a href="#" target="_blank">
-        //                     About
-        //                 </a>
-        //             </li>
-        //             <li>
-        //                 <a href="#" target="_blank">
-        //                     Services
-        //                 </a>
-        //             </li>
-        //             <li>
-        //                 <a href="#" target="_blank">
-        //                     Portfolio
-        //                 </a>
-        //             </li>
-        //             <li>
-        //                 <a href="#" target="_blank">
-        //                     Contact
-        //                 </a>
-        //             </li>
-        //             <a class="icon">
-        //                 <i class="fa fa-twitter"></i>
-        //                 <i class="fa fa-linkedin"></i>
-        //                 <i class="fa fa-youtube"></i>
-        //             </a>
-        //         </ul>
-        //     </div>
-        // </div>
         <Typography color="textPrimary">
             <Grid container>
             {/* <Box sx={{ flowGrow: 1 }} padding="0"> */}
