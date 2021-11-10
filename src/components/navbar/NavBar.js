@@ -121,7 +121,7 @@ const NavBar = (props) => {
             {/* <Box sx={{ flowGrow: 1 }} padding="0"> */}
             <Grid item xs={12} sm={12} md={12}>
                 <AppBar position="static" color="primary" elevation={0} >
-                    <Toolbar >
+                    <Toolbar style={{minHeight: "50px"}}>
                         <Grid container>
                             <Grid item xs={6} sm={3} md={2}>
                                 <IconButton
