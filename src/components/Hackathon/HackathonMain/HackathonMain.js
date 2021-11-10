@@ -91,13 +91,17 @@ const Hackathonmain = (props) => {
         }, 4000);
     }
 
-    const checkregistration = async () => {
-        await axios.get(`http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`)
+    const checkregistration = () => {
+        axios.post(`http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`, {
+            currentUser: currentUser
+        })
             .then((responses) => {
                 if(responses.data.message == 'already registered'){
                     setRegistrationStatus(true)
+                    console.log("Already registered", registrationStatus)
                 }else {
                     setRegistrationStatus(false)
+                    console.log("Not registered", registrationStatus)
                 }
             }).catch(err => {
                 console.log("Error registration check", err);
@@ -178,42 +182,62 @@ const Hackathonmain = (props) => {
                     setShowBanner({apiErrorResponse: "You must be Signed In!"});
                     return history.push('/auth/signin');
                 }
+
+                axios.post(`http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`, {
+                    currentUser: response.data.currentUser
+                })
+                    .then((responses) => {
+                        if(responses.data.message == 'already registered'){
+                            setRegistrationStatus(true)
+                            console.log("Already registered", registrationStatus)
+                        }else {
+                            setRegistrationStatus(false)
+                            console.log("Not registered", registrationStatus)
+                        }
+
+                        axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,  {
+                                body: {
+
+                                },
+                                headers: {
+                                    authorization: localStorage.getItem("session"),
+                                },
+                            }).then(responses => {
+                                console.log("Got Hackathon", responses);
+                                setHackathon(responses.data.get_hackathon_db.hackathon);
+                                setProblemStatements(responses.data.get_problem_statements_db.problemStatements);
+                                setSponsors(responses.data.get_sponsors_db.sponsors);
+                                setSliders(responses.data.get_sliders_db.sliders);
+                                setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
+                            }).catch(err => {
+
+                                console.log("Error fetching hackathon", err);
+                                // setShowBanner({apiErrorResponse: err.response?.data})
+                                if(err.response?.data == "Hackathon doesn't exists!"){
+                                    setShowBanner({apiErrorResponse: err.response?.data})
+                                    return history.push('/dashboard')
+                                }
+
+                                if(err.response?.data == "Invalid user"){
+                                    return history.push('/auth/signin');
+                                } else {
+                                console.log("Error connecting to Server!");
+                                }
+                                
+                            })
+                    }).catch(err => {
+                        console.log("Error registration check", err);
+                    })
+
+
+
             }).catch((err) => {
                 console.log("Error in Hack Main Current User", err);
             })
 
-            checkregistration()
+            
 
-            axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,  {
-                body: {
-
-                },
-                headers: {
-                    authorization: localStorage.getItem("session"),
-                },
-            }).then(responses => {
-                console.log("Got Hackathon", responses);
-                setHackathon(responses.data.get_hackathon_db.hackathon);
-                setProblemStatements(responses.data.get_problem_statements_db.problemStatements);
-                setSponsors(responses.data.get_sponsors_db.sponsors);
-                setSliders(responses.data.get_sliders_db.sliders);
-                setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
-            }).catch(err => {
-
-                console.log("Error fetching hackathon", err);
-                // setShowBanner({apiErrorResponse: err.response?.data})
-                if(err.response?.data == "Hackathon doesn't exists!"){
-                    setShowBanner({apiErrorResponse: err.response?.data})
-                    return history.push('/dashboard')
-                }
-
-                if(err.response?.data == "Invalid user"){
-                    return history.push('/auth/signin');
-                } else {
-                  console.log("Error connecting to Server!");
-                }
-                
-            })
+            
         } catch(err){
 
         } finally{
