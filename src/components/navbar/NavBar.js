@@ -132,6 +132,7 @@ const NavBar = (props) => {
                                     disableRipple
                                     sx={{ mr: 1 }}
                                     className={classes.navIcon}
+                                    href="/dashboard"
                                 >
                                     <strong>EduHack</strong>
                                 </IconButton>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router';
 import NavBar from '../navbar/NavBar';
 import Footer from '../footer/Footer';
@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core';
 import Questioncard from './QuestionCard';
 import Questionlist from './QuestionList';
 import axios from 'axios';
+import { AppContext } from '../../AppContext';
 
 const useStyles = makeStyles((theme) => ({
     container: {
@@ -24,7 +25,27 @@ const Codinglistmain = (props) => {
     const [category, setCategory] = useState('');
     const history = useHistory();
 
+    const { setShowBanner } = useContext(AppContext);
+
     useEffect(() => {
+
+        axios.get(`http://localhost:4200/api/user/currentuser`, {
+            headers: {
+                authorization: localStorage.getItem('session')
+            }
+        })
+        .then(responses => {
+            console.log("C User Dash Resp", responses.data.currentUser)
+            
+            if(!responses.data.currentUser || responses.data.currentUser === undefined || Object.keys(responses.data.currentUser).length == 0){
+                setShowBanner({apiErrorResponse: "You must be Signed In!"});
+                return history.push('/auth/signin');
+            }
+        }).catch((err) => {
+            console.log("ERR Current User in Dashboard", err);
+            setShowBanner({apiErrorResponse: "Error fetching data! Please try again."})
+        })
+
         let pathname = props.location.pathname.split("/");
         // "/coding/practice/javascript"
         // "/coding/practice/python"
@@ -49,7 +70,7 @@ const Codinglistmain = (props) => {
             default :
                 history.push('/dashboard');
         }
-    })
+    }, []);
     
 
     return (        

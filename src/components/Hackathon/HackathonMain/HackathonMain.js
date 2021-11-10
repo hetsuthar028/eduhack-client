@@ -248,7 +248,7 @@ const Hackathonmain = (props) => {
 
     return (
         <div className={classes.parent}>
-            <NavBar />
+            <NavBar location="dashboard" />
 
             {/* Parent Container */}
             <Typography fontFamily="Open Sans">

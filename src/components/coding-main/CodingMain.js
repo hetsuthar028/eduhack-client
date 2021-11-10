@@ -53,6 +53,24 @@ const Codingmain = (props) => {
 
     useEffect(() => {
         console.log("UseEffect in Coding Main")
+
+        axios.get(`http://localhost:4200/api/user/currentuser`, {
+            headers: {
+                authorization: localStorage.getItem('session')
+            }
+        })
+        .then(responses => {
+            console.log("C User Dash Resp", responses.data.currentUser)
+            
+            if(!responses.data.currentUser || responses.data.currentUser === undefined || Object.keys(responses.data.currentUser).length == 0){
+                setShowBanner({apiErrorResponse: "You must be Signed In!"});
+                return history.push('/auth/signin');
+            }
+        }).catch((err) => {
+            console.log("ERR Current User in Dashboard", err);
+            setShowBanner({apiErrorResponse: "Error fetching data! Please try again."})
+        })
+
         axios.get(`http://localhost:9200/api/coding/get/question?id=${props.match.params.id}`)
             .then((response) => {
                 if(response){
