@@ -76,6 +76,7 @@ const formatDate = (date) => {
 
 const Hackathonmain = (props) => {
     const classes = useStyles();
+    const [currentUser, setCurrentUser] = useState({});
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
     const [sponsors, setSponsors] = useState([]);
@@ -87,7 +88,7 @@ const Hackathonmain = (props) => {
     const handleAfterFormResponse = () => {
         setTimeout(() => {
             setShowBanner(null);
-        }, 3000);
+        }, 4000);
     }
 
     const checkregistration = async () => {
@@ -107,7 +108,18 @@ const Hackathonmain = (props) => {
         e.preventDefault();
         console.log(props.match.params.id)
         try{
-            axios.post(`http://localhost:4400/api/hackathon/register/${props.match.params.id}`, {}, {
+            if(!currentUser){
+                setShowBanner({apiErrorResponse: "You must be Signed In!"});
+                return history.push('/auth/signin');
+            }
+
+            if(currentUser.userType == "organization"){
+                return setShowBanner({apiSuccessResponse: "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account."});
+            }
+
+            axios.post(`http://localhost:4400/api/hackathon/register/${props.match.params.id}`, {
+                currentUser: currentUser
+            }, {
                 headers: {
                     authorization: localStorage.getItem('session')
                 }
@@ -155,6 +167,21 @@ const Hackathonmain = (props) => {
 
     useEffect(() => {
         try{
+            axios.get(`http://localhost:4200/api/user/currentuser`, {
+                headers: {
+                    authorization: localStorage.getItem('session')
+                }
+            }).then((response) => {
+                console.log("Hack main user", response.data.currentUser);
+                setCurrentUser(response.data.currentUser);
+                if(!response.data.currentUser || response.data.currentUser === undefined || Object.keys(response.data.currentUser).length == 0){
+                    setShowBanner({apiErrorResponse: "You must be Signed In!"});
+                    return history.push('/auth/signin');
+                }
+            }).catch((err) => {
+                console.log("Error in Hack Main Current User", err);
+            })
+
             checkregistration()
 
             axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,  {
