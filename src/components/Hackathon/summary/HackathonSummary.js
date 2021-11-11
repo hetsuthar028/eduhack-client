@@ -11,7 +11,8 @@ import {
     TextField, 
     Icon,
 } from "@mui/material";
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import Footer from "../../footer/Footer";
 import NavBar from "../../navbar/NavBar";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
@@ -27,6 +28,8 @@ import firstPrize from "../../../static/Icons/firstPrize.svg";
 import secondPrize from "../../../static/Icons/secondPrize.svg";
 import thirdPrize from "../../../static/Icons/thirdPrize.svg";
 import ReactVirtualizedTable from "../../table-demo/TableDemo";
+import axios from 'axios';
+import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -45,8 +48,93 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Hackathonsummary = () => {
+const Hackathonsummary = (props) => {
     const classes = useStyles();
+    const history = useHistory();
+    const [currentUser, setCurrentUser] = useState({});
+    const [hackathon, setHackathon] = useState({});
+    const [problemStatements, setProblemStatements] = useState([]);
+    const [sliders, setSliders] = useState([]);
+    const [submissions, setSubmissions] = useState([]);
+    const [currentProblemStatement, setCurrentProblemStatement] = useState("");
+
+    const [selectedProblemStatementSubmissions, setSelectedProblemStatementSubmissions] = useState([]);
+
+    const { setShowBanner } = useContext(AppContext);
+
+    const handleAfterFormResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null);
+        }, 4000);
+    }
+
+    const handleSelectChange = (e) => {
+        setCurrentProblemStatement(e.target.value);
+        setSelectedProblemStatementSubmissions(submissions.filter((sub) => sub.problemStatID == currentProblemStatement));
+    }
+
+    useEffect(() => {
+        try{
+            axios.get(`http://localhost:4200/api/user/currentuser`, {
+                headers: {
+                    authorization: localStorage.getItem('session'),
+                }
+            }).then((responses) => {
+                setCurrentUser(responses.data.currentUser);
+                if(!responses.data.currentUser || responses.data.currentUser === undefined || Object.keys(responses.data.currentUser).length == 0){
+                    setShowBanner({apiErrorResponse: "You must be signed in!"});
+                    return history.push('/auth/signin');
+                }
+    
+                if(responses.data.currentUser.userType == "developer"){
+                    setShowBanner({apiSuccessResponse: "You're not authorized!"})
+                    return history.push(`/hackathon/view/${props.match.params.id}`);
+                }
+    
+                axios.get(`http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`, {
+                    body: {
+    
+                    },
+                    headers: {
+                        authorization: localStorage.getItem('session'),
+                    }
+                }).then((hackResp) => {
+                    setHackathon(hackResp.data.get_hackathon_db.hackathon);
+                    setProblemStatements(hackResp.data.get_problem_statements_db.problemStatements);
+                    setSliders(hackResp.data.get_sliders_db.sliders);
+    
+                    setShowBanner({apiSuccessResponse: 'Loading Hackathon...'});
+
+                    axios.get(`http://localhost:4400/api/hackathon/get/submissions/${props.match.params.id}`, {
+                        headers: {
+                            authorization: localStorage.getItem('session'),
+                        }
+                    }).then((subResp) => {
+                        console.log("Got submissions", subResp);
+                    }).catch((err) => {
+                        return console.log("Error getting submissions", err.response.data);
+                    })
+                }).catch((err) => {
+                    console.log("Summary Catch", err);
+                    if(err.response?.data == "Hackathon doesn't exists!"){
+                        setShowBanner({apiErrorResponse: err.response?.data});
+                        return history.push('/dashboard');
+                    }
+
+                    if(err.response?.data == "Invalid user"){
+                        return history.push('/auth/login')
+                    } else {
+                        console.log("Error connecting to Server!");
+                    }
+                })
+            })
+        } catch(err){
+
+        } finally{
+            handleAfterFormResponse();
+        }
+        
+    }, []);
 
     return (
         <div>
@@ -166,51 +254,29 @@ const Hackathonsummary = () => {
                         {/* Total Submissions */}
                         <Box component="div" style={{ margin: "20px 0" }}>
                             <Typography variant="h6">
-                                <strong>Total Submissions: 178/300</strong>
+                                <strong>Total Submissions: {submissions && submissions.length}/{hackathon.maxParticipants}</strong>
                             </Typography>
                         </Box>
                         {/* Problem Statement DropDown */}
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">
-                                Submission Format
+                                Problem Statements
                             </InputLabel>
                             <Select
                                 id="demo-simple-select"
-                                label="submissionFormat"
-                                multiple
-                                value={[]}
+                                label="probStateSummary"
+                                value={currentProblemStatement}
+                                onChange={handleSelectChange}
                             >
-                                <MenuItem
-                                    value="JavaScript"
-                                    name="JavaScript"
-                                    key="JavaScript"
-                                >
-                                    JavaScript
-                                </MenuItem>
-                                <MenuItem
-                                    value="Python"
-                                    name="Python"
-                                    key="Python"
-                                >
-                                    Python
-                                </MenuItem>
-                                <MenuItem value="text/x-csrc" name="C" key="C">
-                                    C
-                                </MenuItem>
-                                <MenuItem
-                                    value="text/x-c++src"
-                                    name="C++"
-                                    key="C++"
-                                >
-                                    C++
-                                </MenuItem>
-                                <MenuItem
-                                    value="text/x-java"
-                                    name="Java"
-                                    key="Java"
-                                >
-                                    Java
-                                </MenuItem>
+                                {problemStatements.map((probState) => (
+                                    <MenuItem
+                                        value={probState.id}
+                                        key={probState.id}
+                                        name={probState.id}
+                                    >
+                                        {probState.title}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
 
@@ -218,7 +284,7 @@ const Hackathonsummary = () => {
                         <Box component="div" style={{ margin: "20px" }}>
                             <Typography variant="subtitle1">
                                 <strong>
-                                    Problem Statement Submissions: 71
+                                    Problem Statement Submissions: {selectedProblemStatementSubmissions.length}
                                 </strong>
                             </Typography>
                         </Box>
