@@ -58,6 +58,7 @@ const splitString = (inputString, by) => {
 let currentDate = new Date();
 let hackStart;
 let hackEnd;
+let submissionTimeInterval;
 
 const Hackathonsubmission = (props) => {
     const classes = useStyles();
@@ -125,7 +126,7 @@ const Hackathonsubmission = (props) => {
 
                             if(currentDate >=hackStart){
                                 setHackathonSubmissionStatus(true);
-                                setInterval(() => {
+                                submissionTimeInterval = setInterval(() => {
                                     setSubmissionRemainingTime(getRemainingTime())
                                 }, 1000);
                             } else {
@@ -177,6 +178,10 @@ const Hackathonsubmission = (props) => {
             console.log("Error in Catch", err);
         }finally {
             handleAfterFormResponse();
+        }
+
+        return () => {
+            clearInterval(submissionTimeInterval);
         }
     }, []);
 
