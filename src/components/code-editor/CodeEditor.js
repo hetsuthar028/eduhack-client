@@ -91,6 +91,10 @@ const Codeeditor = (props) => {
     let intervalId;
 
     useEffect(() => {
+        // Resetting the prev code editor stub values!
+        stub["javascript"] = "";
+        stub["python"] = "";
+
         if(props.defaultCode != undefined || props.defaultCode){
             console.log("Def code", props.defaultCode)
             setCode(props.defaultCode);
