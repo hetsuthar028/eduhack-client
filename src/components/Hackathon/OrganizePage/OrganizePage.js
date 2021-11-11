@@ -156,6 +156,38 @@ const Organizepage = () => {
     const handleCSVUpload = (event) => {
         console.log("D", event.target.files[0]);
         setProbStatementCSV(event.target.files[0]);
+        let csvFormData = new FormData();
+        csvFormData.append("userImage", event.target.files[0]);
+        axios.post('http://localhost:4400/api/hackathon/tempUpload', csvFormData, {
+            headers: {
+                'Content-type': 'multipart/form-data'
+            }
+        }).then((resp) => {
+            console.log("Excel Path", resp.data.filePaths);
+            axios.post('http://localhost:4400/api/hackathon/parse/excel', {
+                filePath: resp.data.filePaths[0]
+            }).then((excelResp) => {
+                console.log("Excel RESP", excelResp.data.parsedData);
+                setValues({
+                    ...values,
+                    problemStatements: [...values.problemStatements, excelResp.data.parsedData[0]]
+                })
+
+                console.log("After update", values);
+            }).catch((err) => {
+                const multiErrors = err.response.data.errors;
+                let errorMessage = ""
+                multiErrors.map((er) => {
+                    errorMessage += `${er.column} ` + `${er.error}\n`
+                })
+
+                setShowBanner({apiErrorResponse: errorMessage});
+                console.log("Error parsing Excel file", err.response);    
+            })
+        }).catch((err) => {
+            // setShowBanner({apiErrorResponse: })
+            console.log("Error uploading Excel file", err);
+        })
     }
 
     const results = [];
@@ -818,32 +850,37 @@ const Organizepage = () => {
                                     xs={12}
                                     sm={12}
                                     md={12}
-                                    style={{ display: "flex" }}
+                                    style={{ marginLeft: "0", placeContent: "end" }}
                                 >
                                     <Button
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
                                         onClick={() => setOpenPopup(true)}
+                                        style={{display: "flex", float: "right"}}
                                     >
-                                        CSV Format
+                                        Add Problem Statement
                                     </Button>
+                                    
                                     <Button
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
                                         onClick={() => {document.getElementById('csvUpload').click()}}
+                                        style={{display: "flex", float: "right", marginRight: "10px"}}
                                     >
-                                        Import from CSV
+                                        Import from Excel
                                     </Button>
-                                    <input id="csvUpload" type="file" accept=".csv" style={{visibility: 'hidden' }} onChange={handleCSVUpload}/>
+                                    <input id="csvUpload" type="file" accept=".xlsx" style={{visibility: 'hidden' }} onChange={handleCSVUpload}/>
+                                    
                                     <Button
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
-                                        onClick={() => setOpenPopup(true)}
+                                        href="https://firebasestorage.googleapis.com/v0/b/eduhack-ea18b.appspot.com/o/hackathons%2Fdefault_files%2FProblem_Statements.xlsx?alt=media&token=fae5b021-f685-4d0b-9245-68e749bf65b6"
+                                        style={{display: "flex", float: "right", marginRight: "10px"}}
                                     >
-                                        Add Problem Statement
+                                        Excel Format
                                     </Button>
                                 </Grid>
 
