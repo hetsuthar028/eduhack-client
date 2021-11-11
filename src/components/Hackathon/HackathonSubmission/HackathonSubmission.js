@@ -66,6 +66,7 @@ const Hackathonsubmission = (props) => {
     const [problemStatements, setProblemStatements] = useState([]);
     const [sliders, setSliders] = useState([]);
     const [currentProblemStatement, setCurrentProblemStatement] = useState();
+    const [hackathonSubmissionStatus, setHackathonSubmissionStatus] = useState(false);
 
     const handleAfterFormResponse = () => {
         setTimeout(() => {
@@ -105,6 +106,18 @@ const Hackathonsubmission = (props) => {
                         .then((responses) => {
                             setHackathon(responses.data.get_hackathon_db.hackathon);
                             console.log("Responses = ", responses);
+
+                            // Check hackathon start status
+                            // Allow submissions only if the hackathon start date is valid
+                            let currentDate = new Date();
+                            let hackStart = new Date(responses.data.get_hackathon_db.hackathon.hackStart);
+
+                            if(currentDate >=hackStart){
+                                setHackathonSubmissionStatus(true);
+                            } else {
+                                setHackathonSubmissionStatus(false);
+                            }
+                            
                             setProblemStatements(
                                 responses.data.get_problem_statements_db.problemStatements
                             );
@@ -425,9 +438,14 @@ const Hackathonsubmission = (props) => {
                         md={12}
                         className={classes.innerGrid}
                     >
-                        
-                        <TextField
-                        type="file" variant="outlined" />
+                        {
+                            hackathonSubmissionStatus ? (
+                                <TextField
+                                type="file" variant="outlined" />
+                            ): (
+                                <Typography variant="h6" fontFamily="Open Sans" color="primary">⏳ You can submit your solutions only after the Hackathon has started!</Typography>
+                            )
+                        }
                     </Grid>
                 </Grid>
 
@@ -437,10 +455,11 @@ const Hackathonsubmission = (props) => {
                     sm={12}
                     md={12}
                     className={classes.innerGrid}
+                    style={{marginTop: "20px"}}
                 >
                     <center>
-                        <Button variant="contained" size="large">
-                            Submit
+                        <Button variant="contained" size="large" disabled={!hackathonSubmissionStatus}>
+                            Submit Solution
                         </Button>
                     </center>
                 </Grid>
