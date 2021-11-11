@@ -51,9 +51,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const splitString = (inputString, by) => {
-    console.log("Data", inputString);
+    // console.log("Data", inputString);
     return inputString.split(`${by}`);
 };
+
+let currentDate = new Date();
+let hackStart;
+let hackEnd;
 
 const Hackathonsubmission = (props) => {
     const classes = useStyles();
@@ -65,13 +69,19 @@ const Hackathonsubmission = (props) => {
     const [hackathon, setHackathon] = useState({});
     const [problemStatements, setProblemStatements] = useState([]);
     const [sliders, setSliders] = useState([]);
-    const [currentProblemStatement, setCurrentProblemStatement] = useState();
+    const [currentProblemStatement, setCurrentProblemStatement] = useState(0);
     const [hackathonSubmissionStatus, setHackathonSubmissionStatus] = useState(false);
+    const [submissionRemaningTime, setSubmissionRemainingTime] = useState("");
 
     const handleAfterFormResponse = () => {
         setTimeout(() => {
             setShowBanner(null)
         }, 3000);
+    }
+
+    const getRemainingTime = () => {
+        currentDate = new Date();
+        return `${hackEnd.getDate() - currentDate.getDate() - 1}:${24 - hackEnd.getHours() - currentDate.getHours() -1}:${60 - hackEnd.getMinutes() - currentDate.getMinutes() - 1}:${60 - hackEnd.getSeconds() - currentDate.getSeconds() - 1}`;
     }
 
     useEffect(() => {
@@ -109,14 +119,27 @@ const Hackathonsubmission = (props) => {
 
                             // Check hackathon start status
                             // Allow submissions only if the hackathon start date is valid
-                            let currentDate = new Date();
-                            let hackStart = new Date(responses.data.get_hackathon_db.hackathon.hackStart);
+                            
+                            hackStart = new Date(responses.data.get_hackathon_db.hackathon.hackStart);
+                            hackEnd = new Date(responses.data.get_hackathon_db.hackathon.hackEnd);
 
                             if(currentDate >=hackStart){
                                 setHackathonSubmissionStatus(true);
+                                setInterval(() => {
+                                    setSubmissionRemainingTime(getRemainingTime())
+                                }, 1000);
                             } else {
                                 setHackathonSubmissionStatus(false);
+                                
                             }
+
+                            let hr = Math.ceil((hackStart - currentDate)/(1000*60*60))
+                            let mn = Math.floor((hackStart - currentDate)/(1000*60*60))
+                            // console.log(`Rem Time - ${hr}:${mn*60}`)
+                            console.log("Rem Time", (24 - hackStart.getHours() - currentDate.getHours() - 1))
+                            console.log("Rem Time", (60 - hackStart.getMinutes() - currentDate.getMinutes() -1))
+                            console.log("Rem Time", (60 - hackStart.getSeconds() - currentDate.getSeconds() -1))
+                            console.log("Rem Time", (currentDate.getDate() + 1) - (currentDate.getDate()) )
                             
                             setProblemStatements(
                                 responses.data.get_problem_statements_db.problemStatements
@@ -168,7 +191,7 @@ const Hackathonsubmission = (props) => {
     return (
         <Typography fontFamily="Open Sans">
             <div className={classes.parent}>
-                <NavBar location="dashboard" />
+                <NavBar location="dashboard" style={{position: "relative"}}/>
 
                 <Grid container>
                     {/* Top Carousel */}
@@ -259,6 +282,12 @@ const Hackathonsubmission = (props) => {
                         </Grid> */}
                         <Carousel defaultSliders={false} sliders={sliders} />
                     </Grid>
+
+                    <Button variant="contained" style={{position: "absolute", top: "80px", marginLeft: "20px"}}>
+                        <Typography variant="h6" fontFamily="Open Sans">
+                            {hackathonSubmissionStatus ? (submissionRemaningTime): ("Starting Soon!")}
+                        </Typography>
+                    </Button>
 
                     {/* Problem Statement Title */}
                     <Grid
