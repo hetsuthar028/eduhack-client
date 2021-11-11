@@ -102,6 +102,11 @@ const Hackathonsubmission = (props) => {
                     return history.push('/auth/signin');
                 }
 
+                if(responses.data.currentUser.userType == "organization"){
+                    setShowBanner({apiSuccessResponse: "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account."});
+                    return history.push(`/hackathon/view/${props.match.params.id}`)
+                }
+
                 axios.post(`http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`, {
                     currentUser: responses.data.currentUser
                 }).then((resp) => {
