@@ -74,6 +74,8 @@ const Hackathonsubmission = (props) => {
     const [hackathonSubmissionStatus, setHackathonSubmissionStatus] = useState(false);
     const [submissionRemaningTime, setSubmissionRemainingTime] = useState("");
 
+    const [submissionFile, setSubmissionFile] = useState(null);
+
     const handleAfterFormResponse = () => {
         setTimeout(() => {
             setShowBanner(null)
@@ -197,6 +199,48 @@ const Hackathonsubmission = (props) => {
     const renderIcon = (tech) => {
         return getIcon(tech.toLowerCase());
     };
+
+    const handleSubmissionFileChange = (e) => {
+        let submissionFormData = new FormData();
+        submissionFormData.append("userImage", e.target.files[0]);
+
+        setSubmissionFile(submissionFormData);
+        
+    };
+
+    const getProperSubmissionExt = () => {
+        let allExts = "";
+        // console.log("Hackathon", hackathon)
+        splitString(hackathon.submissionFormats, ',').map((format) => {
+            allExts += `.${format.toLowerCase()}, `
+        })
+        return allExts;
+    }
+
+    const handleSubmissionSubmit = () => {
+        axios.post(`http://localhost:4400/api/hackathon/tempUpload`, submissionFile, {
+            headers: {
+                'Content-type': 'multipart/form-data'
+            }
+        }).then((resp) => {
+            console.log("Uploaded File Data", resp.data);
+            axios.post(`http://localhost:4400/api/hackathon/upload/submission/storage`, {
+                filePath: resp.data.filePaths[0],
+                userEmail: currentUser.email,
+                hackathonID: hackathon.id,
+                problemStatementID: currentProblemStatement
+            }).then((uploadResp) => {
+                console.log("Upload Resp", uploadResp.data);
+            }).catch((err) => {
+                console.log("Error response", err.response)
+                return setShowBanner({apiErrorResponse: err.response.data.errors});
+            })
+        }).catch((err) => {
+            console.log("Error uploading solution", err);
+        }).finally(() => {
+            handleAfterFormResponse();
+        })
+    }
 
     return (
         <Typography fontFamily="Open Sans">
@@ -479,8 +523,12 @@ const Hackathonsubmission = (props) => {
                     >
                         {
                             hackathonSubmissionStatus ? (
-                                <TextField
-                                type="file" variant="outlined" />
+                                currentProblemStatement ? (
+                                    <TextField
+                                    type="file" variant="outlined" onChange={handleSubmissionFileChange} inputProps={{accept: getProperSubmissionExt()}}/>
+                                ): (
+                                    "Please Select Problem Statement"
+                                )
                             ): (
                                 <Typography variant="h6" fontFamily="Open Sans" color="primary">⏳ You can submit your solutions only after the Hackathon has started!</Typography>
                             )
@@ -497,7 +545,7 @@ const Hackathonsubmission = (props) => {
                     style={{marginTop: "20px"}}
                 >
                     <center>
-                        <Button variant="contained" size="large" disabled={!hackathonSubmissionStatus}>
+                        <Button variant="contained" size="large" disabled={!hackathonSubmissionStatus || currentProblemStatement ==0} onClick={() => {handleSubmissionSubmit()}}>
                             Submit Solution
                         </Button>
                     </center>
