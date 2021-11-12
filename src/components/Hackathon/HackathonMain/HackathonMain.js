@@ -82,6 +82,7 @@ const Hackathonmain = (props) => {
     const [sponsors, setSponsors] = useState([]);
     const [sliders, setSliders] = useState([]);
     const [registrationStatus, setRegistrationStatus] = useState(false);
+    const [hackathonAllowParticipantStatus, setHackathonAllowParticipantStatus] = useState(true);
     const { setShowBanner } = useContext(AppContext);
     const history = useHistory();
 
@@ -119,6 +120,10 @@ const Hackathonmain = (props) => {
 
             if(currentUser.userType == "organization"){
                 return setShowBanner({apiSuccessResponse: "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account."});
+            }
+
+            if(hackathonAllowParticipantStatus == false){
+                return setShowBanner({apiErrorResponse: "Hackathon is already ended! Can't register now."})
             }
 
             axios.post(`http://localhost:4400/api/hackathon/register/${props.match.params.id}`, {
@@ -209,6 +214,15 @@ const Hackathonmain = (props) => {
                                 setSponsors(responses.data.get_sponsors_db.sponsors);
                                 setSliders(responses.data.get_sliders_db.sliders);
                                 setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
+
+                                // Setting the Participate Hackathon Button in disable state if HackEnd date is gone
+                                let currentDate = new Date();
+                                let hackEndDate = new Date(hackathon.hackEnd);
+                                if(currentDate >= hackEndDate){
+                                    console.log("Setting ALlow Status", false);
+                                    setHackathonAllowParticipantStatus(false);
+                                }
+
                             }).catch(err => {
 
                                 console.log("Error fetching hackathon", err);
