@@ -43,9 +43,9 @@ const PastHackathonLanding = () => {
 
             <h1>Past Hackathons</h1>
 
-            <Grid container>
+            <Grid container style={{marginTop: "10px"}}>
                 {pastHackathons.map((hackathon) => (
-                    <Grid item xs={2} sm={4} md={3} key={hackathon}>
+                    <Grid item xs={2} sm={4} md={3} key={hackathon} style={{paddingRight:"15px"}}>
                         <Card sx={{ maxWidth: 700 }}>
                             <CardActionArea onClick={() => {handleCardClick(hackathon.id)}}>
                                 <CardMedia

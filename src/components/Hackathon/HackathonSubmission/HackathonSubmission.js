@@ -231,6 +231,7 @@ const Hackathonsubmission = (props) => {
                 problemStatementID: currentProblemStatement
             }).then((uploadResp) => {
                 console.log("Upload Resp", uploadResp.data);
+                return setShowBanner({apiSuccessResponse: "You have successfully submitted your solution! 🤩👨‍💻"});
             }).catch((err) => {
                 console.log("Error response", err.response)
                 return setShowBanner({apiErrorResponse: err.response.data.errors});
@@ -238,7 +239,7 @@ const Hackathonsubmission = (props) => {
         }).catch((err) => {
             console.log("Error uploading solution", err);
         }).finally(() => {
-            handleAfterFormResponse();
+            // handleAfterFormResponse();
         })
     }
 

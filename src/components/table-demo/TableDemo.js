@@ -44,7 +44,7 @@ const styles = (theme) => ({
 class MuiVirtualizedTable extends React.PureComponent {
   static defaultProps = {
     headerHeight: 48,
-    rowHeight: 48,
+    rowHeight: 60,
   };
 
   getRowClassName = ({ index }) => {
@@ -64,7 +64,7 @@ class MuiVirtualizedTable extends React.PureComponent {
           [classes.noClick]: onRowClick == null,
         })}
         variant="body"
-        style={{ height: rowHeight }}
+        style={{ height: rowHeight}}
         align={
           (columnIndex != null && columns[columnIndex].numeric) || false
             ? 'right'
@@ -187,18 +187,20 @@ for(let i = 0; i < sample.length; i+=1){
 //     rows.push(sample)
 // }
 
-export default function ReactVirtualizedTable() {
+export default function ReactVirtualizedTable(props) {
+  let { submissions } = props;
   return (
     <Paper style={{ height: 400, width: '100%', padding: "20px" }}>
       <VirtualizedTable
-        rowCount={rows.length}
-        rowGetter={({ index }) => rows[index]}
+        rowCount={submissions.length}
+        rowGetter={({ index }) => submissions[index]}
         columns={[
           {
             width: 75,
             label: 'Sr. No.',
             dataKey: 'srNo',
-            numeric: true
+            numeric: true,
+            padding: 10,
           },
           {
             width: 120,
@@ -211,17 +213,17 @@ export default function ReactVirtualizedTable() {
             dataKey: 'userName',
           },
           {
-            width: 200,
+            width: 250,
             label: 'Email',
-            dataKey: 'email',
+            dataKey: 'userEmail',
           },
           {
-            width: 240,
+            width: 300,
             label: 'Submission Link',
             dataKey: 'submissionLink',
           },
           {
-            width: 200,
+            width: 250,
             label: 'Timestamp',
             dataKey: 'timestamp',
           },
