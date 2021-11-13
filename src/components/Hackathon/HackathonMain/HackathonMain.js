@@ -84,6 +84,8 @@ const Hackathonmain = (props) => {
     const [registrationStatus, setRegistrationStatus] = useState(false);
     const [hackathonAllowParticipantStatus, setHackathonAllowParticipantStatus] = useState(true);
     const { setShowBanner } = useContext(AppContext);
+    const [winners, setWinners] = useState(null);
+    const [announcedWinners, setAnnouncedWinners] = useState(null);
     const history = useHistory();
 
     const handleAfterFormResponse = () => {
@@ -215,12 +217,36 @@ const Hackathonmain = (props) => {
                                 setSliders(responses.data.get_sliders_db.sliders);
                                 setShowBanner({apiSuccessResponse: "Loading Hackathon..."})
 
+                                let tempHackathon = responses.data.get_hackathon_db.hackathon;
+
                                 // Setting the Participate Hackathon Button in disable state if HackEnd date is gone
                                 let currentDate = new Date();
-                                let hackEndDate = new Date(hackathon.hackEnd);
-                                if(currentDate >= hackEndDate){
+                                let regEndDate = new Date(tempHackathon.regEnd);
+                                let regStartDate = new Date(tempHackathon.regStart);
+                                let hackEndDate = new Date(tempHackathon.hackEnd);
+                                if(currentDate > regEndDate || currentDate <=regStartDate){
                                     console.log("Setting ALlow Status", false);
                                     setHackathonAllowParticipantStatus(false);
+                                }
+
+                                if(currentDate > hackEndDate){
+                                    console.log("Hackathon Ended")
+                                    axios.get(`http://localhost:4400/api/hackathon/get/winners/${props.match.params.id}`)
+                                        .then((winnerResp) => {
+                                            setWinners(winnerResp.data.data)
+                                            console.log("Got Winners", winnerResp.data.data);
+                                            if(winnerResp.data.data.length !=0){
+                                                console.log("SEtting winners")
+                                                setAnnouncedWinners(true)
+                                                
+                                            }
+                                        }).catch((err) => {
+                                            console.log("Error getting winners");
+                                        })
+                                } else{
+                                    setWinners([]);
+                                    console.log("Not setting winners", currentDate, hackEndDate)
+                                    setAnnouncedWinners(false);
                                 }
 
                             }).catch(err => {
@@ -261,6 +287,8 @@ const Hackathonmain = (props) => {
     }, []);
 
     return (
+        announcedWinners!=null &&
+        winners!=null && (
         <div className={classes.parent}>
             <NavBar location="dashboard" />
 
@@ -425,7 +453,7 @@ const Hackathonmain = (props) => {
 
                 {/* Winning Prizes Title Section */}
                 <Grid item xs={12} md={3} sm={4} className={classes.innerGrid}>
-                    <Formsectionheader name="Winning Prizes" />
+                    <Formsectionheader name={announcedWinners ? "Hackathon Winners" : "Winning Prizes"} />
                 </Grid>
                 <Grid item xs={12} md={12} sm={12}></Grid>
 
@@ -450,6 +478,18 @@ const Hackathonmain = (props) => {
                                             <img src={getIcon(tempPrize)} maxHeight="100%"/>
                                         </CardMedia>
                                         <CardContent style={{paddingTop: "0px", paddingBottom: "0px"}}>
+                                            {announcedWinners && (
+                                                <Typography 
+                                                    variant="h5"
+                                                    fontFamily="Open Sans"
+                                                    style={{color: theme.palette.common.orangeColor}}
+                                                    fontWeight="bold"
+                                                >
+                                                    <center>
+                                                        {winners.filter((winner) => winner.prize == tempPrize.substring(0, tempPrize.length - 4))[0].userName}
+                                                    </center>
+                                                </Typography>
+                                            )}
                                             <Typography 
                                             variant="h6"
                                             fontFamily="Open Sans"
@@ -696,6 +736,7 @@ const Hackathonmain = (props) => {
 
             <Footer />
         </div>
+        )
     );
 };
 
