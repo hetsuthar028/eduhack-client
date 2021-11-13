@@ -70,6 +70,12 @@ const tableHeadCells = [
     { id: "timeStamp", label: "Timestamp" },
 ];
 
+const defaultWinners = {
+    firstPrize: "",
+    secondPrize: "",
+    thirdPrize: "",
+};
+
 const Hackathonsummary = (props) => {
     const classes = useStyles();
     const history = useHistory();
@@ -81,6 +87,9 @@ const Hackathonsummary = (props) => {
     const [currentProblemStatement, setCurrentProblemStatement] = useState("");
     const [submittedUsers, setSubmittedUsers] = useState(null);
     const [filteredSubmissions, setFilteredSubmissions] = useState(null);
+    const [winnersInput, setWinnersInput] = useState(defaultWinners);
+    const [hasWinners, setHasWinners] = useState(null);
+    
 
     const { TblContainer, TblHead, TblPagination } = useTable(
         submissions,
@@ -114,6 +123,56 @@ const Hackathonsummary = (props) => {
 
     const filterSubmissionsOnChange = (probID) => {
         return filteredSubmissions.filter((sub) => sub.problemStatID == probID);
+    };
+
+    const handleWinnersChange = (e) => {
+        let { name, value } = e.target;
+        if(hasWinners){
+            setShowBanner({apiErrorResponse: "Can't change winners once announced!"})
+            setTimeout(() => {
+                setShowBanner(null);
+            }, 3000);
+        } else{
+            setWinnersInput({
+                ...winnersInput,
+                [name]: value,
+            });
+        }
+        
+    };
+
+    const changeDefaultWinners = (winners) => {
+        winners.map((winner) => {
+            defaultWinners[winner.prize] = winner.userName;
+        })
+    }
+
+    const announceWinnersHandler = (e) => {
+        e.preventDefault();
+        try {
+            let { firstPrize, secondPrize, thirdPrize } = winnersInput;
+            console.log("Winners", winnersInput);
+            axios
+                .post(`http://localhost:4400/api/hackathon/announce/winners`, {
+                    winnersInput,
+                    hackathonID: hackathon.id,
+                })
+                .then((resp) => {
+                    console.log("Winners Resp", resp);
+                    if (resp.data.success == true) {
+                        return setShowBanner({
+                            apiSuccessResponse:
+                                "Winners added Successfully! 🤩👨‍🎓",
+                        });
+                    }
+                })
+                .catch((err) => {
+                    console.log("Errors WInner upload", err.response?.data);
+                });
+        } catch (err) {
+        } finally {
+            handleAfterFormResponse();
+        }
     };
 
     useEffect(() => {
@@ -188,6 +247,21 @@ const Hackathonsummary = (props) => {
                                     setFilteredSubmissions(
                                         subResp.data.submissions
                                     );
+
+                                    axios.get(`http://localhost:4400/api/hackathon/get/winners/${props.match.params.id}`)
+                                        .then((winnerResp) => {
+                                            console.log("Got Winners", winnerResp);
+                                            if(winnerResp.data.data.length !=0){
+                                                setHasWinners(true);
+                                                changeDefaultWinners(winnerResp.data.data);
+                                            } else {
+                                                setHasWinners(false);
+                                            }
+                                        }).catch((err) => {
+                                            console.log("Error getting winners", err.response?.data);
+                                            setShowBanner({apiErrorResponse: "Can't fetch winners!"});
+                                        })
+                                    
                                 })
                                 .catch((err) => {
                                     return console.log(
@@ -224,7 +298,8 @@ const Hackathonsummary = (props) => {
     return (
         submittedUsers &&
         submissions &&
-        filteredSubmissions && (
+        filteredSubmissions &&
+        hasWinners !=null && (
             <div>
                 <Typography fontFamily="Open Sans">
                     <NavBar location="dashboard" />
@@ -773,132 +848,150 @@ const Hackathonsummary = (props) => {
                                 className={classes.formPaper}
                                 style={{ padding: "20px 0" }}
                             >
-                                <Grid container xs={12} md={12} sm={12}>
-                                    {/* 1st Row */}
-                                    <Grid item xs={3} sm={3} md={3}></Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={6}
-                                        md={6}
-                                        className={classes.innerGrid}
-                                    >
-                                        <TextField
-                                            label="1st Prize - Username"
-                                            name="firstPrize"
-                                            type="text"
-                                            variant="outlined"
-                                            fullWidth
-                                            required
-                                            size="small"
-                                            InputProps={{
-                                                endAdornment: (
-                                                    <Icon
-                                                        classes={{
-                                                            root: classes.iconRoot,
-                                                        }}
-                                                    >
-                                                        <img
-                                                            className={
-                                                                classes.imageIcon
-                                                            }
-                                                            src={firstPrize}
-                                                        />
-                                                    </Icon>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={3} sm={3} md={3}></Grid>
+                                <form onSubmit={announceWinnersHandler}>
+                                    <Grid container xs={12} md={12} sm={12}>
+                                        {/* 1st Row */}
+                                        <Grid item xs={3} sm={3} md={3}></Grid>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            sm={6}
+                                            md={6}
+                                            className={classes.innerGrid}
+                                        >
+                                            <TextField
+                                                label="1st Prize - Username"
+                                                name="firstPrize"
+                                                type="text"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                                size="small"
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <Icon
+                                                            classes={{
+                                                                root: classes.iconRoot,
+                                                            }}
+                                                        >
+                                                            <img
+                                                                className={
+                                                                    classes.imageIcon
+                                                                }
+                                                                src={firstPrize}
+                                                            />
+                                                        </Icon>
+                                                    ),
+                                                }}
+                                                onChange={handleWinnersChange}
+                                                value={winnersInput.firstPrize}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3} sm={3} md={3}></Grid>
 
-                                    {/* 2nd Row */}
-                                    <Grid item xs={3} sm={3} md={3}></Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={6}
-                                        md={6}
-                                        className={classes.innerGrid}
-                                    >
-                                        <TextField
-                                            label="2nd Prize - Username"
-                                            name="secondPrize"
-                                            type="text"
-                                            variant="outlined"
-                                            fullWidth
-                                            required
-                                            size="small"
-                                            InputProps={{
-                                                endAdornment: (
-                                                    <Icon
-                                                        classes={{
-                                                            root: classes.iconRoot,
-                                                        }}
-                                                    >
-                                                        <img
-                                                            className={
-                                                                classes.imageIcon
-                                                            }
-                                                            src={secondPrize}
-                                                        />
-                                                    </Icon>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={3} sm={3} md={3}></Grid>
+                                        {/* 2nd Row */}
+                                        <Grid item xs={3} sm={3} md={3}></Grid>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            sm={6}
+                                            md={6}
+                                            className={classes.innerGrid}
+                                        >
+                                            <TextField
+                                                label="2nd Prize - Username"
+                                                name="secondPrize"
+                                                type="text"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                                size="small"
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <Icon
+                                                            classes={{
+                                                                root: classes.iconRoot,
+                                                            }}
+                                                        >
+                                                            <img
+                                                                className={
+                                                                    classes.imageIcon
+                                                                }
+                                                                src={
+                                                                    secondPrize
+                                                                }
+                                                            />
+                                                        </Icon>
+                                                    ),
+                                                }}
+                                                onChange={handleWinnersChange}
+                                                value={winnersInput.secondPrize}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3} sm={3} md={3}></Grid>
 
-                                    {/* 3rd Row */}
-                                    <Grid item xs={3} sm={3} md={3}></Grid>
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        sm={6}
-                                        md={6}
-                                        className={classes.innerGrid}
-                                    >
-                                        <TextField
-                                            label="3rd Prize - Username"
-                                            name="thirdPrize"
-                                            type="text"
-                                            variant="outlined"
-                                            fullWidth
-                                            required
-                                            size="small"
-                                            InputProps={{
-                                                endAdornment: (
-                                                    <Icon
-                                                        classes={{
-                                                            root: classes.iconRoot,
-                                                        }}
-                                                    >
-                                                        <img
-                                                            className={
-                                                                classes.imageIcon
-                                                            }
-                                                            src={thirdPrize}
-                                                        />
-                                                    </Icon>
-                                                ),
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={3} sm={3} md={3}></Grid>
+                                        {/* 3rd Row */}
+                                        <Grid item xs={3} sm={3} md={3}></Grid>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            sm={6}
+                                            md={6}
+                                            className={classes.innerGrid}
+                                        >
+                                            <TextField
+                                                label="3rd Prize - Username"
+                                                name="thirdPrize"
+                                                type="text"
+                                                variant="outlined"
+                                                fullWidth
+                                                required
+                                                size="small"
+                                                InputProps={{
+                                                    endAdornment: (
+                                                        <Icon
+                                                            classes={{
+                                                                root: classes.iconRoot,
+                                                            }}
+                                                        >
+                                                            <img
+                                                                className={
+                                                                    classes.imageIcon
+                                                                }
+                                                                src={thirdPrize}
+                                                            />
+                                                        </Icon>
+                                                    ),
+                                                }}
+                                                onChange={handleWinnersChange}
+                                                value={winnersInput.thirdPrize}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3} sm={3} md={3}></Grid>
 
-                                    <Grid
-                                        item
-                                        xs={12}
-                                        md={12}
-                                        sm={12}
-                                        className={classes.innerGrid}
-                                    >
-                                        <center>
-                                            <Button variant="outlined">
-                                                Announce
-                                            </Button>
-                                        </center>
+                                        <Grid
+                                            item
+                                            xs={12}
+                                            md={12}
+                                            sm={12}
+                                            className={classes.innerGrid}
+                                        >
+                                            <center>
+                                                <Button
+                                                    variant="contained"
+                                                    type="submit"
+                                                    disabled={hasWinners}
+                                                >
+                                                    {hasWinners ? (
+                                                        "Winners Announced"
+                                                    ): (
+                                                        "Announce"
+                                                    )}
+                                                </Button>
+                                            </center>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
+                                </form>
                             </Paper>
                         </Grid>
                     </Grid>
