@@ -34,6 +34,7 @@ import axios from "axios";
 import { AppContext } from "../../../AppContext";
 import theme from "../../ui/Theme";
 import useTable from "../../table/useTable";
+import Carousel from '../../carousel/Carousel';
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -307,96 +308,7 @@ const Hackathonsummary = (props) => {
                     {/* Body Container Grid */}
                     <Grid container sm={12} xs={12} md={12}>
                         {/* Top Carousel */}
-                        <Grid
-                            item
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            className={classes.carousel}
-                        >
-                            <Grid container xs={12} sm={12} md={12}>
-                                <Grid
-                                    item
-                                    xs={6}
-                                    md={6}
-                                    sm={6}
-                                    className={classes.nestedGrid}
-                                >
-                                    <Button variant="contained" size="large">
-                                        <Typography
-                                            fontFamily="Open Sans"
-                                            letterSpacing="2px"
-                                            variant="h6"
-                                        >
-                                            <strong>22:47:16</strong>
-                                        </Typography>
-                                    </Button>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={6}
-                                    md={6}
-                                    sm={6}
-                                    className={classes.nestedGrid}
-                                    style={{ placeSelf: "center" }}
-                                >
-                                    <Typography
-                                        fontFamily="Open Sans"
-                                        fontSize="20px"
-                                        letterSpacing="2px"
-                                    >
-                                        <strong style={{ float: "right" }}>
-                                            <BusinessOutlined
-                                                style={{ placeSelf: "center" }}
-                                            />
-                                            Organized by HackCode World Pvt Ltd.
-                                        </strong>
-                                    </Typography>
-                                </Grid>
-
-                                <Grid
-                                    item
-                                    xs={3}
-                                    md={3}
-                                    sm={3}
-                                    className={classes.nestedGrid}
-                                ></Grid>
-                                <Grid
-                                    item
-                                    xs={6}
-                                    md={6}
-                                    sm={6}
-                                    className={classes.nestedGrid}
-                                >
-                                    <Typography
-                                        fontFamily="Open Sans"
-                                        letterSpacing="2px"
-                                        variant="h4"
-                                        style={{ textAlign: "center" }}
-                                    >
-                                        <strong>
-                                            CodeState'21 Version 2.0
-                                        </strong>
-                                    </Typography>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={3}
-                                    md={3}
-                                    sm={3}
-                                    className={classes.nestedGrid}
-                                    style={{
-                                        display: "flex",
-                                        placeSelf: "center",
-                                    }}
-                                >
-                                    <Facebook style={{ margin: "5px" }} />
-                                    <Instagram style={{ margin: "5px" }} />
-                                    <Twitter style={{ margin: "5px" }} />
-                                    <LinkedIn style={{ margin: "5px" }} />
-                                </Grid>
-                            </Grid>
-                        </Grid>
+                        <Carousel defaultSliders={true} />
 
                         {/* Submission Status Title */}
                         <Grid item xs={12} md={12} sm={12} />
