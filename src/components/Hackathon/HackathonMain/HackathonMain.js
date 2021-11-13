@@ -259,6 +259,8 @@ const Hackathonmain = (props) => {
                                                 console.log("SEtting winners")
                                                 setAnnouncedWinners(true)
                                                 
+                                            } else {
+                                                setAnnouncedWinners(false);
                                             }
                                         }).catch((err) => {
                                             console.log("Error getting winners");

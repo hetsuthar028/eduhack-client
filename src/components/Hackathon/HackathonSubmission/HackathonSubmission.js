@@ -72,6 +72,7 @@ const Hackathonsubmission = (props) => {
     const [sliders, setSliders] = useState([]);
     const [currentProblemStatement, setCurrentProblemStatement] = useState(0);
     const [hackathonSubmissionStatus, setHackathonSubmissionStatus] = useState(false);
+    const [hackathonEndStatus, setHackathonEndStatus] = useState(false);
     const [submissionRemaningTime, setSubmissionRemainingTime] = useState("");
 
     const [submissionFile, setSubmissionFile] = useState(null);
@@ -139,6 +140,12 @@ const Hackathonsubmission = (props) => {
                             } else {
                                 setHackathonSubmissionStatus(false);
                                 
+                            }
+
+                            if(currentDate >= hackEnd){
+                                setHackathonEndStatus(true);
+                            } else {
+                                setHackathonEndStatus(false);
                             }
 
                             let hr = Math.ceil((hackStart - currentDate)/(1000*60*60))
@@ -340,7 +347,8 @@ const Hackathonsubmission = (props) => {
 
                     <Button variant="contained" style={{position: "absolute", top: "80px", marginLeft: "20px"}}>
                         <Typography variant="h6" fontFamily="Open Sans">
-                            {hackathonSubmissionStatus ? (submissionRemaningTime): ("Starting Soon!")}
+                            {/* {hackathonSubmissionStatus ? (submissionRemaningTime): ("Starting Soon!")} */}
+                            {hackathonSubmissionStatus ? (hackathonEndStatus ? ("Hackathon Ended!"): (submissionRemaningTime)): ("Starting Soon!")}
                         </Typography>
                     </Button>
 
@@ -524,11 +532,15 @@ const Hackathonsubmission = (props) => {
                     >
                         {
                             hackathonSubmissionStatus ? (
+                                hackathonEndStatus ? (
+                                    <Typography variant="h6" fontFamily="Open Sans" color="primary">Hackathon is already ended. You can't submit your solution now! ❌</Typography>
+                                ): (
                                 currentProblemStatement ? (
                                     <TextField
                                     type="file" variant="outlined" onChange={handleSubmissionFileChange} inputProps={{accept: getProperSubmissionExt()}}/>
                                 ): (
                                     "Please Select Problem Statement"
+                                )
                                 )
                             ): (
                                 <Typography variant="h6" fontFamily="Open Sans" color="primary">⏳ You can submit your solutions only after the Hackathon has started!</Typography>
