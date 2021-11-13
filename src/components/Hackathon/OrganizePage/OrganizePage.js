@@ -451,9 +451,9 @@ const Organizepage = () => {
             let temp3 = values["regStart"].split("-");
             let temp4 = values["regEnd"].split("-");
             values["hackStart"] = temp[2] + "-" + temp[1] + "-" + temp[0];
-            values["hackEnd"] = temp2[2] + "-" + temp2[1] + "-" + temp2[0];
+            values["hackEnd"] = (parseInt(temp2[2])+1).toString() + "-" + temp2[1] + "-" + temp2[0];
             values["regStart"] = temp3[2] + "-" + temp3[1] + "-" + temp3[0];
-            values["regEnd"] = temp4[2] + "-" + temp4[1] + "-" + temp4[0];
+            values["regEnd"] = (parseInt(temp4[2])+1).toString() + "-" + temp4[1] + "-" + temp4[0];
             
             let {sliders, sponsors} = values;
             let slidersFormData = new FormData();

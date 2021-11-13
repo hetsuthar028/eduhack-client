@@ -68,10 +68,15 @@ const useStyles = makeStyles((theme) => ({
 const tempPrizes = [1, 2, 3];
 const tempProblemStatements = [1, 2, 3, 4];
 
-const formatDate = (date) => {
+const formatDate = (date, t) => {
     let tempDate = new Date(date);
+    if(t == 1){
+        tempDate.setDate(tempDate.getDate() -1);
+        return `${tempDate.getDate() }/${tempDate.getMonth() + 1}/${tempDate.getFullYear()}`    
+    } else if(t == 0){
+        return `${tempDate.getDate()}/${tempDate.getMonth() + 1}/${tempDate.getFullYear()}`
+    }
 
-    return `${tempDate.getDate()}/${tempDate.getMonth() + 1}/${tempDate.getFullYear()}`
 }
 
 const Hackathonmain = (props) => {
@@ -86,6 +91,7 @@ const Hackathonmain = (props) => {
     const { setShowBanner } = useContext(AppContext);
     const [winners, setWinners] = useState(null);
     const [announcedWinners, setAnnouncedWinners] = useState(null);
+    const [regStartStatus, setRegStartStatus] = useState(true);
     const history = useHistory();
 
     const handleAfterFormResponse = () => {
@@ -124,6 +130,9 @@ const Hackathonmain = (props) => {
                 return setShowBanner({apiSuccessResponse: "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account."});
             }
 
+            if(regStartStatus == false){
+                return setShowBanner({apiErrorResponse: "Registrations haven't started yet! Kindly verify start date."})
+            }
             if(hackathonAllowParticipantStatus == false){
                 return setShowBanner({apiErrorResponse: "Hackathon is already ended! Can't register now."})
             }
@@ -142,20 +151,20 @@ const Hackathonmain = (props) => {
                 }
                 console.log("Registration Request Data", responses.data);
             }).catch((err) => {
-                console.log("ERROR MESSAGE =", err.response.data)
-                if(err.response.data == "Not Authorized"){
-                    setShowBanner({apiErrorResponse: err.response.data});
+                console.log("ERROR MESSAGE =", err.response?.data)
+                if(err.response?.data == "Not Authorized"){
+                    setShowBanner({apiErrorResponse: err.response?.data});
                     return history.push('/dashboard')
                 }
-                if(err.response.data == "Not Authenticated"){
-                    setShowBanner({apiErrorResponse: err.response.data})
+                if(err.response?.data == "Not Authenticated"){
+                    setShowBanner({apiErrorResponse: err.response?.data})
                     return history.push('/auth/signin')
                 }
-                if(err.response.data == "Already registered"){
-                    return setShowBanner({apiErrorResponse: err.response.data})
+                if(err.response?.data == "Already registered"){
+                    return setShowBanner({apiErrorResponse: err.response?.data})
                 }
-                if(err.response.data == "Participant limit exceeded"){
-                    return setShowBanner({apiErrorResponse: err.response.data})
+                if(err.response?.data == "Participant limit exceeded"){
+                    return setShowBanner({apiErrorResponse: err.response?.data})
                 }
                 else {
 
@@ -224,7 +233,18 @@ const Hackathonmain = (props) => {
                                 let regEndDate = new Date(tempHackathon.regEnd);
                                 let regStartDate = new Date(tempHackathon.regStart);
                                 let hackEndDate = new Date(tempHackathon.hackEnd);
-                                if(currentDate > regEndDate || currentDate <=regStartDate){
+                                if(currentDate.toISOString() < regStartDate.toISOString()){
+                                    console.log("Reg start status to false");
+                                    // console.log("CURRENT DATE", currentDate.toISOString());
+                                    // console.log("REGSTART DATE", regStartDate.toISOString());
+                                    // console.log("Comparision CT < REG", currentDate.toISOString() < regStartDate.toISOString());
+                                    // console.log("Comparision CT >= REG", currentDate.toISOString() >= regStartDate.toISOString());
+
+                                    setRegStartStatus(false);
+                                }
+
+                                if(currentDate.toISOString() >= regEndDate.toISOString()){
+                                    console.log("Val Dates", currentDate.toISOString(), regEndDate.toISOString())
                                     console.log("Setting ALlow Status", false);
                                     setHackathonAllowParticipantStatus(false);
                                 }
@@ -339,14 +359,14 @@ const Hackathonmain = (props) => {
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>{formatDate(hackathon.regStart)}</b>
+                                    <b>{formatDate(hackathon.regStart, 0)}</b>
                                 </Typography>
                             </center>
                         </Grid>
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>{formatDate(hackathon.regEnd)}</b>
+                                    <b>{formatDate(hackathon.regEnd, 1)}</b>
                                 </Typography>
                             </center>
                         </Grid>
@@ -390,14 +410,14 @@ const Hackathonmain = (props) => {
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>{formatDate(hackathon.hackStart)}</b>
+                                    <b>{formatDate(hackathon.hackStart, 0)}</b>
                                 </Typography>
                             </center>
                         </Grid>
                         <Grid item xs={6} sm={6} md={6}>
                             <center>
                                 <Typography variant="h5" fontFamily="Open Sans">
-                                    <b>{formatDate(hackathon.hackEnd)}</b>
+                                    <b>{formatDate(hackathon.hackEnd, 1)}</b>
                                 </Typography>
                             </center>
                         </Grid>
