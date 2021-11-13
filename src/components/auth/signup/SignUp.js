@@ -12,7 +12,7 @@ import {
     Grid,
     Paper,
     Typography,
-    FormHelperText
+    FormHelperText,
 } from "@mui/material";
 import { ThemeProvider, makeStyles } from "@material-ui/core";
 import theme from "../../ui/Theme";
@@ -125,11 +125,9 @@ const useStyles = makeStyles({
         // color: theme.palette.primary.main
     },
     errorMessage: {
-        margin: "0px"
+        margin: "0px",
     },
 });
-
-
 
 const SignUp = (props) => {
     const [values, setValues] = useState(initialValues);
@@ -142,70 +140,110 @@ const SignUp = (props) => {
 
     const validateForm = (name, fieldValue) => {
         const fieldErrors = [];
-        const hErrors = {  ...errors };
+        const hErrors = { ...errors };
 
-        const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        if(name == "email" && !re.test(fieldValue.toLowerCase())){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Email</p>)
+        const re =
+            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+        if (name == "email" && !re.test(fieldValue.toLowerCase())) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Invalid Email
+                </p>
+            );
         }
 
-        if(name == "userName" && fieldValue.length < 8){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        if (name == "userName" && fieldValue.length < 8) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 8
+                </p>
+            );
         }
 
-        if(name == "fullName" && fieldValue.length < 8){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        if (name == "fullName" && fieldValue.length < 8) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 8
+                </p>
+            );
         }
 
-        if(name == "password" && fieldValue.length < 8){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 8</p>)
+        if (name == "password" && fieldValue.length < 8) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 8
+                </p>
+            );
         }
 
-        if(name == "conformPassword" && fieldValue != values.password){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Password does not match</p>)
+        if (name == "conformPassword" && fieldValue != values.password) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Password does not match
+                </p>
+            );
         }
 
-        if(name == "college" && fieldValue.length < 2){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Please add valid College name</p>)
+        if (name == "college" && fieldValue.length < 2) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Please add valid College name
+                </p>
+            );
         }
 
-        if(name == "graduationYear" && (parseInt(fieldValue) < 2000 || parseInt(fieldValue) > 2026)){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Graduation Year should be between 2000 to 2026</p>)
+        if (
+            name == "graduationYear" &&
+            (parseInt(fieldValue) < 2000 || parseInt(fieldValue) > 2026)
+        ) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Graduation Year should be between 2000 to 2026
+                </p>
+            );
         }
 
-        if(name == "contact" && fieldValue.toString().length < 10){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 10</p>)
+        if (name == "contact" && fieldValue.toString().length < 10) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 10
+                </p>
+            );
         }
 
-        if(name == "address" && fieldValue.length < 10){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid address</p>)
+        if (name == "address" && fieldValue.length < 10) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Invalid address
+                </p>
+            );
         }
 
         return {
             ...hErrors,
-            [name]: fieldErrors
-        }
-    }
+            [name]: fieldErrors,
+        };
+    };
 
     const checkFormValidation = (formErrors) => {
         let valid = 1;
-        let tempErrors = {}
+        let tempErrors = {};
 
-        for(const [key, value] of Object.entries(formErrors)){
-            if(value.length){
+        for (const [key, value] of Object.entries(formErrors)) {
+            if (value.length) {
                 valid = 0;
                 break;
             }
         }
 
         return valid;
-    }
+    };
 
     const getHelperText = (name) => {
-        if(errors[name] && errors[name].length){
+        if (errors[name] && errors[name].length) {
             return errors[name];
         }
-    }
+    };
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
@@ -213,8 +251,8 @@ const SignUp = (props) => {
 
         const inputErrors = {
             ...errors,
-            ...validateForm(name, value)
-        }
+            ...validateForm(name, value),
+        };
 
         setValues({
             ...values,
@@ -222,10 +260,10 @@ const SignUp = (props) => {
         });
 
         setErrors({
-            ...inputErrors
-        })
+            ...inputErrors,
+        });
 
-        setIsFormValid(checkFormValidation(inputErrors))
+        setIsFormValid(checkFormValidation(inputErrors));
     };
 
     const handleToggleSwitch = (e) => {
@@ -244,14 +282,11 @@ const SignUp = (props) => {
         }
     };
 
-
     const handleAfterFormResponse = () => {
         setTimeout(() => {
-            setShowBanner(null)
+            setShowBanner(null);
         }, 4000);
-    }
-
-
+    };
 
     // @TODO - Determine if the user Already exists | If so, send them to the dashboard
 
@@ -261,31 +296,39 @@ const SignUp = (props) => {
 
         console.log("I'm here");
         // After succesful validation
-        try{
+        try {
             axios
-            .post("http://localhost:4200/api/user/signup", values)
-            .then((response) => {
-                if (response.data.message == "success") {
-                    setShowBanner({apiSuccessResponse: 'Account created succesfully!'})
+                .post("http://localhost:4200/api/user/signup", values)
+                .then((response) => {
+                    if (response.data.message == "success") {
+                        setShowBanner({
+                            apiSuccessResponse: "Account created succesfully!",
+                        });
 
-                    console.log("User Created Succesfully");
-                    return history.push('/auth/signin');
-                } else {
-                    setShowBanner({apiErrorResponse: response.data.warning})
-                    console.log("Can't create user. Please try again!");
-                }
-            })
-            .catch((err) => {
-                //
-                setShowBanner({apiErrorResponse: err.data})
-                console.log("Error while performing network request", err.data);
+                        console.log("User Created Succesfully");
+                        return history.push("/auth/signin");
+                    } else {
+                        setShowBanner({
+                            apiErrorResponse: response.data.warning,
+                        });
+                        console.log("Can't create user. Please try again!");
+                    }
+                })
+                .catch((err) => {
+                    //
+                    setShowBanner({ apiErrorResponse: err.data });
+                    console.log(
+                        "Error while performing network request",
+                        err.data
+                    );
+                });
+        } catch (err) {
+            setShowBanner({
+                apiErrorResponse: "Some error occured. Please try again!",
             });
-        } catch(err) {
-            setShowBanner({apiErrorResponse: 'Some error occured. Please try again!'})
-        } finally{
+        } finally {
             handleAfterFormResponse();
         }
-        
     };
 
     return (
@@ -330,10 +373,10 @@ const SignUp = (props) => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
-                                        {getHelperText('email')}
+                                        {getHelperText("email")}
                                     </FormHelperText>
                                 </Box>
                                 <Box>
@@ -352,10 +395,10 @@ const SignUp = (props) => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
-                                        {getHelperText('userName')}
+                                        {getHelperText("userName")}
                                     </FormHelperText>
                                 </Box>
                                 <Box>
@@ -374,10 +417,10 @@ const SignUp = (props) => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
-                                        {getHelperText('fullName')}
+                                        {getHelperText("fullName")}
                                     </FormHelperText>
                                 </Box>
                                 <Box>
@@ -396,10 +439,10 @@ const SignUp = (props) => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
-                                        {getHelperText('password')}
+                                        {getHelperText("password")}
                                     </FormHelperText>
                                 </Box>
                                 <Box>
@@ -418,10 +461,10 @@ const SignUp = (props) => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
-                                        {getHelperText('conformPassword')}
+                                        {getHelperText("conformPassword")}
                                     </FormHelperText>
                                 </Box>
                                 <Box>
@@ -458,14 +501,16 @@ const SignUp = (props) => {
                                             />
                                             <FormHelperText
                                                 component="div"
-                                                error={errors && errors.length > 0}
+                                                error={
+                                                    errors && errors.length > 0
+                                                }
                                                 style={{
                                                     paddingLeft: "8px",
                                                     boxSizing: "border-box",
-                                                    color: "red"
+                                                    color: "red",
                                                 }}
                                             >
-                                                {getHelperText('college')}
+                                                {getHelperText("college")}
                                             </FormHelperText>
                                         </Box>
                                         <Box>
@@ -480,14 +525,18 @@ const SignUp = (props) => {
                                             />
                                             <FormHelperText
                                                 component="div"
-                                                error={errors && errors.length > 0}
+                                                error={
+                                                    errors && errors.length > 0
+                                                }
                                                 style={{
                                                     paddingLeft: "8px",
                                                     boxSizing: "border-box",
-                                                    color: "red"
+                                                    color: "red",
                                                 }}
                                             >
-                                                {getHelperText('graduationYear')}
+                                                {getHelperText(
+                                                    "graduationYear"
+                                                )}
                                             </FormHelperText>
                                         </Box>
                                     </>
@@ -505,14 +554,16 @@ const SignUp = (props) => {
                                             />
                                             <FormHelperText
                                                 component="div"
-                                                error={errors && errors.length > 0}
+                                                error={
+                                                    errors && errors.length > 0
+                                                }
                                                 style={{
                                                     paddingLeft: "8px",
                                                     boxSizing: "border-box",
-                                                    color: "red"
+                                                    color: "red",
                                                 }}
                                             >
-                                                {getHelperText('contact')}
+                                                {getHelperText("contact")}
                                             </FormHelperText>
                                         </Box>
                                         <Box>
@@ -527,14 +578,16 @@ const SignUp = (props) => {
                                             />
                                             <FormHelperText
                                                 component="div"
-                                                error={errors && errors.length > 0}
+                                                error={
+                                                    errors && errors.length > 0
+                                                }
                                                 style={{
                                                     paddingLeft: "8px",
                                                     boxSizing: "border-box",
-                                                    color: "red"
+                                                    color: "red",
                                                 }}
                                             >
-                                                {getHelperText('address')}
+                                                {getHelperText("address")}
                                             </FormHelperText>
                                         </Box>
                                     </>
