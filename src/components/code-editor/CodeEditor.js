@@ -125,6 +125,10 @@ const Codeeditor = (props) => {
             payload["userEmail"] = "hetmewada028@gmail.com" 
         }
 
+        setOutput("");
+        setStatus("");
+        setJobId("");
+
         console.log("FROM CODE", payload)
 
         await axios.post('http://localhost:9200/api/coding/run/code', payload)

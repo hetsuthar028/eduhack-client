@@ -68,6 +68,7 @@ const Footer = () => {
                             variant="button"
                             style={{
                                 color: `${theme.palette.common.orangeColor}`,
+                                marginBottom: "15px"
                             }}
                         >
                             <Typography
@@ -198,9 +199,10 @@ const Footer = () => {
                         style={{
                             color: `${theme.palette.primary.main}`,
                             margin: "auto",
+                            placeSelf: "center"
                         }}
                     >
-                        <center>Copyright Reserved © 2021 | Het Suthar</center>
+                        <center><strong>Copyright Reserved © 2021 | <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" height="15" style={{placeSelf: "center"}}/> <a href="https://github.com/hetsuthar028" target="_blank" style={{color: 'inherit', textDecoration: 'none'}}>Het Suthar</a></strong></center>
                     </Typography>
                 </Grid>
             </Grid>
