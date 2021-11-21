@@ -27,6 +27,7 @@ import AWSSvg from './AWS.svg';
 import TensorflowSvg from './Tensorflow.svg';
 import MySQLSvg from './MySQL.svg';
 import MongoDBSvg from './MongoDB.svg';
+import CompanyLogo from './Eduhack3.svg';
 
 export default function getIcon(iconName){
 
@@ -99,6 +100,8 @@ export default function getIcon(iconName){
             return TensorflowSvg
         case 'aws':
             return AWSSvg
+        case 'eduhack':
+            return CompanyLogo
 
         default:
             return TechnologySvg

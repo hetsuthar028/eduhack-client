@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) =>({
         color: theme.palette.secondary.main,
         placeSelf: "center"
     },
+    appLogo: {
+        maxHeight: "2.5em",
+        minWidth: '5em',
+    }
 
 }));
 
