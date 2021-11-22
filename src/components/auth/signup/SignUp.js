@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router";
 import {
     TextField,
     Button,
     styled,
     Switch,
-    FormControlLabel,
     Box,
     Avatar,
     Link,
@@ -17,9 +16,9 @@ import {
 import { ThemeProvider, makeStyles } from "@material-ui/core";
 import theme from "../../ui/Theme";
 import { LockOutlined } from "@mui/icons-material";
-import axious from "axios";
 import axios from "axios";
 import { AppContext } from "../../../AppContext";
+import { useTheme } from "@mui/material/styles";
 
 const initialValues = {
     email: "",
@@ -82,7 +81,6 @@ const useStyles = makeStyles({
     root: {
         "& .MuiFormControl-root": {
             width: "100%",
-            // margin: theme.spacing(1),
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
         },
@@ -90,39 +88,36 @@ const useStyles = makeStyles({
             width: "40%",
             marginTop: theme.spacing(1),
             marginBottom: theme.spacing(1),
-            // margin: theme.spacing(1),
         },
     },
     pageContent: {
         margin: theme.spacing(3),
         padding: theme.spacing(3),
         width: "35%",
-        // height: "100vw",
+        [theme.breakpoints.down('md')]: {
+            width: "40%"
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: "90%"
+        },
         margin: "auto",
         marginTop: "50px",
         marginBottom: "50px",
-        // display: "block",
-        // verticalAlign: "middle",
     },
     formLink: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
     mainContainer: {
-        // height: "100%",
-        // width: "100%",
-        // margin: "10% auto",
-        // Testing
         display: "grid",
         minHeight: "100vh",
         alignContent: "center",
-        gridTemplateColumns: "auto",
+        
         backgroundColor: theme.palette.common.lightMainGreenColor,
     },
     formButton: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(1),
-        // color: theme.palette.primary.main
     },
     errorMessage: {
         margin: "0px",
@@ -133,6 +128,7 @@ const SignUp = (props) => {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
+    const theme2 = useTheme();
 
     const classes = useStyles();
     const history = useHistory();
@@ -247,8 +243,7 @@ const SignUp = (props) => {
 
     const handleInputChange = (e) => {
         let { name, value } = e.target;
-        // console.log("Values", value);
-
+        
         const inputErrors = {
             ...errors,
             ...validateForm(name, value),
@@ -355,7 +350,7 @@ const SignUp = (props) => {
                         onSubmit={handleSubmit}
                         method="POST"
                     >
-                        <Grid container sm={12} xs={12} md={12}>
+                        <Grid container>
                             <Grid item xs={12} sm={12} md={12}>
                                 <Box>
                                     <TextField
@@ -477,15 +472,7 @@ const SignUp = (props) => {
                                         />
                                         <label>Organization</label>
                                     </Typography>
-                                    {/* <FormControlLabel 
-                                        control={
-                                            
-                                        }
-                                        label="Organization"
-                                    /> */}
                                 </Box>
-
-                                {/* Testing  */}
 
                                 {values.userType == "developer" ? (
                                     <>
@@ -593,9 +580,6 @@ const SignUp = (props) => {
                                     </>
                                 )}
 
-                                {/* {
-                                    userFields
-                                } */}
                                 <center>
                                     <Box>
                                         <Button
@@ -626,7 +610,6 @@ const SignUp = (props) => {
                                     </Box>
                                 </center>
 
-                                {/* {changeFields = () => {renderUserTypeFields()}} */}
                             </Grid>
                         </Grid>
                     </form>

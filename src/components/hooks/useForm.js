@@ -1,9 +1,6 @@
-import React, {useState} from 'react';
-import { makeStyles } from '@material-ui/styles';
-import theme from '../ui/Theme'
+import React, { useState } from "react";
 
-export function useForm(initialValues){
-
+export function useForm(initialValues) {
     const [values, setValues] = useState(initialValues);
 
     const handleInputChange = (e) => {
@@ -17,22 +14,10 @@ export function useForm(initialValues){
     return {
         values,
         setValues,
-        handleInputChange
-    }
+        handleInputChange,
+    };
 }
 
-
-
-
-
-export function Form(props){
-
-    return (
-        <form>
-            {props.children}        
-        </form>
-    );
+export function Form(props) {
+    return <form>{props.children}</form>;
 }
-
-
-

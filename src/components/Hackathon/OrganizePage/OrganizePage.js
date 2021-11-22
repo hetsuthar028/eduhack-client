@@ -5,10 +5,8 @@ import Footer from "../../footer/Footer";
 import theme from "../../ui/Theme";
 import { makeStyles } from "@material-ui/core";
 import {
-    Box,
     Grid,
     Paper,
-    Container,
     Typography,
     Button,
     Divider,
@@ -24,7 +22,7 @@ import {
     FormHelperText,
 } from "@mui/material";
 import "./OrganizePage.css";
-import firstPrize from "../../../static/Icons/firstPrize.svg"; 
+import firstPrize from "../../../static/Icons/firstPrize.svg";
 import secondPrize from "../../../static/Icons/secondPrize.svg";
 import thirdPrize from "../../../static/Icons/thirdPrize.svg";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
@@ -34,9 +32,6 @@ import useTable from "../../table/useTable";
 import Sponsorsform from "../SponsorsForm/SponsorsForm";
 import axios from "axios";
 import { AppContext } from "../../../AppContext";
-import fs from 'fs';
-import csv from 'csv-parser';
-import Papa from 'papaparse';
 import Slidersform from "../SlidersForm/SlidersForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     },
     formPaper: {
         padding: "15px",
-        border: ".5px solid #d3d3d3"
+        border: ".5px solid #d3d3d3",
     },
     innerGrid: {
         padding: "10px",
@@ -68,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
     errorMessage: {
         margin: "0px",
     },
-    
 }));
 
 // Initial Form Values
@@ -140,7 +134,7 @@ const Organizepage = () => {
     const [values, setValues] = useState(initialValues);
     const [openPopup, setOpenPopup] = useState(false);
     const [sponsorOpenPopup, setSponsorOpenPopup] = useState(false);
-    const [sliderOpenPopup, setSliderOpenPopup] = useState(false)
+    const [sliderOpenPopup, setSliderOpenPopup] = useState(false);
 
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
@@ -158,70 +152,95 @@ const Organizepage = () => {
         setProbStatementCSV(event.target.files[0]);
         let csvFormData = new FormData();
         csvFormData.append("userImage", event.target.files[0]);
-        axios.post('http://localhost:4400/api/hackathon/tempUpload', csvFormData, {
-            headers: {
-                'Content-type': 'multipart/form-data'
-            }
-        }).then((resp) => {
-            console.log("Excel Path", resp.data.filePaths);
-            axios.post('http://localhost:4400/api/hackathon/parse/excel', {
-                filePath: resp.data.filePaths[0]
-            }).then((excelResp) => {
-                console.log("Excel RESP", excelResp.data.parsedData);
-                setValues({
-                    ...values,
-                    problemStatements: [...values.problemStatements, excelResp.data.parsedData[0]]
-                })
+        axios
+            .post(
+                "http://localhost:4400/api/hackathon/tempUpload",
+                csvFormData,
+                {
+                    headers: {
+                        "Content-type": "multipart/form-data",
+                    },
+                }
+            )
+            .then((resp) => {
+                console.log("Excel Path", resp.data.filePaths);
+                axios
+                    .post("http://localhost:4400/api/hackathon/parse/excel", {
+                        filePath: resp.data.filePaths[0],
+                    })
+                    .then((excelResp) => {
+                        console.log("Excel RESP", excelResp.data.parsedData);
+                        setValues({
+                            ...values,
+                            problemStatements: [
+                                ...values.problemStatements,
+                                excelResp.data.parsedData[0],
+                            ],
+                        });
 
-                console.log("After update", values);
-            }).catch((err) => {
-                const multiErrors = err.response.data.errors;
-                let errorMessage = ""
-                multiErrors.map((er) => {
-                    errorMessage += `${er.column} ` + `${er.error}\n`
-                })
+                        console.log("After update", values);
+                    })
+                    .catch((err) => {
+                        const multiErrors = err.response.data.errors;
+                        let errorMessage = "";
+                        multiErrors.map((er) => {
+                            errorMessage += `${er.column} ` + `${er.error}\n`;
+                        });
 
-                setShowBanner({apiErrorResponse: errorMessage});
-                console.log("Error parsing Excel file", err.response);    
+                        setShowBanner({ apiErrorResponse: errorMessage });
+                        console.log("Error parsing Excel file", err.response);
+                    });
             })
-        }).catch((err) => {
-            // setShowBanner({apiErrorResponse: })
-            console.log("Error uploading Excel file", err);
-        })
-    }
+            .catch((err) => {
+                // setShowBanner({apiErrorResponse: })
+                console.log("Error uploading Excel file", err);
+            });
+    };
 
     const results = [];
 
     useEffect(() => {
-        try{
-
-            axios.get(`http://localhost:4200/api/user/currentuser`, {
-                headers: {
-                    authorization: localStorage.getItem('session')
-                }
-            })
-            .then(responses => {
-                console.log("C User Org Resp", responses.data.currentUser)
-                // setCurrentUser(responses.data.currentUser);
-                if(!responses.data.currentUser || responses.data.currentUser === undefined){
-                    setShowBanner({apiErrorResponse: "You must be signed in!"});
-                    return history.push('/auth/signin')
-                }
-                if(responses.data.currentUser.userType == "developer"){ 
-                    setShowBanner({apiErrorResponse: "You're not allowed to create hackathons!\nPlease SignIn using an Organization account."})
-                    return history.push('/dashboard');
-                }
-            }).catch((err) => {
-                console.log("ERR Current User in Dashboard", err);
-                setShowBanner({apiErrorResponse: "Error fetching data! Please try again. 2"})
-            })
-        } catch(err){
+        try {
+            axios
+                .get(`http://localhost:4200/api/user/currentuser`, {
+                    headers: {
+                        authorization: localStorage.getItem("session"),
+                    },
+                })
+                .then((responses) => {
+                    console.log("C User Org Resp", responses.data.currentUser);
+                    // setCurrentUser(responses.data.currentUser);
+                    if (
+                        !responses.data.currentUser ||
+                        responses.data.currentUser === undefined
+                    ) {
+                        setShowBanner({
+                            apiErrorResponse: "You must be signed in!",
+                        });
+                        return history.push("/auth/signin");
+                    }
+                    if (responses.data.currentUser.userType == "developer") {
+                        setShowBanner({
+                            apiErrorResponse:
+                                "You're not allowed to create hackathons!\nPlease SignIn using an Organization account.",
+                        });
+                        return history.push("/dashboard");
+                    }
+                })
+                .catch((err) => {
+                    console.log("ERR Current User in Dashboard", err);
+                    setShowBanner({
+                        apiErrorResponse:
+                            "Error fetching data! Please try again. 2",
+                    });
+                });
+        } catch (err) {
             console.log("Error catched in Org Page", err);
-        } finally{
+        } finally {
             handleAfterFormResponse();
         }
 
-        if(probStatementCSV !=null){
+        if (probStatementCSV != null) {
             // fs.createReadStream(probStatementCSV)
             //     .pipe(csv({}))
             //     .on('data', (data) => { results.push(data) })
@@ -231,7 +250,7 @@ const Organizepage = () => {
             // getCsvData();
             console.log("CSV", probStatementCSV);
         }
-    }, [probStatementCSV])
+    }, [probStatementCSV]);
 
     const validateForm = (name, fieldValue) => {
         const fieldErrors = [];
@@ -426,7 +445,7 @@ const Organizepage = () => {
         });
 
         setSliderOpenPopup(false);
-    }
+    };
 
     const handleSelectChange = (e) => {
         setValues({
@@ -451,84 +470,116 @@ const Organizepage = () => {
             let temp3 = values["regStart"].split("-");
             let temp4 = values["regEnd"].split("-");
             values["hackStart"] = temp[2] + "-" + temp[1] + "-" + temp[0];
-            values["hackEnd"] = (parseInt(temp2[2])+1).toString() + "-" + temp2[1] + "-" + temp2[0];
+            values["hackEnd"] =
+                (parseInt(temp2[2]) + 1).toString() +
+                "-" +
+                temp2[1] +
+                "-" +
+                temp2[0];
             values["regStart"] = temp3[2] + "-" + temp3[1] + "-" + temp3[0];
-            values["regEnd"] = (parseInt(temp4[2])+1).toString() + "-" + temp4[1] + "-" + temp4[0];
-            
-            let {sliders, sponsors} = values;
+            values["regEnd"] =
+                (parseInt(temp4[2]) + 1).toString() +
+                "-" +
+                temp4[1] +
+                "-" +
+                temp4[0];
+
+            let { sliders, sponsors } = values;
             let slidersFormData = new FormData();
             let sponsorsFormData = new FormData();
 
             sliders.map((slide) => {
-                console.log("Inv Image", slide.sliderImage)
-                slidersFormData.append("userImage", slide.sliderImage)
+                console.log("Inv Image", slide.sliderImage);
+                slidersFormData.append("userImage", slide.sliderImage);
             });
 
             sponsors.map((sponsor) => {
-                console.log("Inv Sponsor Image", sponsor.sponsorImageLink)
-                sponsorsFormData.append("userImage", sponsor.sponsorImageLink)
-            })
+                console.log("Inv Sponsor Image", sponsor.sponsorImageLink);
+                sponsorsFormData.append("userImage", sponsor.sponsorImageLink);
+            });
 
-                    axios.post('http://localhost:4400/api/hackathon/tempUpload', slidersFormData, {
+            axios
+                .post(
+                    "http://localhost:4400/api/hackathon/tempUpload",
+                    slidersFormData,
+                    {
                         headers: {
-                            'Content-type': 'multipart/form-data',
-                        }
-                    }).then((resp) => {
-                        
-                        values["localUploadedSlidersFilesPath"] = resp.data.filePaths;
-                        console.log("Updated - All values", values);
+                            "Content-type": "multipart/form-data",
+                        },
+                    }
+                )
+                .then((resp) => {
+                    values["localUploadedSlidersFilesPath"] =
+                        resp.data.filePaths;
+                    console.log("Updated - All values", values);
 
-                        axios.post('http://localhost:4400/api/hackathon/tempUpload', sponsorsFormData, {
-                            headers: {
-                                'Content-type': 'multipart/form-data'
+                    axios
+                        .post(
+                            "http://localhost:4400/api/hackathon/tempUpload",
+                            sponsorsFormData,
+                            {
+                                headers: {
+                                    "Content-type": "multipart/form-data",
+                                },
                             }
-                        }).then((response) => {
-                            values["localUploadedSponsorsFilesPath"] = response.data.filePaths;
+                        )
+                        .then((response) => {
+                            values["localUploadedSponsorsFilesPath"] =
+                                response.data.filePaths;
                             console.log("Updated - All values 2", values);
-                            axios.post(
+                            axios
+                                .post(
                                     "http://localhost:4400/api/hackathon/create",
                                     {
                                         ...values,
                                     },
                                     {
                                         headers: {
-                                            authorization: localStorage.getItem("session"),
+                                            authorization:
+                                                localStorage.getItem("session"),
                                         },
                                     }
                                 )
-                            .then((response) => {
-                                setShowBanner({
-                                    apiSuccessResponse:
-                                        "Hackathon Created Successfully! 👨‍🎓",
+                                .then((response) => {
+                                    setShowBanner({
+                                        apiSuccessResponse:
+                                            "Hackathon Created Successfully! 👨‍🎓",
+                                    });
+
+                                    console.log(
+                                        "Got Response, Hackathon Created!!"
+                                    );
+                                    console.log(
+                                        response.data.add_hackathon_db
+                                            .uniqueHackathonID
+                                    );
+                                    history.push(
+                                        `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
+                                    );
+                                })
+                                .catch((err) => {
+                                    setShowBanner({
+                                        apiErrorResponse:
+                                            "Problem occured while creating a hackathon! 😦",
+                                    });
+                                    console.log(
+                                        "Error in axios while creating Hackathon",
+                                        err
+                                    );
                                 });
-    
-                                console.log("Got Response, Hackathon Created!!");
-                                console.log(
-                                    response.data.add_hackathon_db.uniqueHackathonID
-                                );
-                                history.push(
-                                    `/hackathon/view/${response.data.add_hackathon_db.uniqueHackathonID}`
-                                );
-                            })
-                            .catch((err) => {
-                                setShowBanner({
-                                    apiErrorResponse:
-                                        "Problem occured while creating a hackathon! 😦",
-                                });
-                                console.log("Error in axios while creating Hackathon", err);
+                            console.log("Resp after uploading");
+                            setShowBanner({
+                                apiSuccessResponse:
+                                    "Your hackathon is being created! ⏳🤩 \nYou'll be automatically redirected to your hackathon page once it is created!",
                             });
-                                console.log("Resp after uploading")
-                                setShowBanner({apiSuccessResponse: "Your hackathon is being created! ⏳🤩 \nYou'll be automatically redirected to your hackathon page once it is created!"})
-                                // setTimeout(() => {
-                                //     setShowBanner(null);
-                                // }, 2000);
-                        })
-
-
-                    }).catch((err) => {
-                        console.log("ERR1", err);
-                    })
-            
+                            // setTimeout(() => {
+                            //     setShowBanner(null);
+                            // }, 2000);
+                        });
+                })
+                .catch((err) => {
+                    console.log("ERR1", err);
+                });
         } catch (err) {
         } finally {
             handleAfterFormResponse();
@@ -850,35 +901,59 @@ const Organizepage = () => {
                                     xs={12}
                                     sm={12}
                                     md={12}
-                                    style={{ marginLeft: "0", placeContent: "end" }}
+                                    style={{
+                                        marginLeft: "0",
+                                        placeContent: "end",
+                                    }}
                                 >
                                     <Button
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
                                         onClick={() => setOpenPopup(true)}
-                                        style={{display: "flex", float: "right"}}
+                                        style={{
+                                            display: "flex",
+                                            float: "right",
+                                        }}
                                     >
                                         Add Problem Statement
                                     </Button>
-                                    
+
                                     <Button
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
-                                        onClick={() => {document.getElementById('csvUpload').click()}}
-                                        style={{display: "flex", float: "right", marginRight: "10px"}}
+                                        onClick={() => {
+                                            document
+                                                .getElementById("csvUpload")
+                                                .click();
+                                        }}
+                                        style={{
+                                            display: "flex",
+                                            float: "right",
+                                            marginRight: "10px",
+                                        }}
                                     >
                                         Import from Excel
                                     </Button>
-                                    <input id="csvUpload" type="file" accept=".xlsx" style={{visibility: 'hidden' }} onChange={handleCSVUpload}/>
-                                    
+                                    <input
+                                        id="csvUpload"
+                                        type="file"
+                                        accept=".xlsx"
+                                        style={{ visibility: "hidden" }}
+                                        onChange={handleCSVUpload}
+                                    />
+
                                     <Button
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
                                         href="https://firebasestorage.googleapis.com/v0/b/eduhack-ea18b.appspot.com/o/hackathons%2Fdefault_files%2FProblem_Statements.xlsx?alt=media&token=fae5b021-f685-4d0b-9245-68e749bf65b6"
-                                        style={{display: "flex", float: "right", marginRight: "10px"}}
+                                        style={{
+                                            display: "flex",
+                                            float: "right",
+                                            marginRight: "10px",
+                                        }}
                                     >
                                         Excel Format
                                     </Button>
@@ -1293,9 +1368,7 @@ const Organizepage = () => {
                                         variant="contained"
                                         size="small"
                                         style={{ marginLeft: "auto" }}
-                                        onClick={() =>
-                                            setSliderOpenPopup(true)
-                                        }
+                                        onClick={() => setSliderOpenPopup(true)}
                                     >
                                         Add Slider
                                     </Button>
@@ -1308,7 +1381,6 @@ const Organizepage = () => {
                             </Grid>
                         </Paper>
                     </Grid>
-
 
                     {/* Winning prizes Details Title */}
                     <Formsectionheader name="Winning Prizes" />
@@ -1518,7 +1590,6 @@ const Organizepage = () => {
                             handleSubmit={handleSliderSubmit}
                         />
                     </Popup>
-
                 </Grid>
             </form>
             <Footer />

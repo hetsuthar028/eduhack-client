@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-    Box,
     Grid,
     Button,
     Typography,
@@ -65,7 +64,7 @@ const Overviewhackathon = () => {
     return (
         <div>
             <NavBar location="dashboard" />
-            <Container style={{marginTop: "20px"}}>
+            <Container style={{ marginTop: "20px" }}>
                 <Grid
                     container
                     xs={12}
@@ -76,16 +75,21 @@ const Overviewhackathon = () => {
                 >
                     {/* 1st Title Section */}
                     <Grid item direction="column">
-                        <img src="https://source.unsplash.com/random" height={150} width={150} style={{ borderRadius: "10px" }}/>
+                        <img
+                            src="https://source.unsplash.com/random"
+                            height={150}
+                            width={150}
+                            style={{ borderRadius: "10px" }}
+                        />
                     </Grid>
                     <Grid item direction="column">
-                    <Typography
+                        <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
                             letterSpacing="1.5px"
-                            style={{verticalAlign: "bottom"}}
+                            style={{ verticalAlign: "bottom" }}
                         >
-                        Organize Hackathons with EduHack
+                            Organize Hackathons with EduHack
                         </Typography>
                     </Grid>
 
@@ -171,7 +175,7 @@ const Overviewhackathon = () => {
                             🤝 Success Story
                         </Typography>
                     </Grid>
-                    <Grid item xs={5} sm={5} md={5}>
+                    <Grid item xs={12} sm={5} md={5}>
                         <img
                             src="https://source.unsplash.com/random"
                             width="40%"
@@ -179,13 +183,7 @@ const Overviewhackathon = () => {
                             style={{ borderRadius: "50%" }}
                         />
                     </Grid>
-                    <Grid
-                        item
-                        xs={7}
-                        sm={7}
-                        md={7}
-                        style={{ paddingLeft: "100px" }}
-                    >
+                    <Grid item xs={12} sm={7} md={7}>
                         <Typography
                             variant="body1"
                             className={classes.mainFont}
@@ -281,7 +279,11 @@ const Overviewhackathon = () => {
                     {/* Organize Hackathon Button */}
                     <Grid item xs={12} sm={12} md={12}>
                         <center>
-                            <Button variant="contained" size="large" href="http://localhost:3000/hackathon/organize">
+                            <Button
+                                variant="contained"
+                                size="large"
+                                href="http://localhost:3000/hackathon/organize"
+                            >
                                 Organize Hackathon
                             </Button>
                         </center>
@@ -290,10 +292,10 @@ const Overviewhackathon = () => {
                     {/* Help? Contact Us */}
                     <Grid item xs={12} sm={12} md={12}>
                         <Typography
-                                fontFamily="Bebas Neue"
-                                variant="h4"
-                                letterSpacing="1px"
-                            >
+                            fontFamily="Bebas Neue"
+                            variant="h4"
+                            letterSpacing="1px"
+                        >
                             Need Help? Feel free to reach us!
                         </Typography>
                     </Grid>
@@ -309,7 +311,7 @@ const Overviewhackathon = () => {
                             className={classes.mainFont}
                             fontFamily="Open Sans"
                         >
-                        Email : <TextField />
+                            Email : <TextField />
                         </Typography>
                     </Grid>
                     <Grid
@@ -324,7 +326,7 @@ const Overviewhackathon = () => {
                             className={classes.mainFont}
                             fontFamily="Open Sans"
                         >
-                        Description : <TextField />
+                            Description : <TextField />
                         </Typography>
                     </Grid>
                 </Grid>

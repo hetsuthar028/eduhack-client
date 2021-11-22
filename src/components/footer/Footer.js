@@ -22,9 +22,6 @@ const Footer = () => {
         },
         gridFirst: {
             width: "40%",
-            // whiteSpace: "initial",
-            // display: "block",
-            // overflow: "hidden",
             wordWrap: "breakWord",
             overflowWrap: "breakWord",
             flexGrow: "1",
@@ -184,16 +181,6 @@ const Footer = () => {
                 </Grid>
 
                 <Grid item xs={12} sm={12} md={12}>
-                    {/* <Typography
-                        variant="subtitle1"
-                        style={{ color: `${theme.palette.primary.main}` }}
-                    >
-                        <center>
-                            A B Developers, Suite 316, IT Road, Ahmedabad -
-                            179236, (Main) +918923419231, (Support)
-                            +912734762835
-                        </center>
-                    </Typography> */}
                     <Typography
                         variant="subtitle1"
                         style={{

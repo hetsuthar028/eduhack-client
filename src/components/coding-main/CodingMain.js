@@ -25,11 +25,11 @@ const useStyles = makeStyles(() => ({
         padding: "0 5px",
     },
     paper: {
-        padding: "10px"
+        padding: "10px",
     },
     smallVertPadding: {
-        padding: "3px 0"
-    }
+        padding: "3px 0",
+    },
 }));
 
 const Codingmain = (props) => {
@@ -37,76 +37,89 @@ const Codingmain = (props) => {
     const history = useHistory();
     const { setShowBanner } = useContext(AppContext);
 
-    const [ question, setQuestion ] = useState({});
-    const [ defaultCode, setDefaultCode ] = useState("");
+    const [question, setQuestion] = useState({});
+    const [defaultCode, setDefaultCode] = useState("");
 
     const formatExamples = (example) => {
         let temp = JSON.stringify(example).slice(1, -1);
         return temp;
-    }
+    };
 
     const handleAfterFormResponse = () => {
         setTimeout(() => {
-            setShowBanner(null)
+            setShowBanner(null);
         }, 3000);
-    }
+    };
 
     useEffect(() => {
-        console.log("UseEffect in Coding Main")
+        console.log("UseEffect in Coding Main");
 
-        axios.get(`http://localhost:4200/api/user/currentuser`, {
-            headers: {
-                authorization: localStorage.getItem('session')
-            }
-        })
-        .then(responses => {
-            console.log("C User Dash Resp", responses.data.currentUser)
-            
-            if(!responses.data.currentUser || responses.data.currentUser === undefined || Object.keys(responses.data.currentUser).length == 0){
-                setShowBanner({apiErrorResponse: "You must be Signed In!"});
-                return history.push('/auth/signin');
-            }
-        }).catch((err) => {
-            console.log("ERR Current User in Dashboard", err);
-            setShowBanner({apiErrorResponse: "Error fetching data! Please try again."})
-        })
+        axios
+            .get(`http://localhost:4200/api/user/currentuser`, {
+                headers: {
+                    authorization: localStorage.getItem("session"),
+                },
+            })
+            .then((responses) => {
+                console.log("C User Dash Resp", responses.data.currentUser);
 
-        axios.get(`http://localhost:9200/api/coding/get/question?id=${props.match.params.id}`)
+                if (
+                    !responses.data.currentUser ||
+                    responses.data.currentUser === undefined ||
+                    Object.keys(responses.data.currentUser).length == 0
+                ) {
+                    setShowBanner({
+                        apiErrorResponse: "You must be Signed In!",
+                    });
+                    return history.push("/auth/signin");
+                }
+            })
+            .catch((err) => {
+                console.log("ERR Current User in Dashboard", err);
+                setShowBanner({
+                    apiErrorResponse: "Error fetching data! Please try again.",
+                });
+            });
+
+        axios
+            .get(
+                `http://localhost:9200/api/coding/get/question?id=${props.match.params.id}`
+            )
             .then((response) => {
-                if(response){
-                    try{
+                if (response) {
+                    try {
                         console.log("Got question", response);
-                        response.data.questionData[0].inputExample = formatExamples(response.data.questionData[0].inputExample)
-                        // response.data.questionData[0].outputExample = 
-                        setQuestion(response.data.questionData[0])
-                    }
-                    catch(err){
-                        setShowBanner({apiErrorResponse: "Invalid question"});
+                        response.data.questionData[0].inputExample =
+                            formatExamples(
+                                response.data.questionData[0].inputExample
+                            );
+                        // response.data.questionData[0].outputExample =
+                        setQuestion(response.data.questionData[0]);
+                    } catch (err) {
+                        setShowBanner({ apiErrorResponse: "Invalid question" });
                         return history.goBack();
-                    }
-                    finally{
+                    } finally {
                         handleAfterFormResponse();
                     }
-                    
                 } else {
-                    setShowBanner({apiErrorResponse: "Invalid question"});
+                    setShowBanner({ apiErrorResponse: "Invalid question" });
                     handleAfterFormResponse();
                     // return history.goBack();
                 }
-                
-            }).catch((err) => {
-
-                console.log("Error fetching question @CodingMain", err)
+            })
+            .catch((err) => {
+                console.log("Error fetching question @CodingMain", err);
             });
 
-        axios.get(`http://localhost:9200/api/coding/get/defaultFile/javascript`)
+        axios
+            .get(`http://localhost:9200/api/coding/get/defaultFile/javascript`)
             .then((response) => {
-                console.log("Default code", response.data.content)
-                setDefaultCode(response.data.content)
-            }).catch((err) => {
-                console.log("Error fetching default file @CodingMain")
+                console.log("Default code", response.data.content);
+                setDefaultCode(response.data.content);
             })
-
+            .catch((err) => {
+                console.log("Error fetching default file @CodingMain");
+            });
     }, []);
 
     return (
@@ -114,7 +127,17 @@ const Codingmain = (props) => {
             <NavBar />
             <div>
                 <Grid container>
-                    <Grid item xs={12} sm={12} md={5.5} style={{height: "100vh", overflow: "auto", clear: "both"}}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={5.5}
+                        style={{
+                            height: "100vh",
+                            overflow: "auto",
+                            clear: "both",
+                        }}
+                    >
                         <Grid container className={classes.container}>
                             {/* Section Title */}
                             <Grid
@@ -161,7 +184,12 @@ const Codingmain = (props) => {
                                     variant="body2"
                                     fontWeight="bold"
                                 >
-                                    {question.category && `${question.category.charAt(0).toUpperCase()}${question.category.slice(1)}`}
+                                    {question.category &&
+                                        `${question.category
+                                            .charAt(0)
+                                            .toUpperCase()}${question.category.slice(
+                                            1
+                                        )}`}
                                 </Typography>
 
                                 <Typography
@@ -398,9 +426,8 @@ const Codingmain = (props) => {
                                     fontWeight="bold"
                                     style={{ color: "red" }}
                                 >
-                                    Function Schema: 
+                                    Function Schema:
                                 </Typography>
-                                
                             </Grid>
 
                             {/* Sample Output Header Section */}
@@ -415,11 +442,17 @@ const Codingmain = (props) => {
                                     variant="body1"
                                     fontFamily="Open Sans"
                                 >
-                                    {question.functionName && `${question.functionName}(${question.parameters.map((para) => {return para})})`}
+                                    {question.functionName &&
+                                        `${
+                                            question.functionName
+                                        }(${question.parameters.map((para) => {
+                                            return para;
+                                        })})`}
                                 </Typography>
                             </Grid>
 
-                            <Grid item 
+                            <Grid
+                                item
                                 xs={4}
                                 sm={4}
                                 md={4}
@@ -429,12 +462,13 @@ const Codingmain = (props) => {
                                     variant="body1"
                                     fontFamily="Open Sans"
                                     fontWeight="bold"
-                                    style={{color: "red"}}
+                                    style={{ color: "red" }}
                                 >
                                     Max Execution Time:
                                 </Typography>
                             </Grid>
-                            <Grid item 
+                            <Grid
+                                item
                                 xs={8}
                                 sm={8}
                                 md={8}
@@ -447,9 +481,10 @@ const Codingmain = (props) => {
                                     {`${question.maxExecutionInSec} seconds`}
                                 </Typography>
                             </Grid>
-                            
+
                             {/* Test cases title */}
-                            <Grid item 
+                            <Grid
+                                item
                                 xs={12}
                                 sm={12}
                                 md={12}
@@ -459,71 +494,120 @@ const Codingmain = (props) => {
                                     variant="body1"
                                     fontFamily="Open Sans"
                                     fontWeight="bold"
-                                    style={{color: 'green'}}
+                                    style={{ color: "green" }}
                                 >
                                     Test Cases:
                                 </Typography>
                             </Grid>
-                            
+
                             {/* Test Cases List */}
-                            {question.testCases && question.testCases.map((testcase, idx) => (
-                                <Grid 
-                                    item 
-                                    xs={12}
-                                    sm={12}
-                                    md={12}
-                                    className={classes.innerGrid}
-                                >
-                                    <Paper elevation={2} className={classes.paper}>
-                                        <Grid container>
-                                            <Grid item xs={12} sm={12} md={12} className={classes.smallVertPadding}>
-                                                <Typography
-                                                    fontFamily="Open Sans"
-                                                    variant="body1"
-                                                    fontWeight="bold"
-                                                > 
-                                                    {`Test Case - ${idx + 1}`}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={6} sm={6} md={6} className={classes.smallVertPadding}>
-                                                <Typography
-                                                    fontFamily="Open Sans"
-                                                    variant="body2"
-                                                > 
-                                                    Inputs: 
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={6} sm={6} md={6} className={classes.smallVertPadding}>
-                                                <Typography
-                                                    fontFamily="Open Sans"
-                                                    variant="body2"
-                                                > 
-                                                {formatExamples(testcase.parameters)}
-                                                </Typography> 
-                                            </Grid>
-                                            <Grid item xs={6} sm={6} md={6} className={classes.smallVertPadding}> 
-                                                <Typography
-                                                    fontFamily="Open Sans"
-                                                    variant="body2"
-                                                > 
-                                                Output: 
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={6} sm={6} md={6} className={classes.smallVertPadding}> 
-                                                <Typography
+                            {question.testCases &&
+                                question.testCases.map((testcase, idx) => (
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        sm={12}
+                                        md={12}
+                                        className={classes.innerGrid}
+                                    >
+                                        <Paper
+                                            elevation={2}
+                                            className={classes.paper}
+                                        >
+                                            <Grid container>
+                                                <Grid
+                                                    item
+                                                    xs={12}
+                                                    sm={12}
+                                                    md={12}
+                                                    className={
+                                                        classes.smallVertPadding
+                                                    }
+                                                >
+                                                    <Typography
+                                                        fontFamily="Open Sans"
+                                                        variant="body1"
+                                                        fontWeight="bold"
+                                                    >
+                                                        {`Test Case - ${
+                                                            idx + 1
+                                                        }`}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={6}
+                                                    sm={6}
+                                                    md={6}
+                                                    className={
+                                                        classes.smallVertPadding
+                                                    }
+                                                >
+                                                    <Typography
                                                         fontFamily="Open Sans"
                                                         variant="body2"
-                                                > 
-                                                    {JSON.stringify(testcase.output)}
-                                                </Typography>
+                                                    >
+                                                        Inputs:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={6}
+                                                    sm={6}
+                                                    md={6}
+                                                    className={
+                                                        classes.smallVertPadding
+                                                    }
+                                                >
+                                                    <Typography
+                                                        fontFamily="Open Sans"
+                                                        variant="body2"
+                                                    >
+                                                        {formatExamples(
+                                                            testcase.parameters
+                                                        )}
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={6}
+                                                    sm={6}
+                                                    md={6}
+                                                    className={
+                                                        classes.smallVertPadding
+                                                    }
+                                                >
+                                                    <Typography
+                                                        fontFamily="Open Sans"
+                                                        variant="body2"
+                                                    >
+                                                        Output:
+                                                    </Typography>
+                                                </Grid>
+                                                <Grid
+                                                    item
+                                                    xs={6}
+                                                    sm={6}
+                                                    md={6}
+                                                    className={
+                                                        classes.smallVertPadding
+                                                    }
+                                                >
+                                                    <Typography
+                                                        fontFamily="Open Sans"
+                                                        variant="body2"
+                                                    >
+                                                        {JSON.stringify(
+                                                            testcase.output
+                                                        )}
+                                                    </Typography>
+                                                </Grid>
+                                                {/* </Typography> */}
                                             </Grid>
-                                            {/* </Typography> */}
-                                        </Grid>
-                                    </Paper>
-                                </Grid>
-                            ))}
-                            
-                            
+                                        </Paper>
+                                    </Grid>
+                                ))}
+
                             {/* Space Grid */}
                             <Grid
                                 item
@@ -541,9 +625,21 @@ const Codingmain = (props) => {
                             />
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6.5} style={{padding: "30px 10px"}}>
-                        {Object.keys(question).length !=0 ? (<Codeeditor defaultCode={defaultCode} question={question}/>): (<></>)}
-                        
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={6.5}
+                        style={{ padding: "30px 10px" }}
+                    >
+                        {Object.keys(question).length != 0 ? (
+                            <Codeeditor
+                                defaultCode={defaultCode}
+                                question={question}
+                            />
+                        ) : (
+                            <></>
+                        )}
                     </Grid>
                 </Grid>
             </div>

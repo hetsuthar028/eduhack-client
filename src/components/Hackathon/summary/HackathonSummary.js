@@ -11,30 +11,21 @@ import {
     TextField,
     Icon,
     Divider,
-    TableBody,
 } from "@mui/material";
 import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import Footer from "../../footer/Footer";
 import NavBar from "../../navbar/NavBar";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
-import {
-    BusinessOutlined,
-    Facebook,
-    Instagram,
-    LinkedIn,
-    Twitter,
-} from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core";
 import firstPrize from "../../../static/Icons/firstPrize.svg";
 import secondPrize from "../../../static/Icons/secondPrize.svg";
 import thirdPrize from "../../../static/Icons/thirdPrize.svg";
-import ReactVirtualizedTable from "../../table-demo/TableDemo";
 import axios from "axios";
 import { AppContext } from "../../../AppContext";
 import theme from "../../ui/Theme";
 import useTable from "../../table/useTable";
-import Carousel from '../../carousel/Carousel';
+import Carousel from "../../carousel/Carousel";
 
 const useStyles = makeStyles((theme) => ({
     parent: {
@@ -90,7 +81,6 @@ const Hackathonsummary = (props) => {
     const [filteredSubmissions, setFilteredSubmissions] = useState(null);
     const [winnersInput, setWinnersInput] = useState(defaultWinners);
     const [hasWinners, setHasWinners] = useState(null);
-    
 
     const { TblContainer, TblHead, TblPagination } = useTable(
         submissions,
@@ -128,25 +118,26 @@ const Hackathonsummary = (props) => {
 
     const handleWinnersChange = (e) => {
         let { name, value } = e.target;
-        if(hasWinners){
-            setShowBanner({apiErrorResponse: "Can't change winners once announced!"})
+        if (hasWinners) {
+            setShowBanner({
+                apiErrorResponse: "Can't change winners once announced!",
+            });
             setTimeout(() => {
                 setShowBanner(null);
             }, 3000);
-        } else{
+        } else {
             setWinnersInput({
                 ...winnersInput,
                 [name]: value,
             });
         }
-        
     };
 
     const changeDefaultWinners = (winners) => {
         winners.map((winner) => {
             defaultWinners[winner.prize] = winner.userName;
-        })
-    }
+        });
+    };
 
     const announceWinnersHandler = (e) => {
         e.preventDefault();
@@ -249,20 +240,36 @@ const Hackathonsummary = (props) => {
                                         subResp.data.submissions
                                     );
 
-                                    axios.get(`http://localhost:4400/api/hackathon/get/winners/${props.match.params.id}`)
+                                    axios
+                                        .get(
+                                            `http://localhost:4400/api/hackathon/get/winners/${props.match.params.id}`
+                                        )
                                         .then((winnerResp) => {
-                                            console.log("Got Winners", winnerResp);
-                                            if(winnerResp.data.data.length !=0){
+                                            console.log(
+                                                "Got Winners",
+                                                winnerResp
+                                            );
+                                            if (
+                                                winnerResp.data.data.length != 0
+                                            ) {
                                                 setHasWinners(true);
-                                                changeDefaultWinners(winnerResp.data.data);
+                                                changeDefaultWinners(
+                                                    winnerResp.data.data
+                                                );
                                             } else {
                                                 setHasWinners(false);
                                             }
-                                        }).catch((err) => {
-                                            console.log("Error getting winners", err.response?.data);
-                                            setShowBanner({apiErrorResponse: "Can't fetch winners!"});
                                         })
-                                    
+                                        .catch((err) => {
+                                            console.log(
+                                                "Error getting winners",
+                                                err.response?.data
+                                            );
+                                            setShowBanner({
+                                                apiErrorResponse:
+                                                    "Can't fetch winners!",
+                                            });
+                                        });
                                 })
                                 .catch((err) => {
                                     return console.log(
@@ -300,7 +307,7 @@ const Hackathonsummary = (props) => {
         submittedUsers &&
         submissions &&
         filteredSubmissions &&
-        hasWinners !=null && (
+        hasWinners != null && (
             <div>
                 <Typography fontFamily="Open Sans">
                     <NavBar location="dashboard" />
@@ -894,11 +901,9 @@ const Hackathonsummary = (props) => {
                                                     type="submit"
                                                     disabled={hasWinners}
                                                 >
-                                                    {hasWinners ? (
-                                                        "Winners Announced"
-                                                    ): (
-                                                        "Announce"
-                                                    )}
+                                                    {hasWinners
+                                                        ? "Winners Announced"
+                                                        : "Announce"}
                                                 </Button>
                                             </center>
                                         </Grid>

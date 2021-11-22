@@ -5,7 +5,6 @@ import Footer from "../../footer/Footer";
 import {
     Button,
     TextField,
-    Container,
     Grid,
     Typography,
     FormControl,
@@ -17,17 +16,10 @@ import {
     Link,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
-import {
-    BusinessOutlined,
-    Facebook,
-    Instagram,
-    LinkedIn,
-    Twitter,
-} from "@mui/icons-material";
 import Formsectionheader from "../FormSectionHeader/FormSectionHeader";
 import getIcon from "../../../static/Icons/getIcon";
 import axios from "axios";
-import { AppContext } from '../../../AppContext';
+import { AppContext } from "../../../AppContext";
 import Carousel from "../../carousel/Carousel";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +63,8 @@ const Hackathonsubmission = (props) => {
     const [problemStatements, setProblemStatements] = useState([]);
     const [sliders, setSliders] = useState([]);
     const [currentProblemStatement, setCurrentProblemStatement] = useState(0);
-    const [hackathonSubmissionStatus, setHackathonSubmissionStatus] = useState(false);
+    const [hackathonSubmissionStatus, setHackathonSubmissionStatus] =
+        useState(false);
     const [hackathonEndStatus, setHackathonEndStatus] = useState(false);
     const [submissionRemaningTime, setSubmissionRemainingTime] = useState("");
 
@@ -79,124 +72,179 @@ const Hackathonsubmission = (props) => {
 
     const handleAfterFormResponse = () => {
         setTimeout(() => {
-            setShowBanner(null)
+            setShowBanner(null);
         }, 3000);
-    }
+    };
 
     const getRemainingTime = () => {
         currentDate = new Date();
-        return `${hackEnd.getDate() - currentDate.getDate() - 1}:${24 - hackEnd.getHours() - currentDate.getHours() -1}:${60 - hackEnd.getMinutes() - currentDate.getMinutes() - 1}:${60 - hackEnd.getSeconds() - currentDate.getSeconds() - 1}`;
-    }
+        return `${hackEnd.getDate() - currentDate.getDate() - 1}:${
+            24 - hackEnd.getHours() - currentDate.getHours() - 1
+        }:${60 - hackEnd.getMinutes() - currentDate.getMinutes() - 1}:${
+            60 - hackEnd.getSeconds() - currentDate.getSeconds() - 1
+        }`;
+    };
 
     useEffect(() => {
         console.log("Submission page", props.match.params.id);
-        try{
-
-            axios.get(`http://localhost:4200/api/user/currentuser`, {
-                headers: {
-                    authorization: localStorage.getItem('session')
-                }
-            })
-            .then(responses => {
-                console.log("C User Sub Resp", responses.data.currentUser)
-                setCurrentUser(responses.data.currentUser);
-                if(!responses.data.currentUser || responses.data.currentUser === undefined || Object.keys(responses.data.currentUser).length == 0){
-                    setShowBanner({apiErrorResponse: "You must be Signed In!"});
-                    return history.push('/auth/signin');
-                }
-
-                if(responses.data.currentUser.userType == "organization"){
-                    setShowBanner({apiSuccessResponse: "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account."});
-                    return history.push(`/hackathon/view/${props.match.params.id}`)
-                }
-
-                axios.post(`http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`, {
-                    currentUser: responses.data.currentUser
-                }).then((resp) => {
-                    if(resp.data.message == 'already registered'){
-                        axios.get(
-                            `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
-                            {
-                                headers: {
-                                    authorization: localStorage.getItem("session"),
-                                },
-                            }
-                        )
-                        .then((responses) => {
-                            setHackathon(responses.data.get_hackathon_db.hackathon);
-                            console.log("Responses = ", responses);
-
-                            // Check hackathon start status
-                            // Allow submissions only if the hackathon start date is valid
-                            
-                            hackStart = new Date(responses.data.get_hackathon_db.hackathon.hackStart);
-                            hackEnd = new Date(responses.data.get_hackathon_db.hackathon.hackEnd);
-
-                            if(currentDate >=hackStart){
-                                setHackathonSubmissionStatus(true);
-                                submissionTimeInterval = setInterval(() => {
-                                    setSubmissionRemainingTime(getRemainingTime())
-                                }, 1000);
-                            } else {
-                                setHackathonSubmissionStatus(false);
-                                
-                            }
-
-                            if(currentDate >= hackEnd){
-                                setHackathonEndStatus(true);
-                            } else {
-                                setHackathonEndStatus(false);
-                            }
-
-                            let hr = Math.ceil((hackStart - currentDate)/(1000*60*60))
-                            let mn = Math.floor((hackStart - currentDate)/(1000*60*60))
-                            // console.log(`Rem Time - ${hr}:${mn*60}`)
-                            console.log("Rem Time", (24 - hackStart.getHours() - currentDate.getHours() - 1))
-                            console.log("Rem Time", (60 - hackStart.getMinutes() - currentDate.getMinutes() -1))
-                            console.log("Rem Time", (60 - hackStart.getSeconds() - currentDate.getSeconds() -1))
-                            console.log("Rem Time", (currentDate.getDate() + 1) - (currentDate.getDate()) )
-                            
-                            setProblemStatements(
-                                responses.data.get_problem_statements_db.problemStatements
-                            );
-                            setSliders(responses.data.get_sliders_db.sliders)
-                        })
-                        .catch((err) => {
-                            if(err.response?.data == "Invalid user"){
-                                setShowBanner({apiErrorResponse: err.response.data})
-                                return history.push('/auth/signin')
-                            }
-                            if(err.response?.data == "Hackathon doesn't exists!"){
-                                setShowBanner({apiErrorResponse: err.response.data})
-                                return history.push('/dashboard')
-                            }
-                            console.log(
-                                "Error fetching hackathon in Submission page axios"
-                            );
+        try {
+            axios
+                .get(`http://localhost:4200/api/user/currentuser`, {
+                    headers: {
+                        authorization: localStorage.getItem("session"),
+                    },
+                })
+                .then((responses) => {
+                    console.log("C User Sub Resp", responses.data.currentUser);
+                    setCurrentUser(responses.data.currentUser);
+                    if (
+                        !responses.data.currentUser ||
+                        responses.data.currentUser === undefined ||
+                        Object.keys(responses.data.currentUser).length == 0
+                    ) {
+                        setShowBanner({
+                            apiErrorResponse: "You must be Signed In!",
                         });
-                    }else {
-                        setShowBanner({apiErrorResponse: "Please register to view submission page!"})
-                        return history.push(`/hackathon/view/${props.match.params.id}`)
+                        return history.push("/auth/signin");
                     }
 
-                }).catch((err) => {
-                    
-                })
-            }).catch((err) => {
-                console.log("ERR Current User in Dashboard", err);
-                setShowBanner({apiErrorResponse: "Error fetching data! Please try again."})
-            })
+                    if (responses.data.currentUser.userType == "organization") {
+                        setShowBanner({
+                            apiSuccessResponse:
+                                "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account.",
+                        });
+                        return history.push(
+                            `/hackathon/view/${props.match.params.id}`
+                        );
+                    }
 
-            
-        } catch(err){
+                    axios
+                        .post(
+                            `http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`,
+                            {
+                                currentUser: responses.data.currentUser,
+                            }
+                        )
+                        .then((resp) => {
+                            if (resp.data.message == "already registered") {
+                                axios
+                                    .get(
+                                        `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
+                                        {
+                                            headers: {
+                                                authorization:
+                                                    localStorage.getItem(
+                                                        "session"
+                                                    ),
+                                            },
+                                        }
+                                    )
+                                    .then((responses) => {
+                                        setHackathon(
+                                            responses.data.get_hackathon_db
+                                                .hackathon
+                                        );
+                                        console.log("Responses = ", responses);
+
+                                        // Check hackathon start status
+                                        // Allow submissions only if the hackathon start date is valid
+
+                                        hackStart = new Date(
+                                            responses.data.get_hackathon_db.hackathon.hackStart
+                                        );
+                                        hackEnd = new Date(
+                                            responses.data.get_hackathon_db.hackathon.hackEnd
+                                        );
+
+                                        if (currentDate >= hackStart) {
+                                            setHackathonSubmissionStatus(true);
+                                            submissionTimeInterval =
+                                                setInterval(() => {
+                                                    setSubmissionRemainingTime(
+                                                        getRemainingTime()
+                                                    );
+                                                }, 1000);
+                                        } else {
+                                            setHackathonSubmissionStatus(false);
+                                        }
+
+                                        if (currentDate >= hackEnd) {
+                                            setHackathonEndStatus(true);
+                                        } else {
+                                            setHackathonEndStatus(false);
+                                        }
+
+                                        let hr = Math.ceil(
+                                            (hackStart - currentDate) /
+                                                (1000 * 60 * 60)
+                                        );
+                                        let mn = Math.floor(
+                                            (hackStart - currentDate) /
+                                                (1000 * 60 * 60)
+                                        );
+
+                                        setProblemStatements(
+                                            responses.data
+                                                .get_problem_statements_db
+                                                .problemStatements
+                                        );
+                                        setSliders(
+                                            responses.data.get_sliders_db
+                                                .sliders
+                                        );
+                                    })
+                                    .catch((err) => {
+                                        if (
+                                            err.response?.data == "Invalid user"
+                                        ) {
+                                            setShowBanner({
+                                                apiErrorResponse:
+                                                    err.response.data,
+                                            });
+                                            return history.push("/auth/signin");
+                                        }
+                                        if (
+                                            err.response?.data ==
+                                            "Hackathon doesn't exists!"
+                                        ) {
+                                            setShowBanner({
+                                                apiErrorResponse:
+                                                    err.response.data,
+                                            });
+                                            return history.push("/dashboard");
+                                        }
+                                        console.log(
+                                            "Error fetching hackathon in Submission page axios"
+                                        );
+                                    });
+                            } else {
+                                setShowBanner({
+                                    apiErrorResponse:
+                                        "Please register to view submission page!",
+                                });
+                                return history.push(
+                                    `/hackathon/view/${props.match.params.id}`
+                                );
+                            }
+                        })
+                        .catch((err) => {});
+                })
+                .catch((err) => {
+                    console.log("ERR Current User in Dashboard", err);
+                    setShowBanner({
+                        apiErrorResponse:
+                            "Error fetching data! Please try again.",
+                    });
+                });
+        } catch (err) {
             console.log("Error in Catch", err);
-        }finally {
+        } finally {
             handleAfterFormResponse();
         }
 
         return () => {
             clearInterval(submissionTimeInterval);
-        }
+        };
     }, []);
 
     const handleSelectChange = (e) => {
@@ -212,143 +260,87 @@ const Hackathonsubmission = (props) => {
         submissionFormData.append("userImage", e.target.files[0]);
 
         setSubmissionFile(submissionFormData);
-        
     };
 
     const getProperSubmissionExt = () => {
         let allExts = "";
         // console.log("Hackathon", hackathon)
-        splitString(hackathon.submissionFormats, ',').map((format) => {
-            allExts += `.${format.toLowerCase()}, `
-        })
+        splitString(hackathon.submissionFormats, ",").map((format) => {
+            allExts += `.${format.toLowerCase()}, `;
+        });
         return allExts;
-    }
+    };
 
     const handleSubmissionSubmit = () => {
-        axios.post(`http://localhost:4400/api/hackathon/tempUpload`, submissionFile, {
-            headers: {
-                'Content-type': 'multipart/form-data'
-            }
-        }).then((resp) => {
-            console.log("Uploaded File Data", resp.data);
-            axios.post(`http://localhost:4400/api/hackathon/upload/submission/storage`, {
-                filePath: resp.data.filePaths[0],
-                userEmail: currentUser.email,
-                hackathonID: hackathon.id,
-                problemStatementID: currentProblemStatement
-            }).then((uploadResp) => {
-                console.log("Upload Resp", uploadResp.data);
-                return setShowBanner({apiSuccessResponse: "You have successfully submitted your solution! 🤩👨‍💻"});
-            }).catch((err) => {
-                console.log("Error response", err.response)
-                return setShowBanner({apiErrorResponse: err.response.data.errors});
+        axios
+            .post(
+                `http://localhost:4400/api/hackathon/tempUpload`,
+                submissionFile,
+                {
+                    headers: {
+                        "Content-type": "multipart/form-data",
+                    },
+                }
+            )
+            .then((resp) => {
+                console.log("Uploaded File Data", resp.data);
+                axios
+                    .post(
+                        `http://localhost:4400/api/hackathon/upload/submission/storage`,
+                        {
+                            filePath: resp.data.filePaths[0],
+                            userEmail: currentUser.email,
+                            hackathonID: hackathon.id,
+                            problemStatementID: currentProblemStatement,
+                        }
+                    )
+                    .then((uploadResp) => {
+                        console.log("Upload Resp", uploadResp.data);
+                        return setShowBanner({
+                            apiSuccessResponse:
+                                "You have successfully submitted your solution! 🤩👨‍💻",
+                        });
+                    })
+                    .catch((err) => {
+                        console.log("Error response", err.response);
+                        return setShowBanner({
+                            apiErrorResponse: err.response.data.errors,
+                        });
+                    });
             })
-        }).catch((err) => {
-            console.log("Error uploading solution", err);
-        }).finally(() => {
-            // handleAfterFormResponse();
-        })
-    }
+            .catch((err) => {
+                console.log("Error uploading solution", err);
+            })
+            .finally(() => {
+                // handleAfterFormResponse();
+            });
+    };
 
     return (
         <Typography fontFamily="Open Sans">
             <div className={classes.parent}>
-                <NavBar location="dashboard" style={{position: "relative"}}/>
+                <NavBar location="dashboard" style={{ position: "relative" }} />
 
                 <Grid container>
                     {/* Top Carousel */}
-                    <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                    >
-                        {/* <Grid container>
-                            <Grid
-                                item
-                                xs={6}
-                                md={6}
-                                sm={6}
-                                className={classes.nestedGrid}
-                            >
-                                <Button variant="contained" size="large">
-                                    <Typography
-                                        fontFamily="Open Sans"
-                                        letterSpacing="2px"
-                                        variant="h6"
-                                    >
-                                        <strong>22:47:16</strong>
-                                    </Typography>
-                                </Button>
-                            </Grid>
-                            <Grid
-                                item
-                                xs={6}
-                                md={6}
-                                sm={6}
-                                className={classes.nestedGrid}
-                                style={{ placeSelf: "center" }}
-                            >
-                                <Typography
-                                    fontFamily="Open Sans"
-                                    fontSize="20px"
-                                    letterSpacing="2px"
-                                >
-                                    <strong style={{ float: "right" }}>
-                                        <BusinessOutlined
-                                            style={{ placeSelf: "center" }}
-                                        />
-                                        Organized by{" "}
-                                        {hackathon.organizedBy &&
-                                            hackathon.organizedBy}
-                                    </strong>
-                                </Typography>
-                            </Grid>
-
-                            <Grid
-                                item
-                                xs={3}
-                                md={3}
-                                sm={3}
-                                className={classes.nestedGrid}
-                            ></Grid>
-                            <Grid
-                                item
-                                xs={6}
-                                md={6}
-                                sm={6}
-                                className={classes.nestedGrid}
-                            >
-                                <Typography
-                                    fontFamily="Open Sans"
-                                    letterSpacing="2px"
-                                    variant="h4"
-                                    style={{ textAlign: "center" }}
-                                >
-                                    <strong>CodeState'21 Version 2.0</strong>
-                                </Typography>
-                            </Grid>
-                            <Grid
-                                item
-                                xs={3}
-                                md={3}
-                                sm={3}
-                                className={classes.nestedGrid}
-                                style={{ display: "flex", placeSelf: "center" }}
-                            >
-                                <Facebook style={{ margin: "5px" }} />
-                                <Instagram style={{ margin: "5px" }} />
-                                <Twitter style={{ margin: "5px" }} />
-                                <LinkedIn style={{ margin: "5px" }} />
-                            </Grid>
-                        </Grid> */}
+                    <Grid item xs={12} sm={12} md={12}>
                         <Carousel defaultSliders={false} sliders={sliders} />
                     </Grid>
 
-                    <Button variant="contained" style={{position: "absolute", top: "80px", marginLeft: "20px"}}>
+                    <Button
+                        variant="contained"
+                        style={{
+                            position: "absolute",
+                            top: "80px",
+                            marginLeft: "20px",
+                        }}
+                    >
                         <Typography variant="h6" fontFamily="Open Sans">
-                            {/* {hackathonSubmissionStatus ? (submissionRemaningTime): ("Starting Soon!")} */}
-                            {hackathonSubmissionStatus ? (hackathonEndStatus ? ("Hackathon Ended!"): (submissionRemaningTime)): ("Starting Soon!")}
+                            {hackathonSubmissionStatus
+                                ? hackathonEndStatus
+                                    ? "Hackathon Ended!"
+                                    : submissionRemaningTime
+                                : "Starting Soon!"}
                         </Typography>
                     </Button>
 
@@ -443,14 +435,28 @@ const Hackathonsubmission = (props) => {
                                 sm={4}
                                 md={2}
                                 className={classes.technologies}
-                                style={{ display: "flex", placeSelf: "center"}}
+                                style={{ display: "flex", placeSelf: "center" }}
                             >
-                                <Avatar style={{backgroundColor: "#F0FFF0", boxShadow: "5px 5px 5px #ccc", margin: "0 10px"}}>
+                                <Avatar
+                                    style={{
+                                        backgroundColor: "#F0FFF0",
+                                        boxShadow: "5px 5px 5px #ccc",
+                                        margin: "0 10px",
+                                    }}
+                                >
                                     <Icon>
-                                        <img src={renderIcon(tech.trim())} style={{width: "100%"}}/>
+                                        <img
+                                            src={renderIcon(tech.trim())}
+                                            style={{ width: "100%" }}
+                                        />
                                     </Icon>
                                 </Avatar>
-                                <Typography variant="h6" style={{placeSelf: "center"}}>{tech}</Typography>
+                                <Typography
+                                    variant="h6"
+                                    style={{ placeSelf: "center" }}
+                                >
+                                    {tech}
+                                </Typography>
                             </Grid>
                         ))
                     ) : (
@@ -530,22 +536,38 @@ const Hackathonsubmission = (props) => {
                         md={12}
                         className={classes.innerGrid}
                     >
-                        {
-                            hackathonSubmissionStatus ? (
-                                hackathonEndStatus ? (
-                                    <Typography variant="h6" fontFamily="Open Sans" color="primary">Hackathon is already ended. You can't submit your solution now! ❌</Typography>
-                                ): (
-                                currentProblemStatement ? (
-                                    <TextField
-                                    type="file" variant="outlined" onChange={handleSubmissionFileChange} inputProps={{accept: getProperSubmissionExt()}}/>
-                                ): (
-                                    "Please Select Problem Statement"
-                                )
-                                )
-                            ): (
-                                <Typography variant="h6" fontFamily="Open Sans" color="primary">⏳ You can submit your solutions only after the Hackathon has started!</Typography>
+                        {hackathonSubmissionStatus ? (
+                            hackathonEndStatus ? (
+                                <Typography
+                                    variant="h6"
+                                    fontFamily="Open Sans"
+                                    color="primary"
+                                >
+                                    Hackathon is already ended. You can't submit
+                                    your solution now! ❌
+                                </Typography>
+                            ) : currentProblemStatement ? (
+                                <TextField
+                                    type="file"
+                                    variant="outlined"
+                                    onChange={handleSubmissionFileChange}
+                                    inputProps={{
+                                        accept: getProperSubmissionExt(),
+                                    }}
+                                />
+                            ) : (
+                                "Please Select Problem Statement"
                             )
-                        }
+                        ) : (
+                            <Typography
+                                variant="h6"
+                                fontFamily="Open Sans"
+                                color="primary"
+                            >
+                                ⏳ You can submit your solutions only after the
+                                Hackathon has started!
+                            </Typography>
+                        )}
                     </Grid>
                 </Grid>
 
@@ -555,10 +577,20 @@ const Hackathonsubmission = (props) => {
                     sm={12}
                     md={12}
                     className={classes.innerGrid}
-                    style={{marginTop: "20px"}}
+                    style={{ marginTop: "20px" }}
                 >
                     <center>
-                        <Button variant="contained" size="large" disabled={!hackathonSubmissionStatus || currentProblemStatement ==0} onClick={() => {handleSubmissionSubmit()}}>
+                        <Button
+                            variant="contained"
+                            size="large"
+                            disabled={
+                                !hackathonSubmissionStatus ||
+                                currentProblemStatement == 0
+                            }
+                            onClick={() => {
+                                handleSubmissionSubmit();
+                            }}
+                        >
                             Submit Solution
                         </Button>
                     </center>

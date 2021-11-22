@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-    Container,
-    Grid,
-    Button,
-    TextField,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    FormHelperText
-} from "@mui/material";
+import { Grid, Button, TextField, FormHelperText } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,12 +22,12 @@ const validateURL = (inputURL) => {
 
     try {
         url = new URL(inputURL);
-    } catch(_){
+    } catch (_) {
         return false;
     }
 
     return url.protocol === "https:";
-}
+};
 
 const Sponsorsform = (props) => {
     const classes = useStyles();
@@ -50,51 +40,63 @@ const Sponsorsform = (props) => {
     const checkFormValidation = (formErrors) => {
         let valid = 1;
 
-        for(const [key, value] of Object.entries(formErrors)){
-            if(value.length){
+        for (const [key, value] of Object.entries(formErrors)) {
+            if (value.length) {
                 valid = 0;
-                break
+                break;
             }
         }
 
         return valid;
-    }
+    };
 
     const getHelperText = (name) => {
-        if(errors[name] && errors[name].length){
+        if (errors[name] && errors[name].length) {
             return errors[name];
         }
-    }
+    };
 
     const validateForm = (name, fieldValue) => {
         let fieldErrors = [];
         let hErrors = { ...errors };
 
-        if(name == "sponsorName" && fieldValue.length < 3){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>MinLength should be 3</p>)
+        if (name == "sponsorName" && fieldValue.length < 3) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 3
+                </p>
+            );
         }
 
-        if(name == "sponsorImageLink" && !fieldValue){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid upload</p>)
+        if (name == "sponsorImageLink" && !fieldValue) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Invalid upload
+                </p>
+            );
         }
 
-        if(name == "sponsorWebLink" && !validateURL(fieldValue)){
-            fieldErrors.push(<p className={classes.errorMessage} name={name}>Invalid Website Link</p>)
+        if (name == "sponsorWebLink" && !validateURL(fieldValue)) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    Invalid Website Link
+                </p>
+            );
         }
 
         return {
             ...hErrors,
-            [name]: fieldErrors
-        }
-    }
+            [name]: fieldErrors,
+        };
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
 
         const inputErrors = {
             ...errors,
-            ...validateForm(name, value)
-        }
+            ...validateForm(name, value),
+        };
 
         setSponsorDetails({
             ...sponsorDetails,
@@ -102,10 +104,10 @@ const Sponsorsform = (props) => {
         });
 
         setErrors({
-            ...inputErrors
+            ...inputErrors,
         });
 
-        setIsFormValid(checkFormValidation(inputErrors))
+        setIsFormValid(checkFormValidation(inputErrors));
     };
 
     const handleImageChange = (e) => {
@@ -115,7 +117,7 @@ const Sponsorsform = (props) => {
             ...sponsorDetails,
             ["sponsorImageLink"]: e.target.files[0],
         });
-    }
+    };
 
     return (
         <div className={classes.parent}>
@@ -144,7 +146,7 @@ const Sponsorsform = (props) => {
                             style={{
                                 paddingLeft: "8px",
                                 boxSizing: "border-box",
-                                color: "red"
+                                color: "red",
                             }}
                         >
                             {getHelperText("sponsorName")}
@@ -173,7 +175,7 @@ const Sponsorsform = (props) => {
                             style={{
                                 paddingLeft: "8px",
                                 boxSizing: "border-box",
-                                color: "red"
+                                color: "red",
                             }}
                         >
                             {getHelperText("sponsorWebLink")}
@@ -183,17 +185,31 @@ const Sponsorsform = (props) => {
                     <Grid item md={3} />
 
                     <Grid item md={6} className={classes.innerGrid}>
-                        <Button variant="outlined" fullWidth onClick={() => {document.getElementById("sponsorImageUpload").click()}}>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            onClick={() => {
+                                document
+                                    .getElementById("sponsorImageUpload")
+                                    .click();
+                            }}
+                        >
                             Upload Image
                         </Button>
-                        <input id="sponsorImageUpload" type="file" accept=".png, .jpg, .jpeg" style={{visibility: "hidden"}} onChange={handleImageChange}/>
+                        <input
+                            id="sponsorImageUpload"
+                            type="file"
+                            accept=".png, .jpg, .jpeg"
+                            style={{ visibility: "hidden" }}
+                            onChange={handleImageChange}
+                        />
                         <FormHelperText
                             component="div"
                             error={errors && errors.length > 0}
                             style={{
                                 paddingLeft: "8px",
                                 boxSizing: "border-box",
-                                color: "red"
+                                color: "red",
                             }}
                         >
                             {getHelperText("sponsorImageLink")}

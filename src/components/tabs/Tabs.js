@@ -63,7 +63,13 @@ export default function BasicTabs() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0}>
-                <Grid container sm={12} xs={12} md={12} spacing={{ xs: 2, md: 2 }}>
+                <Grid
+                    container
+                    sm={12}
+                    xs={12}
+                    md={12}
+                    spacing={{ xs: 2, md: 2 }}
+                >
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Articlecard />
                     </Grid>
@@ -88,14 +94,7 @@ export default function BasicTabs() {
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Articlecard />
                     </Grid>
-
-                    {/*<Articlecard />
-            <Articlecard />
-            <Articlecard />
-            <Articlecard /> */}
                 </Grid>
-                {/* <Articlecard />
-        <Articlecard /> */}
             </TabPanel>
             <TabPanel value={value} index={1}>
                 Python

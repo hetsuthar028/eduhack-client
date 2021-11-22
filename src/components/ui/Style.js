@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core";
-import theme from '../ui/Theme'
 
 const useStyles = makeStyles((theme) =>({
     navIcon: {

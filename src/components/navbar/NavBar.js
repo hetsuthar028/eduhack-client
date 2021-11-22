@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useContext} from "react";
 import "./NavBar.scss";
-import Box from "@mui/material/Box";
 import {
     AppBar,
     IconButton,
@@ -12,23 +11,14 @@ import {
     Tooltip,
     Menu,
     MenuItem,
-    Divider,
-    
 } from "@material-ui/core";
 import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
 import MenuIcon from '@mui/icons-material/Menu';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import useStyles from "../ui/Style";
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
 import { AppContext } from '../../AppContext';
 import getIcon from '../../static/Icons/getIcon';
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import { AnchorRounded } from "@mui/icons-material";
 
 const NavBar = (props) => {
     const classes = useStyles();
@@ -43,24 +33,6 @@ const NavBar = (props) => {
 
     useEffect(() => {
         updateAppCurrentUser();
-        // setCurrentUser(appCurrentUser)
-        // axios
-        //     .get("http://localhost:4200/api/user/currentuser", {
-        //         headers: {
-        //             authorization: localStorage.getItem("session"),
-        //         }
-        //     })
-        //     .then((response) => {
-        //         if (response.data.currentUser) {
-        //             // console.log("C User", response.data.currentUser)
-        //             setCurrentUser(response.data.currentUser);
-        //         } else {
-        //             // Push outside of the application
-        //         }
-        //     })
-        //     .catch((err) => {
-        //         console.log("Error in Dashboard - While fetching current user");
-        //     });
     }, []);
 
     const handleMenuClick = (e) => {
@@ -73,7 +45,6 @@ const NavBar = (props) => {
 
     const renderNavButttons = () => {
         
-        // console.log("Current User", currentUser)
         if(location == "landingPage"){
             if (!appCurrentUser) {
                 return (
@@ -96,7 +67,7 @@ const NavBar = (props) => {
                 );
             }
         }
-        // console.log("Current User 2", appCurrentUser)
+
         if(location == "dashboard"){
             if(!appCurrentUser){
                 return (
@@ -110,7 +81,6 @@ const NavBar = (props) => {
                 )
             }
 
-            // console.log("Current User 3", appCurrentUser)
             if(appCurrentUser.userType == "developer"){
                 return (
                     <>
@@ -131,8 +101,6 @@ const NavBar = (props) => {
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button>
                         <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar>
-                        
-                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
                     </>
                 )
             }
@@ -163,7 +131,7 @@ const NavBar = (props) => {
                 );
             }
         }
-        // console.log("Current User 2", appCurrentUser)
+        
         if(location == "dashboard"){
             if(!appCurrentUser){
                 return (
@@ -177,7 +145,7 @@ const NavBar = (props) => {
                 )
             }
 
-            // console.log("Current User 3", appCurrentUser)
+            
             if(appCurrentUser.userType == "developer"){
                 return (
                     <div>
@@ -193,13 +161,11 @@ const NavBar = (props) => {
                 return (
                     <div>
                         <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Learn</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Explore</Button></MenuItem>
+                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button></MenuItem>
+                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("explore")}>Explore</Button></MenuItem>
                         <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
                         <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
                         <MenuItem><Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar></MenuItem>
-                        
-                        {/* <Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button> */}
                     </div>
                 )
             }
@@ -219,7 +185,6 @@ const NavBar = (props) => {
     return (
         <Typography color="textPrimary">
             <Grid container>
-            {/* <Box sx={{ flowGrow: 1 }} padding="0"> */}
             <Grid item xs={12} sm={12} md={12}>
                 <AppBar position="static" color="primary" elevation={0}>
                     <Toolbar style={{minHeight: "50px"}} disableGutters>
@@ -237,13 +202,10 @@ const NavBar = (props) => {
                                     style={{maxHeight: "50px", placeSelf: "center"}}
                                 >
                                     <img src={getIcon("eduhack")} className={classes.appLogo}/>
-                                    {/* <strong>EduHack</strong> */}
                                 </IconButton>
                             </Grid>
                             <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center", display: "flex", placeContent: "end"}}>
-                            {/* {currentUser !=null? renderNavButttons(): ""} */}
                                 {matches ? smallMenu : renderNavButttons()}
-                                {/* {renderNavButttons()} */}
                             </Grid>
                             <Menu
                                 anchorEl={anchorEl}
@@ -280,31 +242,6 @@ const NavBar = (props) => {
                                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                             >
                                 {renderSmallMenuIcons()}
-                                {/* <MenuItem>
-                                <Avatar /> Profile
-                                </MenuItem>
-                                <MenuItem>
-                                <Avatar /> My account
-                                </MenuItem>
-                                <Divider />
-                                <MenuItem>
-                                <ListItemIcon>
-                                    <PersonAdd fontSize="small" />
-                                </ListItemIcon>
-                                Add another account
-                                </MenuItem>
-                                <MenuItem>
-                                <ListItemIcon>
-                                    <Settings fontSize="small" />
-                                </ListItemIcon>
-                                Settings
-                                </MenuItem>
-                                <MenuItem>
-                                <ListItemIcon>
-                                    <Logout fontSize="small" />
-                                </ListItemIcon>
-                                Logout
-                                </MenuItem> */}
                             </Menu>
                         </Grid>
                         
@@ -313,7 +250,6 @@ const NavBar = (props) => {
                     </Toolbar>
                 </AppBar>
                 </Grid>
-            {/* </Box> */}
             </Grid>
          </Typography>
     );

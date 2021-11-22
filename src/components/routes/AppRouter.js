@@ -20,7 +20,6 @@ import Tempupload from "../TempUpload";
 const AppRouter = (props) => {
     return (
         <ThemeProvider theme={theme}>
-            {/* <Typography color="textPrimary"> */}
             <div className="App">
                 <Router>
                     <Route exact path="/" component={LandingPage} />
@@ -32,13 +31,10 @@ const AppRouter = (props) => {
                     <Route exact path="/hackathon/view/:id" component={Hackathonmain} />
                     <Route exact path="/hackathon/submission/:id" component={Hackathonsubmission} />
                     <Route exact path="/hackathon/submission/summary/:id" component={Hackathonsummary} />
-                    <Route exact path="/table" component={ReactVirtualizedTable} />
                     <Route exact path="/coding/practice/:language" component={Codinglistmain} />
                     <Route exact path="/coding/question/:id" component={Codingmain} />
-                    <Route exact path="/temp/upload" component={Tempupload} />
                 </Router>
             </div>
-            {/* </Typography> */}
         </ThemeProvider>
     );
 };

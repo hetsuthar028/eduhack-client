@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-    Container,
     Grid,
     Button,
     TextField,
@@ -72,10 +71,7 @@ const Problemstatementform = (props) => {
             );
         }
 
-        if (
-            name == "probDescription" &&
-            (fieldValue.length < 30)
-        ) {
+        if (name == "probDescription" && fieldValue.length < 30) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 30
@@ -106,9 +102,8 @@ const Problemstatementform = (props) => {
     };
 
     const handleInputChange = (e) => {
-        
         const { name, value } = e.target;
-        
+
         const inputErrors = {
             ...errors,
             ...validateForm(name, value),
@@ -136,8 +131,8 @@ const Problemstatementform = (props) => {
     const handleProbSubmit = (e) => {
         // e.preventDefault();
 
-        handleSubmit(probDetails)
-    }
+        handleSubmit(probDetails);
+    };
 
     return (
         <div className={classes.parent}>
@@ -328,7 +323,9 @@ const Problemstatementform = (props) => {
                                 style={{ margin: "10px" }}
                                 // type="submit"
                                 disabled={!isFormValid}
-                                onClick={() => {handleProbSubmit()}}
+                                onClick={() => {
+                                    handleProbSubmit();
+                                }}
                             >
                                 Add
                             </Button>

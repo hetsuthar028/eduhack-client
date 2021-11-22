@@ -2,9 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router";
 import {
     Grid,
-    Container,
-    Box,
-    Button,
     Typography,
     Card,
     CardActionArea,
@@ -13,7 +10,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import axios from "axios";
-import './UpcomingHackathons.scss';
+import "./UpcomingHackathons.scss";
 import { AppContext } from "../../../AppContext";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,35 +37,27 @@ const Upcominghackathons = (props) => {
         setTimeout(() => {
             setShowBanner(null);
         }, 3000);
-    }
+    };
 
     const getData = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:4400/api/hackathon/get/upcomingHackathons",
+                {
+                    headers: {
+                        authorization: localStorage.getItem("session"),
+                    },
+                }
+            );
 
-        try{
-            const response = await axios
-            .get("http://localhost:4400/api/hackathon/get/upcomingHackathons", {
-                headers: {
-                    authorization: localStorage.getItem("session"),
-                },
-            })
-
-
-            // .then((response) => {
-            //     // console.log("Upcoming Hackathons", response.data)
-                let { get_upcoming_hackathons } = response.data;
-                console.log(get_upcoming_hackathons.upcomingHackathons);
-                setUpcomingHackathons(
-                    get_upcoming_hackathons.upcomingHackathons
-                );
-            // });
-        } catch(err){
-            // setShowBanner({ apiErrorResponse: err.response.data })
+            let { get_upcoming_hackathons } = response.data;
+            console.log(get_upcoming_hackathons.upcomingHackathons);
+            setUpcomingHackathons(get_upcoming_hackathons.upcomingHackathons);
+        } catch (err) {
             console.log("Error in Upcoming Hackathon", err.response);
-        }
-        finally{
+        } finally {
             handleAfterFormResponse();
         }
-        
     };
 
     useEffect(() => {
@@ -76,30 +65,42 @@ const Upcominghackathons = (props) => {
     }, []);
 
     const getProperDateFormat = (regEnd) => {
-        const date = regEnd.toString().split('T')[0]
-        const allDate = date.split('-')
-        const finalDate = `${allDate[2]}/${allDate[1]}/${allDate[0]}`
-        return finalDate
-    }
+        const date = regEnd.toString().split("T")[0];
+        const allDate = date.split("-");
+        const finalDate = `${allDate[2]}/${allDate[1]}/${allDate[0]}`;
+        return finalDate;
+    };
 
     const handleCardClick = (hackId) => {
-        history.push(`/hackathon/view/${hackId}`)
-    }
+        history.push(`/hackathon/view/${hackId}`);
+    };
 
     return (
-        <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            xs={12}
-            sm={12}
-            md={12}
-            classes={classes.cardContainer}
-        >
+        <Grid container classes={classes.cardContainer}>
+            {upcomingHackathons.length == 0 && (
+                <Typography
+                    variant="h6"
+                    fontFamily="Open Sans"
+                    style={{ color: "green" }}
+                >
+                    No Upcoming Hackathons!
+                </Typography>
+            )}
             {upcomingHackathons.map(({ ...hackathon }) => (
-                
-                <Grid item xs={12} sm={4} md={3} key={hackathon.title} key={hackathon.id}>
+                <Grid
+                    item
+                    xs={12}
+                    sm={4}
+                    md={3}
+                    key={hackathon.title}
+                    key={hackathon.id}
+                >
                     <Card classes={classes.card}>
-                        <CardActionArea onClick={() => {handleCardClick(hackathon.id)}}>
+                        <CardActionArea
+                            onClick={() => {
+                                handleCardClick(hackathon.id);
+                            }}
+                        >
                             <CardMedia
                                 component="img"
                                 height="160"
@@ -110,7 +111,11 @@ const Upcominghackathons = (props) => {
                             <CardContent>
                                 <Grid container xs={12} sm={12} md={12}>
                                     <Grid item xs={12} sm={12} md={12}>
-                                        <Typography variant="h6" gutterBottom fontFamily="Open Sans">
+                                        <Typography
+                                            variant="h6"
+                                            gutterBottom
+                                            fontFamily="Open Sans"
+                                        >
                                             {hackathon.title} OPEN
                                         </Typography>
                                     </Grid>
@@ -120,11 +125,13 @@ const Upcominghackathons = (props) => {
                                             color="text.secondary"
                                             gutterBottom
                                             fontFamily="Open Sans"
-                                            style={{color: 'green'}}
+                                            style={{ color: "green" }}
                                         >
                                             <strong>
                                                 Hackathon Starts:{" "}
-                                                {getProperDateFormat(hackathon.hackStart)}
+                                                {getProperDateFormat(
+                                                    hackathon.hackStart
+                                                )}
                                             </strong>
                                         </Typography>
                                     </Grid>
@@ -134,7 +141,10 @@ const Upcominghackathons = (props) => {
                                             color="text.secondary"
                                             gutterBottom
                                             fontFamily="Open Sans"
-                                            style={{textAlign: "justify", textJustify: "inner-word"}}
+                                            style={{
+                                                textAlign: "justify",
+                                                textJustify: "inner-word",
+                                            }}
                                             className="line-clamp module"
                                         >
                                             {hackathon.description}
@@ -145,8 +155,7 @@ const Upcominghackathons = (props) => {
                         </CardActionArea>
                     </Card>
                 </Grid>
-                )
-            )}
+            ))}
         </Grid>
     );
 };

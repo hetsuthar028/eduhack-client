@@ -2,12 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import {
     TextField,
     Button,
     Box,
-    FormGroup,
     Grid,
     Paper,
     Typography,
@@ -16,10 +15,9 @@ import {
     FormHelperText,
 } from "@mui/material";
 import theme from "../../ui/Theme";
-import { color } from "@mui/system";
 import { LockOutlined } from "@mui/icons-material";
 import { AppContext } from "../../../AppContext";
-import Banner from '../../banner/banner';
+import Banner from "../../banner/banner";
 
 const useStyles = makeStyles({
     root: {
@@ -40,34 +38,32 @@ const useStyles = makeStyles({
         margin: theme.spacing(3),
         padding: theme.spacing(3),
         width: "35%",
-        // height: "100vw",
+        [theme.breakpoints.down("md")]: {
+            width: "40%",
+        },
+        [theme.breakpoints.down("sm")]: {
+            width: "90%",
+        },
         margin: "auto",
-
-        // display: "block",
-        // verticalAlign: "middle",
+        marginTop: "50px",
+        marginBottom: "50px",
     },
     formLink: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
     mainContainer: {
-        // height: "100%",
-        // width: "100%",
-        // margin: "10% auto",
-        // Testing
         display: "grid",
         minHeight: "100vh",
         alignContent: "center",
-        gridTemplateColumns: "auto",
         backgroundColor: theme.palette.common.lightMainGreenColor,
     },
     formButton: {
         marginTop: theme.spacing(2),
         marginBottom: theme.spacing(1),
-        // color: theme.palette.primary.main
     },
     errorMessage: {
-        margin: "0px"
+        margin: "0px",
     },
 });
 
@@ -86,16 +82,15 @@ const SignIn = () => {
     const [isFormValid, setIsFormValid] = useState(false);
 
     const history = useHistory();
-    const {setShowBanner, appCurrentUser, updateAppCurrentUser} = useContext(AppContext);
-
+    const { setShowBanner, appCurrentUser, updateAppCurrentUser } =
+        useContext(AppContext);
 
     useEffect(() => {
-        
         updateAppCurrentUser();
-        console.log("Sign User", updateAppCurrentUser())
-        if(appCurrentUser){
-            setShowBanner({apiSuccessResponse: 'You\'re already signed in!'})
-            return history.push('/dashboard')
+        console.log("Sign User", updateAppCurrentUser());
+        if (appCurrentUser) {
+            setShowBanner({ apiSuccessResponse: "You're already signed in!" });
+            return history.push("/dashboard");
         }
     }, []);
 
@@ -125,34 +120,38 @@ const SignIn = () => {
         setTimeout(() => {
             setShowBanner(null);
         }, 3000);
-    }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         try {
             axios
-            .post("http://localhost:4200/api/user/signin", {
-                email: values.email,
-                password: values.password,
-            })
-            .then((response) => {
-                if (response) {
-                    localStorage.setItem(
-                        "session",
-                        response.data.data.accessToken
-                    );
-                    setShowBanner({apiSuccessResponse: 'Signed in successfully!'});
-                    updateAppCurrentUser();
-                    return history.push('/');
-                }
-            })
-            .catch((err) => {
-                console.log("Some problem occured. Please try again!");
-                setShowBanner({apiErrorResponse: 'Invalid credentials, Please try again!'})
-                console.log(err)
-            });
-        } catch(err) {
-
+                .post("http://localhost:4200/api/user/signin", {
+                    email: values.email,
+                    password: values.password,
+                })
+                .then((response) => {
+                    if (response) {
+                        localStorage.setItem(
+                            "session",
+                            response.data.data.accessToken
+                        );
+                        setShowBanner({
+                            apiSuccessResponse: "Signed in successfully!",
+                        });
+                        updateAppCurrentUser();
+                        return history.push("/");
+                    }
+                })
+                .catch((err) => {
+                    console.log("Some problem occured. Please try again!");
+                    setShowBanner({
+                        apiErrorResponse:
+                            "Invalid credentials, Please try again!",
+                    });
+                    console.log(err);
+                });
+        } catch (err) {
         } finally {
             handleAfterFormResponse();
         }
@@ -165,7 +164,7 @@ const SignIn = () => {
         for (const [key, value] of Object.entries(formErrors)) {
             if (value.length) {
                 valid = 0;
-                console.log("Valid Changed to 0")
+                console.log("Valid Changed to 0");
                 break;
             }
         }
@@ -201,14 +200,13 @@ const SignIn = () => {
     };
 
     const getHelperText = (name) => {
-        console.log("Errors", errors.name)
+        console.log("Errors", errors.name);
         if (errors[name] && errors[name].length) {
-            
             return errors[name];
         }
         // return errors[name] || " ";
         // return "Hello World"
-    }
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -217,8 +215,7 @@ const SignIn = () => {
             ...validateForm(name, value),
         };
 
-        console.log("Input Errors", inputErrors)
-
+        console.log("Input Errors", inputErrors);
 
         setValues({
             ...values,
@@ -256,7 +253,7 @@ const SignIn = () => {
                         elevation={10}
                         onSubmit={handleSubmit}
                     >
-                        <Grid container xs={12} md={12} sm={12}>
+                        <Grid container>
                             <Grid item xs={12} md={12} sm={12}>
                                 <Box>
                                     <TextField
@@ -277,7 +274,7 @@ const SignIn = () => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
                                         {getHelperText("email")}
@@ -298,7 +295,7 @@ const SignIn = () => {
                                         style={{
                                             paddingLeft: "8px",
                                             boxSizing: "border-box",
-                                            color: "red"
+                                            color: "red",
                                         }}
                                     >
                                         {getHelperText("password")}
@@ -331,12 +328,7 @@ const SignIn = () => {
                                     </Typography>
                                 </Box>
                                 <center>
-                                    <Box
-                                        sx={{
-                                            width: 500,
-                                            maxWidth: "100%",
-                                        }}
-                                    >
+                                    <Box>
                                         <Button
                                             variant="contained"
                                             style={{
@@ -368,13 +360,9 @@ const SignIn = () => {
                         </Grid>
                     </form>
                 </Paper>
-                {/* </center> */}
             </Grid>
         </ThemeProvider>
-        // Testing purpose
-        // <button onClick={handleSubmit}>Sign In</button>
     );
 };
-
 
 export default SignIn;

@@ -3,10 +3,7 @@ import {
     Grid,
     TextField,
     FormHelperText,
-    FormControl,
-    Typography,
     Button,
-    InputLabel,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 
@@ -18,15 +15,15 @@ const useStyles = makeStyles((theme) => ({
         padding: "10px",
     },
     errorMessage: {
-        margin: "0px"
-    }
+        margin: "0px",
+    },
 }));
 
 const initialValues = {
     sliderTitle: "",
     sliderSubtitle: "",
     sliderImage: {},
-}
+};
 
 const Slidersform = (props) => {
     const classes = useStyles();
@@ -40,27 +37,21 @@ const Slidersform = (props) => {
     const checkFormValidation = (formErrors) => {
         let valid = 1;
 
-        for(const [key, value] of Object.entries(formErrors)){
-            if(value.length){
+        for (const [key, value] of Object.entries(formErrors)) {
+            if (value.length) {
                 valid = 0;
                 break;
             }
         }
 
         return valid;
-    }
+    };
 
     const validateForm = (name, fieldValue) => {
         const fieldErrors = [];
-        const hErrors = {...errors};
+        const hErrors = { ...errors };
 
-        if(name == "sliderTitle" && fieldValue.length < 5){
-            fieldErrors.push(
-                <p className={classes.errorMessage} name={name}>MinLength should be 5</p>
-            );
-        }
-
-        if(name == "sliderSubtitle" && fieldValue.length < 5){
+        if (name == "sliderTitle" && fieldValue.length < 5) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 5
@@ -68,33 +59,41 @@ const Slidersform = (props) => {
             );
         }
 
-        if(name == "sliderImage" && !fieldValue){
+        if (name == "sliderSubtitle" && fieldValue.length < 5) {
+            fieldErrors.push(
+                <p className={classes.errorMessage} name={name}>
+                    MinLength should be 5
+                </p>
+            );
+        }
+
+        if (name == "sliderImage" && !fieldValue) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid Image
                 </p>
-            )
+            );
         }
 
         return {
             ...hErrors,
             [name]: fieldErrors,
-        }
-    }
+        };
+    };
 
     const getHelperText = (name) => {
-        if(errors[name] && errors[name].length){
+        if (errors[name] && errors[name].length) {
             return errors[name];
         }
-    }
+    };
 
     const handleInputChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
 
         const inputErrors = {
             ...errors,
             ...validateForm(name, value),
-        }
+        };
 
         setSliderDetails({
             ...sliderDetails,
@@ -102,11 +101,11 @@ const Slidersform = (props) => {
         });
 
         setErrors({
-            ...inputErrors
+            ...inputErrors,
         });
 
         setIsFormValid(checkFormValidation(inputErrors));
-    }
+    };
 
     // const handleSliderSubmit = (e) => {
     //     handleSubmit(sliderDetails);
@@ -116,15 +115,19 @@ const Slidersform = (props) => {
         console.log("Uploaded Slider Image", e.target.files[0]);
         setSliderDetails({
             ...sliderDetails,
-            ["sliderImage"]: e.target.files[0]
+            ["sliderImage"]: e.target.files[0],
         });
-    }
+    };
 
     return (
         <div className={classes.parent}>
             <form onSubmit={() => handleSubmit(sliderDetails)}>
                 <Grid container>
-                    <Grid item xs={12} sm={12} md={12}
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -149,7 +152,11 @@ const Slidersform = (props) => {
                             {getHelperText("sliderTitle")}
                         </FormHelperText>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={12}
+                    <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -177,18 +184,38 @@ const Slidersform = (props) => {
 
                     <Grid item xs={3} sm={3} md={3} />
 
-                    <Grid item xs={6} sm={6} md={6} className={classes.innerGrid}>
-                        <Button variant="outlined" fullWidth onClick={() => {document.getElementById("sliderImageUpload").click()}}>
+                    <Grid
+                        item
+                        xs={6}
+                        sm={6}
+                        md={6}
+                        className={classes.innerGrid}
+                    >
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            onClick={() => {
+                                document
+                                    .getElementById("sliderImageUpload")
+                                    .click();
+                            }}
+                        >
                             Upload Image
                         </Button>
-                        <input id="sliderImageUpload" type="file" accept=".png, .jpg, .jpeg" style={{visibility: 'hidden' }} onChange={handleImageInput}/>
+                        <input
+                            id="sliderImageUpload"
+                            type="file"
+                            accept=".png, .jpg, .jpeg"
+                            style={{ visibility: "hidden" }}
+                            onChange={handleImageInput}
+                        />
                         <FormHelperText
                             component="div"
                             error={errors && errors.length > 0}
                             style={{
                                 paddingLeft: "8px",
-                                boxSizing: 'border-box',
-                                color: 'red',
+                                boxSizing: "border-box",
+                                color: "red",
                             }}
                         >
                             {getHelperText("sliderImage")}
@@ -196,7 +223,6 @@ const Slidersform = (props) => {
                     </Grid>
 
                     <Grid item xs={3} sm={3} md={3} />
-                        
 
                     <Grid
                         item
