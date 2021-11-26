@@ -1,0 +1,34 @@
+@import "../../styles/variables.scss";
+
+.banner-container {
+    padding: 10px;
+    // height: 40px;
+    position: fixed;
+    top: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    right: 20px;
+    animation: banner 0.5s;
+}
+
+.success-banner-container {
+    background-color: $successColor;
+}
+
+.error-banner-container {
+    background-color: $errorColor;
+    color: #fff;
+}
+
+@keyframes banner {
+    0% {
+        right: -400px;
+    }
+    50% {
+        right: 40px;
+    }
+    100% {
+        right: 20px;
+    }
+}
