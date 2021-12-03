@@ -272,15 +272,13 @@ const Dashboard = () => {
                                                     <CardContent
                                                         style={{
                                                             padding: "0px",
+                                                            resize: "both",
                                                         }}
                                                     >
                                                         <Typography
                                                             component="div"
                                                             variant="h6"
                                                             fontFamily="Open Sans"
-                                                            style={{
-                                                                fontSize: "4vw",
-                                                            }}
                                                         >
                                                             <center>
                                                                 Python

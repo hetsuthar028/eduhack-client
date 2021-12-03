@@ -131,6 +131,7 @@ const Organizepage = () => {
     const { setShowBanner } = useContext(AppContext);
     const history = useHistory();
 
+    const [currentUser, setCurrentUser] = useState({});
     const [values, setValues] = useState(initialValues);
     const [openPopup, setOpenPopup] = useState(false);
     const [sponsorOpenPopup, setSponsorOpenPopup] = useState(false);
@@ -226,6 +227,8 @@ const Organizepage = () => {
                         });
                         return history.push("/dashboard");
                     }
+
+                    setCurrentUser(responses.data.currentUser);
                 })
                 .catch((err) => {
                     console.log("ERR Current User in Dashboard", err);
@@ -532,6 +535,7 @@ const Organizepage = () => {
                                     "http://localhost:4400/api/hackathon/create",
                                     {
                                         ...values,
+                                        organiserEmail: currentUser.email,
                                     },
                                     {
                                         headers: {
