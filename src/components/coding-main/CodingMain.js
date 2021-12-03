@@ -124,7 +124,7 @@ const Codingmain = (props) => {
 
     return (
         <>
-            <NavBar />
+            <NavBar location="dashboard" />
             <div>
                 <Grid container>
                     <Grid

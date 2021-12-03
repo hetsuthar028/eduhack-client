@@ -19,10 +19,12 @@ import { AppContext } from '../../AppContext';
 import getIcon from '../../static/Icons/getIcon';
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
+import { useHistory } from "react-router";
 
 const NavBar = (props) => {
     const classes = useStyles();
     const theme = useTheme();
+    const history = useHistory();
     const matches = useMediaQuery(theme.breakpoints.down("md"));
     const [currentUser, setCurrentUser] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -41,6 +43,16 @@ const NavBar = (props) => {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
+    }
+
+    const handleSignOut = () => {
+        try{
+            localStorage.removeItem('session');
+            return history.push('/');
+        }
+        catch(err){
+            
+        }
     }
 
     const renderNavButttons = () => {
@@ -88,7 +100,7 @@ const NavBar = (props) => {
                         <Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button>
                         <Button className={classes.navButton} onClick={() => navClickHandler("practice")}>Practice</Button>
                         <Button className={classes.navButton}>Hackathons</Button>
-                        <Avatar className={classes.navAvatar}><AccountCircleRoundedIcon /></Avatar>
+                        {/* <Avatar className={classes.navAvatar}><AccountCircleRoundedIcon /></Avatar> */}
                     </>
                 )
             }
@@ -100,7 +112,7 @@ const NavBar = (props) => {
                         <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Explore</Button>
                         <Button className={classes.navButton}>Hackathons</Button>
                         <Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button>
-                        <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar>
+                        {/* <Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar> */}
                     </>
                 )
             }
@@ -109,67 +121,78 @@ const NavBar = (props) => {
     };
 
     const renderSmallMenuIcons = () => {
-        if(location == "landingPage"){
-            if (!appCurrentUser) {
-                return (
-                    <div>
-                        <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
-                        <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/auth/signin" fullWidth>Sign In</Button></MenuItem>
-                        <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/auth/signup" fullWidth>Sign Up</Button></MenuItem>
-                    </div>
-                );
-            } else {
-                return (
-                    <div>
-                        <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
-                        <MenuItem><Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/dashboard">Go to Dashboard</Button></MenuItem>
-                    </div>
-                );
+
+        if(matches){
+            if(location == "landingPage"){
+                if (!appCurrentUser) {
+                    return (
+                        <div>
+                            <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
+                            <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/auth/signin" fullWidth>Sign In</Button></MenuItem>
+                            <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/auth/signup" fullWidth>Sign Up</Button></MenuItem>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div>
+                            <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
+                            <MenuItem><Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/dashboard">Go to Dashboard</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
+                        </div>
+                    );
+                }
             }
+            
+            if(location == "dashboard"){
+                if(!appCurrentUser){
+                    return (
+                        <div>
+                            <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
+                            <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/auth/signin">Sign In</Button></MenuItem>
+                            <MenuItem><Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button></MenuItem>
+                        </div>
+                    )
+                }
+    
+                
+                if(appCurrentUser.userType == "developer"){
+                    return (
+                        <div>
+                            <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("practice")}>Practice</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
+                        </div>
+                    )
+                }
+                else if(appCurrentUser.userType == "organization"){
+                    return (
+                        <div>
+                            <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("explore")}>Explore</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
+                            <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
+                        </div>
+                    )
+                }
+            }
+        } else {
+            return (
+                <div>
+                    <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>   
+                </div>
+            )
         }
         
-        if(location == "dashboard"){
-            if(!appCurrentUser){
-                return (
-                    <div>
-                        <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
-                        <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/auth/signin">Sign In</Button></MenuItem>
-                        <MenuItem><Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/auth/signup">Sign Up</Button></MenuItem>
-                    </div>
-                )
-            }
-
-            
-            if(appCurrentUser.userType == "developer"){
-                return (
-                    <div>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("practice")}>Practice</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
-                        <MenuItem><Avatar className={classes.navAvatar}><AccountCircleRoundedIcon /></Avatar></MenuItem>
-                    </div>
-                )
-            }
-            else if(appCurrentUser.userType == "organization"){
-                return (
-                    <div>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("explore")}>Explore</Button></MenuItem>
-                        <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
-                        <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
-                        <MenuItem><Avatar><AccountCircleRoundedIcon style={{color: "red"}} /></Avatar></MenuItem>
-                    </div>
-                )
-            }
-        }
     }
 
     const smallMenu = (
@@ -205,7 +228,8 @@ const NavBar = (props) => {
                                 </IconButton>
                             </Grid>
                             <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center", display: "flex", placeContent: "end"}}>
-                                {matches ? smallMenu : renderNavButttons()}
+                                {matches ? null : renderNavButttons()}
+                                {appCurrentUser && <Avatar className={classes.navAvatar} onClick={handleMenuClick}><AccountCircleRoundedIcon /></Avatar>}
                             </Grid>
                             <Menu
                                 anchorEl={anchorEl}

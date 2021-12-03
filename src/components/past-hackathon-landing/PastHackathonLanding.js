@@ -94,6 +94,15 @@ const PastHackathonLanding = () => {
                         </Card>
                     </Grid>
                 ))}
+                {pastHackathons.length == 0 && (
+                    <Typography
+                        fontFamily="Open Sans"
+                        variant="h6"
+                        style={{color: 'red'}}
+                    >
+                        No Past Hackathons! 😀
+                    </Typography>
+                )}
             </Grid>
         </Container>
     );
