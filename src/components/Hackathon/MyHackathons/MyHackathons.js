@@ -14,6 +14,7 @@ import Footer from "../../footer/Footer";
 import Formsectionheader from "../../Hackathon/FormSectionHeader/FormSectionHeader";
 import axios from "axios";
 import { AppContext } from "../../../AppContext";
+import './MyHackathons.css';
 
 const useStyles = makeStyles((theme) => ({
     parent: {
