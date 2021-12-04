@@ -6,6 +6,7 @@ import {
     CardActionArea,
     CardMedia,
     CardContent,
+    Button
 } from "@mui/material";
 import { useHistory } from "react-router";
 import { makeStyles } from "@material-ui/core";
@@ -97,6 +98,7 @@ const Myhackathons = () => {
     useEffect(() => {
         if (!currentUser) {
             setShowBanner({ apiErrorResponse: "You must be signed in!" });
+            handleAfterResponse();
             return history.push("/auth/signin");
         }
     }, [currentUser]);
@@ -168,6 +170,11 @@ const Myhackathons = () => {
                         </Card>
                     </Grid>
                 ))}
+                {myHackathons.length == 0 && (
+                <Typography variant="h6" fontFamily="Open Sans">
+                    You've not organized any hackathon yet! Please Navigation to &nbsp;
+                    <Button variant="contained" href="/hackathon/organize/overview">Organize Page</Button>
+                </Typography>)}
             </Grid>
 
             <Footer />
