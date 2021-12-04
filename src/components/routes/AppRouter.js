@@ -1,21 +1,18 @@
 import React from "react";
-import { BrowserRouter as Router, Link, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import SignIn from "../auth/signin/SignIn";
 import SignUp from "../auth/signup/SignUp";
 import Dashboard from "../dashboard/Dashboard";
 import Overviewhackathon from "../Hackathon/OverviewPage/OverviewHackathon";
 import LandingPage from "../landing-page/LandingPage";
 import theme from "../ui/Theme";
-import { ThemeProvider, Typography } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/core";
 import Organizepage from "../Hackathon/OrganizePage/OrganizePage";
-import Problemstatementform from "../Hackathon/ProblemStatementForm/ProblemStatementForm";
 import Hackathonmain from "../Hackathon/HackathonMain/HackathonMain";
 import Hackathonsubmission from "../Hackathon/HackathonSubmission/HackathonSubmission";
 import Hackathonsummary from "../Hackathon/summary/HackathonSummary";
-import ReactVirtualizedTable from "../table-demo/TableDemo";
 import Codinglistmain from "../coding-list-page/CodingListMain";
 import Codingmain from "../coding-main/CodingMain";
-import Tempupload from "../TempUpload";
 import Myhackathons from "../Hackathon/MyHackathons/MyHackathons";
 
 const AppRouter = (props) => {
