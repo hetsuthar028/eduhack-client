@@ -55,6 +55,10 @@ const NavBar = (props) => {
         }
     }
 
+    const navToMyHackathons = () => {
+        history.push('/hackathon/myhackathons')
+    }
+
     const renderNavButttons = () => {
         
         if(location == "landingPage"){
@@ -188,7 +192,8 @@ const NavBar = (props) => {
         } else {
             return (
                 <div>
-                    <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>   
+                    {appCurrentUser && appCurrentUser.userType == "organization" && (<MenuItem><Button className={classes.navBotton} onClick={() => navToMyHackathons()}>My Hackathons</Button></MenuItem>)}
+                    <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
                 </div>
             )
         }
@@ -227,7 +232,7 @@ const NavBar = (props) => {
                                     <img src={getIcon("eduhack")} className={classes.appLogo}/>
                                 </IconButton>
                             </Grid>
-                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center", display: "flex", placeContent: "end"}}>
+                            <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center", display: "flex", placeContent: "end", paddingRight: "10px"}}>
                                 {matches ? null : renderNavButttons()}
                                 {appCurrentUser && <Avatar className={classes.navAvatar} onClick={handleMenuClick}><AccountCircleRoundedIcon /></Avatar>}
                             </Grid>

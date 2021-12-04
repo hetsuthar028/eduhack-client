@@ -34,53 +34,64 @@ const Myhackathons = () => {
     const { setShowBanner } = useContext(AppContext);
 
     useEffect(() => {
-        axios
-            .get(`http://localhost:4200/api/user/currentuser`, {
-                headers: {
-                    authorization: localStorage.getItem("session"),
-                },
-            })
-            .then((responses) => {
-                setCurrentUser(responses.data.currentUser);
+        try{
 
-                axios
-                    .get(
-                        `http://localhost:4400/api/hackathon/get/myhackathons`,
-                        {
-                            headers: {
-                                authorization: localStorage.getItem("session"),
-                            },
-                        }
-                    )
-                    .then((responses) => {
-                        console.log(
-                            "My Hackathons",
-                            responses.data.get_my_hackathons.myHackathons
-                        );
-                        try {
-                            setMyHackathons(
+            axios
+                .get(`http://localhost:4200/api/user/currentuser`, {
+                    headers: {
+                        authorization: localStorage.getItem("session"),
+                    },
+                })
+                .then((responses) => {
+                    setCurrentUser(responses.data.currentUser);
+                    if(responses.data.currentUser.userType == "developer"){
+                        setShowBanner({apiErrorResponse: "You must be an organization user to view this page!"})
+                        return history.push('/dashboard')
+                    }
+                    axios
+                        .get(
+                            `http://localhost:4400/api/hackathon/get/myhackathons`,
+                            {
+                                headers: {
+                                    authorization: localStorage.getItem("session"),
+                                },
+                            }
+                        )
+                        .then((responses) => {
+                            console.log(
+                                "My Hackathons",
                                 responses.data.get_my_hackathons.myHackathons
                             );
-                        } catch (err) {
-                            setShowBanner({
+                            try {
+                                setMyHackathons(
+                                    responses.data.get_my_hackathons.myHackathons
+                                );
+                            } catch (err) {
+                                setShowBanner({
+                                    apiErrorResponse:
+                                        "Error setting Hackathons data",
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                            return setShowBanner({
                                 apiErrorResponse:
-                                    "Error setting Hackathons data",
+                                    "Unable to fetch your hackathons! Please try again.",
                             });
-                        }
-                    })
-                    .catch((err) => {
-                        console.error(err);
-                        return setShowBanner({
-                            apiErrorResponse:
-                                "Unable to fetch your hackathons! Please try again.",
                         });
+                })
+                .catch((err) => {
+                    return setShowBanner({
+                        apiErrorResponse: "Unable to fetch user! Please try again",
                     });
-            })
-            .catch((err) => {
-                return setShowBanner({
-                    apiErrorResponse: "Unable to fetch user! Please try again",
                 });
-            });
+        } catch(err){
+
+        } finally{
+            handleAfterResponse();
+        }
+
     }, []);
 
     useEffect(() => {
@@ -92,6 +103,12 @@ const Myhackathons = () => {
 
     const handleCardClick = (hackId) => {
         history.push(`/hackathon/view/${hackId}`)
+    }
+
+    const handleAfterResponse = () => {
+        setTimeout(() => {
+            setShowBanner(null)
+        }, 3000);
     }
 
     return (
@@ -115,7 +132,7 @@ const Myhackathons = () => {
                         <Card sx={{ maxWidth: 7000, height: "330px" }}>
                             <CardActionArea onClick={() => {
                                 handleCardClick(hackathon.id)
-                            }}>
+                            }} >
                                 <CardMedia
                                     component="img"
                                     height="140"
@@ -124,7 +141,7 @@ const Myhackathons = () => {
                                     className={classes.cardMedia}
                                 />
 
-                                <CardContent className={classes.cardContent}>
+                                <CardContent className={classes.cardContent} sx={{ maxWidth: 7000, height: "330px" }}>
                                     <Typography
                                         variant="h6"
                                         fontFamily="Open Sans"
