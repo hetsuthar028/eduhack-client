@@ -217,7 +217,8 @@ const Hackathonsummary = (props) => {
                                     .problemStatements
                             );
                             setSliders(hackResp.data.get_sliders_db.sliders);
-
+                            
+                            console.log("Hackathon Resp", hackResp)
                             setShowBanner({
                                 apiSuccessResponse: "Loading Hackathon...",
                             });
@@ -409,7 +410,7 @@ const Hackathonsummary = (props) => {
                             style={{ maxHeight: "80vh", overflow: "auto" }}
                         >
                             {/* Validating if User has selected any current problem statement */}
-                            {currentProblemStatement ? (
+                            {currentProblemStatement && filteredSubmissions.length !=0 ? (
                                 <>
                                     {/* Table Header */}
                                     <Grid

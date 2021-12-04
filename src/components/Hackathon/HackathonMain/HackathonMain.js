@@ -419,6 +419,10 @@ const Hackathonmain = (props) => {
         }
     }, []);
 
+    const handleNavToSummaryPage = () => {
+        return history.push(`/hackathon/submission/summary/${hackathon.id}`)
+    }
+
     return (
         announcedWinners != null &&
         winners != null && (
@@ -612,29 +616,42 @@ const Hackathonmain = (props) => {
                                         {hackathon.participantCount}
                                     </Typography>
                                 </div>
-                                {registrationStatus ? (
-                                    <Button
+                                
+                                {currentUser.email === hackathon.organiserEmail ? (
+                                    <Button 
                                         variant="contained"
                                         style={{ marginTop: "20px" }}
                                         size="large"
-                                        onClick={() => {
-                                            history.push(
-                                                `/hackathon/submission/${props.match.params.id}`
-                                            );
-                                        }}
+                                        onClick={handleNavToSummaryPage}
                                     >
-                                        View Hackathon
+                                        View Summary OR Announce Winners
                                     </Button>
                                 ) : (
-                                    <Button
-                                        variant="contained"
-                                        style={{ marginTop: "20px" }}
-                                        size="large"
-                                        onClick={handleParticipate}
-                                    >
-                                        Participate Now
-                                    </Button>
-                                )}
+                                    registrationStatus ? (
+                                        <Button
+                                            variant="contained"
+                                            style={{ marginTop: "20px" }}
+                                            size="large"
+                                            onClick={() => {
+                                                history.push(
+                                                    `/hackathon/submission/${props.match.params.id}`
+                                                );
+                                            }}
+                                        >
+                                            View Hackathon
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            variant="contained"
+                                            style={{ marginTop: "20px" }}
+                                            size="large"
+                                            onClick={handleParticipate}
+                                        >
+                                            Participate Now
+                                        </Button>
+                                    )
+                                )
+                                }
                             </center>
                         </Grid>
 
