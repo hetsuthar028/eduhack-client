@@ -67,7 +67,8 @@ const Hackathonsubmission = (props) => {
         useState(false);
     const [hackathonEndStatus, setHackathonEndStatus] = useState(false);
     const [submissionRemaningTime, setSubmissionRemainingTime] = useState("");
-
+    const [userSubmissionStatus, setUserSubmissionStatus] = useState(null);
+    const [userAlreadySubmittedSolutionLink, setUserAlreadySubmittedSolutionLink] = useState(null);
     const [submissionFile, setSubmissionFile] = useState(null);
 
     const handleAfterFormResponse = () => {
@@ -192,6 +193,30 @@ const Hackathonsubmission = (props) => {
                                             responses.data.get_sliders_db
                                                 .sliders
                                         );
+
+                                        axios.get(`http://localhost:4400/api/hackathon/get/user/submission`, {
+                                            headers: {
+                                                authorization: localStorage.getItem('session'),
+                                            }
+                                        }).then((submissionResp) => {
+                                            try{
+                                                let userSubmission = submissionResp.data.responses.get_user_submission.userSubmission;
+                                                console.log("User Submission", typeof userSubmission);
+                                                if(Object.keys(userSubmission).length != 0){
+                                                    console.log("User Sub to TRUE")
+                                                    setUserSubmissionStatus(true);
+                                                    setUserAlreadySubmittedSolutionLink(userSubmission.submissionLink)
+                                                } else{
+                                                    console.log("User Sub to FALSE")
+                                                    setUserSubmissionStatus(false);
+                                                }
+                                            } catch(err){
+                                                console.log("User Sub to IN ERRR", err)
+                                                setUserSubmissionStatus(false);
+                                            }
+                                        }).catch((err) => {
+
+                                        })
                                     })
                                     .catch((err) => {
                                         if (
@@ -272,6 +297,9 @@ const Hackathonsubmission = (props) => {
     };
 
     const handleSubmissionSubmit = () => {
+
+        setShowBanner({apiSuccessResponse: "Your submission is getting uploaded 🤩⌛! Please wait..."})
+
         axios
             .post(
                 `http://localhost:4400/api/hackathon/tempUpload`,
@@ -296,10 +324,14 @@ const Hackathonsubmission = (props) => {
                     )
                     .then((uploadResp) => {
                         console.log("Upload Resp", uploadResp.data);
-                        return setShowBanner({
+                        setShowBanner({
                             apiSuccessResponse:
                                 "You have successfully submitted your solution! 🤩👨‍💻",
                         });
+                        setTimeout(() => {
+                            return history.push(`/hackathon/view/${hackathon.id}`)
+                        }, 2000);
+                        
                     })
                     .catch((err) => {
                         console.log("Error response", err.response);
@@ -312,7 +344,7 @@ const Hackathonsubmission = (props) => {
                 console.log("Error uploading solution", err);
             })
             .finally(() => {
-                // handleAfterFormResponse();
+                handleAfterFormResponse();
             });
     };
 
@@ -398,7 +430,15 @@ const Hackathonsubmission = (props) => {
                     </Grid>
 
                     {/* Submission Guidlines Details */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} className={classes.innerGrid}>
+                        <Typography
+                            variant="h6"
+                            fontFamily="Open Sans"
+                            style={{color: 'red'}}
+                            fontWeight="bold"
+                        >
+                            **You can Submit your solution ONLY ONCE!
+                        </Typography>
                         <ul>
                             {hackathon.submissionGuidelines &&
                                 splitString(
@@ -547,14 +587,26 @@ const Hackathonsubmission = (props) => {
                                     your solution now! ❌
                                 </Typography>
                             ) : currentProblemStatement ? (
-                                <TextField
-                                    type="file"
-                                    variant="outlined"
-                                    onChange={handleSubmissionFileChange}
-                                    inputProps={{
-                                        accept: getProperSubmissionExt(),
-                                    }}
-                                />
+                                userSubmissionStatus ? (
+                                    <Typography
+                                        variant="h5"
+                                        style={{color: 'green'}}
+                                        fontWeight="bold"
+                                        fontFamily="Open Sans"
+                                    >
+                                     ✔️ Your Submission: <a target="_blank" href={userAlreadySubmittedSolutionLink}>Click Here</a>
+                                    </Typography>
+                                ): (
+                                    <TextField
+                                        type="file"
+                                        variant="outlined"
+                                        onChange={handleSubmissionFileChange}
+                                        inputProps={{
+                                            accept: getProperSubmissionExt(),
+                                        }}
+                                    />
+                                )
+                                
                             ) : (
                                 "Please Select Problem Statement"
                             )
@@ -568,6 +620,16 @@ const Hackathonsubmission = (props) => {
                                 Hackathon has started!
                             </Typography>
                         )}
+                        <br />
+                        <br />
+                        <Typography
+                            variant="h6"
+                            fontFamily="Open Sans"
+                            style={{color: 'red'}}
+                            fontWeight="bold"
+                        >
+                            **You can Submit your solution ONLY ONCE!
+                        </Typography>
                     </Grid>
                 </Grid>
 
