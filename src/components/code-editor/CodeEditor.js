@@ -57,6 +57,7 @@ const Codeeditor = (props) => {
     const [output, setOutput] = useState("");
     const [status, setStatus] = useState("");
     const [jobId, setJobId] = useState("");
+    const [currentUser, setCurrentUser] = useState({});
 
     const [tempQuestionData, setTempQuestionData] = useState({});
 
@@ -113,6 +114,17 @@ const Codeeditor = (props) => {
             console.log("Question inside CodeEditor", props.question);
             setTempQuestionData(props.question);
         }
+
+        axios.get(`http://localhost:4200/api/user/currentuser`, {
+            headers: {
+                authorization: localStorage.getItem('session'),
+            }
+        }).then((userResp) => {
+            setCurrentUser(userResp.data.currentUser);
+        }).catch((err) => {
+            console.log("CODE EDITOR ERRR", err);
+        })
+
     }, []);
 
     useEffect(() => {
@@ -130,7 +142,7 @@ const Codeeditor = (props) => {
             payload["questionId"] = tempQuestionData["_id"];
 
             // @WorkAround
-            payload["userEmail"] = "hetmewada028@gmail.com";
+            payload["userEmail"] = currentUser.email;
         }
 
         setOutput("");
