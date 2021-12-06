@@ -179,12 +179,12 @@ const Userprofile = () => {
                 <Grid
                     item
                     xs={12}
-                    sm={4}
-                    md={5}
+                    sm={12}
+                    md={12}
                     className={classes.topLeftGrid}
                 >
                     <Grid container>
-                        <Grid item xs={12} md={4} style={{ minWidth: "150px" }}>
+                        <Grid item xs={12} md={1.7} sm={3} style={{ minWidth: "150px" }}>
                             <img
                                 height="150"
                                 width="150"
@@ -199,7 +199,7 @@ const Userprofile = () => {
                                 @{currentUser.username}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={8}>
+                        <Grid item xs={12} md={9.3} sm={9}>
                             <Typography
                                 variant="h4"
                                 fontFamily="Bebas Neue"
@@ -243,7 +243,7 @@ const Userprofile = () => {
                                 </>
                             ) : (<>
                                 <div style={{display: "flex", marginTop: "10px"}}>
-                                        <SchoolIcon height="30"/>
+                                        <PhoneIcon height="30"/>
                                         <Typography
                                             variant="subtitle1"
                                             fontFamily="Open Sans"
@@ -254,7 +254,7 @@ const Userprofile = () => {
                                         </Typography>
                                     </div>
                                     <div style={{display: "flex", marginTop: "10px"}}>
-                                        <CalendarTodayIcon height="30"/>
+                                        <BusinessIcon height="30"/>
                                         <Typography
                                             variant="subtitle1"
                                             fontFamily="Open Sans"
@@ -273,20 +273,7 @@ const Userprofile = () => {
                     </Grid>
                 </Grid>
 
-                <Grid
-                    item
-                    xs={12}
-                    sm={8}
-                    md={7}
-                    className={classes.topLeftGrid}
-                >
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                </Grid>
-
+                
                 {currentUser.userType == "developer" && (
                     <>
                         <Grid
