@@ -14,6 +14,7 @@ import Hackathonsummary from "../Hackathon/summary/HackathonSummary";
 import Codinglistmain from "../coding-list-page/CodingListMain";
 import Codingmain from "../coding-main/CodingMain";
 import Myhackathons from "../Hackathon/MyHackathons/MyHackathons";
+import Userprofile from '../profile/UserProfile';
 
 const AppRouter = (props) => {
     return (
@@ -32,6 +33,7 @@ const AppRouter = (props) => {
                     <Route exact path="/coding/practice/:language" component={Codinglistmain} />
                     <Route exact path="/coding/question/:id" component={Codingmain} />
                     <Route exact path="/hackathon/myhackathons/" component={Myhackathons} />
+                    <Route exact path="/profile" component={Userprofile} />
                 </Router>
             </div>
         </ThemeProvider>
