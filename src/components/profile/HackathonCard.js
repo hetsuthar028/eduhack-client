@@ -10,7 +10,7 @@ import { useHistory } from 'react-router';
 import { Typography } from "@material-ui/core";
 
 const Hackathoncard = (props) => {
-    const {} = props;
+    const {title, id} = props;
     const history = useHistory();
 
     const handleCardClick = (hackId) => {
@@ -20,7 +20,7 @@ const Hackathoncard = (props) => {
     return (
         <Card sx={{ maxWidth: 700, height: "200px" }}>
             <CardActionArea
-                onClick={() => handleCardClick()}
+                onClick={() => handleCardClick(id)}
             >
                 <CardMedia
                     component="img"
@@ -34,7 +34,7 @@ const Hackathoncard = (props) => {
                         fontWeight="bold"
                         variant="h6"
                     >
-                        Title
+                        {title}
                     </Typography>
                 </CardContent>
             </CardActionArea>

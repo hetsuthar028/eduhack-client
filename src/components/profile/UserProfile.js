@@ -35,6 +35,7 @@ const Userprofile = () => {
     const [currentUser, setCurrentUser] = useState({});
     const [userData, setUserData] = useState({});
     const [solvedQuestions, setSolvedQuestions] = useState([]);
+    const [myHackathons, setMyHackathons] = useState([]);
 
     useEffect(() => {
         try {
@@ -58,9 +59,15 @@ const Userprofile = () => {
 
                     setCurrentUser(userResp.data.currentUser);
 
+                    let queryLocation = "";
+                    if(userResp.data.currentUser.userType == "organization"){
+                        queryLocation="org";
+                    } else {
+                        queryLocation="dev";
+                    }
                     axios
                         .get(
-                            `http://localhost:4200/api/user/get/dev/${userResp.data.currentUser.email}`,
+                            `http://localhost:4200/api/user/get/${queryLocation}/${userResp.data.currentUser.email}`,
                             {
                                 headers: {
                                     authorization:
@@ -70,9 +77,9 @@ const Userprofile = () => {
                         )
                         .then((devUserResp) => {
                             if (
-                                !devUserResp.data.devUser ||
-                                devUserResp.data.devUser === undefined ||
-                                Object.keys(devUserResp.data.devUser).length ==
+                                !devUserResp.data.userProfile ||
+                                devUserResp.data.userProfile === undefined ||
+                                Object.keys(devUserResp.data.userProfile).length ==
                                     0
                             ) {
                                 setShowBanner({
@@ -82,7 +89,7 @@ const Userprofile = () => {
 
                             console.log("Dev User", devUserResp);
                             setUserData(devUserResp);
-
+                            
                             axios.get(`http://localhost:9200/api/coding/get/solvedQuestions`, {
                                 headers: {
                                     authorization: localStorage.getItem('session'),
@@ -90,9 +97,24 @@ const Userprofile = () => {
                             }).then((solvedQuestionResp) => {
                                 console.log("Solved Questions! ", solvedQuestionResp.data.responses.get_solved_questions.codeSolutions);
                                 setSolvedQuestions(solvedQuestionResp.data.responses.get_solved_questions.codeSolutions)
-                            }).catch((err) => {
 
+                                
+
+
+                            }).catch((err) => {
+                                console.log("ERROR IN SOLVED Questions", err);
                             })
+
+                            axios.get(`http://localhost:4400/api/hackathon/get/myhackathons`, {
+                                    headers: {
+                                        authorization: localStorage.getItem('session'),
+                                    }
+                                }).then((myHackResp) => {
+                                    console.log("My Hackathons Resp", myHackResp)
+                                    setMyHackathons(myHackResp.data.get_my_hackathons.myHackathons)
+                                }).catch((err) => {
+                                    console.log("Error getting my hackathons")
+                                })
                         })
                         .catch((err) => {
                             console.log("Profile Error", err);
@@ -108,6 +130,7 @@ const Userprofile = () => {
                     });
                 });
         } catch (err) {
+            console.log("Global Error")
         } finally {
             handleAfterFormResponse();
         }
@@ -294,14 +317,14 @@ const Userprofile = () => {
                     sm={12}
                     className={classes.solvedQuestionsGrid}
                 >
-                    <Formsectionheader name="Participated In Hackathons" />
+                    <Formsectionheader name={currentUser.userType == "organization" ? "Hackathons Organized" : "Participated in Hackathons"} />
                 </Grid>
                 
                 <Grid container>
                 {
-                    [1, 2, 3, 4, 5].map((hack) => (
-                        <Grid item xs={12} sm={4} md={3} style={{ paddingRight: "15px", paddingTop: "15px" }}>
-                            <Hackathoncard />
+                    myHackathons.map((hack) => (
+                        <Grid item xs={12} sm={4} md={3} style={{ paddingRight: "15px", paddingTop: "15px" }} key={hack.id}>
+                            <Hackathoncard title={hack.title} id={hack.id}/>
                         </Grid>
                     ))
                 }
