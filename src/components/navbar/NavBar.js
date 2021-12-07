@@ -145,6 +145,7 @@ const NavBar = (props) => {
                             <MenuItem><Button className={classes.navButton}>About Us</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
                             <MenuItem><Button variant="contained" className={classes.navButtonContained} href="http://localhost:3000/dashboard">Go to Dashboard</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} href="/profile">My Profile</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
                         </div>
                     );
@@ -172,6 +173,7 @@ const NavBar = (props) => {
                             <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("learn")}>Learn</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("practice")}>Practice</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} href="/profile">My Profile</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
                         </div>
                     )
@@ -184,6 +186,7 @@ const NavBar = (props) => {
                             <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("explore")}>Explore</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton}>Hackathons</Button></MenuItem>
                             <MenuItem><Button variant="contained" className={classes.navButtonContained} href="/hackathon/organize/overview">Organize a Hackathon</Button></MenuItem>
+                            <MenuItem><Button className={classes.navButton} href="/profile">My Profile</Button></MenuItem>
                             <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
                         </div>
                     )
@@ -192,7 +195,7 @@ const NavBar = (props) => {
         } else {
             return (
                 <div>
-                    {appCurrentUser && appCurrentUser.userType == "organization" && (<MenuItem><Button className={classes.navBotton} onClick={() => navToMyHackathons()}>My Hackathons</Button></MenuItem>)}
+                    <MenuItem><Button className={classes.navButton} href="/profile">My Profile</Button></MenuItem>
                     <MenuItem><Button className={classes.navButton} onClick={() => handleSignOut()}>Sign Out</Button></MenuItem>
                 </div>
             )

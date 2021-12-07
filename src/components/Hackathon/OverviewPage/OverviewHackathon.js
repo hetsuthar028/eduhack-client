@@ -112,6 +112,7 @@ const Overviewhackathon = () => {
                         <Typography
                             variant="body1"
                             className={classes.mainFont}
+                            fontFamily="Open Sans"
                             fontWeight="1px"
                         >
                             EduHack provides an end-to-end hackathon and coding
@@ -215,7 +216,7 @@ const Overviewhackathon = () => {
                     <Grid item xs={12} sm={12} md={12}>
                         {/* <img src="https://source.unsplash.com/random"  width="100%" height={200} style={{borderRadius: "50px"}}/>  */}
 
-                        <Stepper>
+                        <Stepper style={{maxWidth: "100vw", overflow: "auto"}}>
                             {steps.map((label, index) => {
                                 const stepProps = {};
                                 const labelProps = {};
@@ -311,14 +312,15 @@ const Overviewhackathon = () => {
                             className={classes.mainFont}
                             fontFamily="Open Sans"
                         >
-                            Email : <TextField />
+                            Email : 
                         </Typography>
+                        <TextField />
                     </Grid>
                     <Grid
                         item
                         xs={12}
-                        sm={8}
-                        md={8}
+                        sm={4}
+                        md={4}
                         style={{ placeSelf: "center" }}
                     >
                         <Typography
@@ -326,8 +328,18 @@ const Overviewhackathon = () => {
                             className={classes.mainFont}
                             fontFamily="Open Sans"
                         >
-                            Description : <TextField />
+                            Description : 
                         </Typography>
+                        <TextField />
+                    </Grid>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={4}
+                        md={4}
+                        style={{ placeSelf: "center"}}
+                    >
+                        <Button variant="contained">Submit Query</Button>
                     </Grid>
                 </Grid>
             </Container>
