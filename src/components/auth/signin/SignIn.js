@@ -17,7 +17,6 @@ import {
 import theme from "../../ui/Theme";
 import { LockOutlined } from "@mui/icons-material";
 import { AppContext } from "../../../AppContext";
-import Banner from "../../banner/banner";
 
 const useStyles = makeStyles({
     root: {
@@ -72,7 +71,6 @@ const initialValues = {
     password: "",
 };
 
-const preventDefault = (event) => event.preventDefault();
 
 const SignIn = () => {
     const classes = useStyles();
@@ -94,27 +92,27 @@ const SignIn = () => {
         }
     }, []);
 
-    const validate = () => {
-        const re =
-            /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    // const validate = () => {
+    //     const re =
+    //         /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-        let temp = {};
+    //     let temp = {};
 
-        temp.email = re.test(values.email.toLowerCase()) ? "" : "Invalid";
-        temp.password =
-            values.password.length > 7
-                ? ""
-                : "Password length should be greater than 10.";
-        console.log("Temp", temp);
-        setErrors(
-            {
-                something: "true",
-            },
-            () => {
-                return Object.values(temp).every((x) => x == "");
-            }
-        );
-    };
+    //     temp.email = re.test(values.email.toLowerCase()) ? "" : "Invalid";
+    //     temp.password =
+    //         values.password.length > 7
+    //             ? ""
+    //             : "Password length should be greater than 10.";
+    //     console.log("Temp", temp);
+    //     setErrors(
+    //         {
+    //             something: "true",
+    //         },
+    //         () => {
+    //             return Object.values(temp).every((x) => x == "");
+    //         }
+    //     );
+    // };
 
     const handleAfterFormResponse = () => {
         setTimeout(() => {
@@ -159,12 +157,12 @@ const SignIn = () => {
 
     const checkFormValidation = (formErrors) => {
         let valid = 1;
-        let tempErrors = {};
+        // let tempErrors = {};
 
         for (const [key, value] of Object.entries(formErrors)) {
             if (value.length) {
                 valid = 0;
-                console.log("Valid Changed to 0");
+                // console.log("Valid Changed to 0");
                 break;
             }
         }
@@ -178,16 +176,16 @@ const SignIn = () => {
 
         const re =
             /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        if (name == "email" && !re.test(fieldValue.toLowerCase())) {
+        if (name === "email" && !re.test(fieldValue.toLowerCase())) {
             fieldErrors.push(
-                <p name={name} className={classes.errorMessage}>
+                <p name={name} className={classes.errorMessage} key={name}>
                     Invalid email
                 </p>
             );
         }
-        if (name == "password" && fieldValue.length < 8) {
+        if (name === "password" && fieldValue.length < 8) {
             fieldErrors.push(
-                <p name={name} className={classes.errorMessage}>
+                <p name={name} className={classes.errorMessage} key={name}>
                     Minlength should be 8
                 </p>
             );
@@ -200,7 +198,7 @@ const SignIn = () => {
     };
 
     const getHelperText = (name) => {
-        console.log("Errors", errors.name);
+        // console.log("Errors", errors.name);
         if (errors[name] && errors[name].length) {
             return errors[name];
         }
@@ -215,7 +213,7 @@ const SignIn = () => {
             ...validateForm(name, value),
         };
 
-        console.log("Input Errors", inputErrors);
+        // console.log("Input Errors", inputErrors);
 
         setValues({
             ...values,
@@ -231,7 +229,7 @@ const SignIn = () => {
 
     return (
         <ThemeProvider theme={theme}>
-            <Grid className={classes.mainContainer} xs={12} md={12} sm={12}>
+            <Grid className={classes.mainContainer} container>
                 {/* <center> */}
                 <Paper className={classes.pageContent}>
                     <center>
@@ -286,6 +284,7 @@ const SignIn = () => {
                                         label="Password"
                                         name="password"
                                         type="password"
+                                        key="password"
                                         value={values.password}
                                         onChange={handleInputChange}
                                     />

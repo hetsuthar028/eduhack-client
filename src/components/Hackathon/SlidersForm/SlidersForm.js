@@ -51,7 +51,7 @@ const Slidersform = (props) => {
         const fieldErrors = [];
         const hErrors = { ...errors };
 
-        if (name == "sliderTitle" && fieldValue.length < 5) {
+        if (name === "sliderTitle" && fieldValue.length < 5) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 5
@@ -59,7 +59,7 @@ const Slidersform = (props) => {
             );
         }
 
-        if (name == "sliderSubtitle" && fieldValue.length < 5) {
+        if (name === "sliderSubtitle" && fieldValue.length < 5) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 5
@@ -67,7 +67,7 @@ const Slidersform = (props) => {
             );
         }
 
-        if (name == "sliderImage" && !fieldValue) {
+        if (name === "sliderImage" && !fieldValue) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid Image
@@ -228,7 +228,7 @@ const Slidersform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <center>

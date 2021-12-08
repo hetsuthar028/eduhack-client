@@ -60,7 +60,7 @@ const Sponsorsform = (props) => {
         let fieldErrors = [];
         let hErrors = { ...errors };
 
-        if (name == "sponsorName" && fieldValue.length < 3) {
+        if (name === "sponsorName" && fieldValue.length < 3) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 3
@@ -68,7 +68,7 @@ const Sponsorsform = (props) => {
             );
         }
 
-        if (name == "sponsorImageLink" && !fieldValue) {
+        if (name === "sponsorImageLink" && !fieldValue) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid upload
@@ -76,7 +76,7 @@ const Sponsorsform = (props) => {
             );
         }
 
-        if (name == "sponsorWebLink" && !validateURL(fieldValue)) {
+        if (name === "sponsorWebLink" && !validateURL(fieldValue)) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid Website Link
@@ -127,7 +127,7 @@ const Sponsorsform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -156,7 +156,7 @@ const Sponsorsform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -222,7 +222,7 @@ const Sponsorsform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <center>

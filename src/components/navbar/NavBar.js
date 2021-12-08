@@ -4,7 +4,6 @@ import {
     AppBar,
     IconButton,
     Toolbar,
-    Typography,
     Button,
     Avatar,
     Grid,
@@ -55,13 +54,13 @@ const NavBar = (props) => {
         }
     }
 
-    const navToMyHackathons = () => {
-        history.push('/hackathon/myhackathons')
-    }
+    // const navToMyHackathons = () => {
+    //     history.push('/hackathon/myhackathons')
+    // }
 
     const renderNavButttons = () => {
         
-        if(location == "landingPage"){
+        if(location === "landingPage"){
             if (!appCurrentUser) {
                 return (
                     <>
@@ -84,7 +83,7 @@ const NavBar = (props) => {
             }
         }
 
-        if(location == "dashboard"){
+        if(location === "dashboard"){
             if(!appCurrentUser){
                 return (
                     <>
@@ -97,7 +96,7 @@ const NavBar = (props) => {
                 )
             }
 
-            if(appCurrentUser.userType == "developer"){
+            if(appCurrentUser.userType === "developer"){
                 return (
                     <>
                         <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button>
@@ -108,7 +107,7 @@ const NavBar = (props) => {
                     </>
                 )
             }
-            else if(appCurrentUser.userType == "organization"){
+            else if(appCurrentUser.userType === "organization"){
                 return (
                     <>
                         <Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button>
@@ -127,7 +126,7 @@ const NavBar = (props) => {
     const renderSmallMenuIcons = () => {
 
         if(matches){
-            if(location == "landingPage"){
+            if(location === "landingPage"){
                 if (!appCurrentUser) {
                     return (
                         <div>
@@ -152,7 +151,7 @@ const NavBar = (props) => {
                 }
             }
             
-            if(location == "dashboard"){
+            if(location === "dashboard"){
                 if(!appCurrentUser){
                     return (
                         <div>
@@ -166,7 +165,7 @@ const NavBar = (props) => {
                 }
     
                 
-                if(appCurrentUser.userType == "developer"){
+                if(appCurrentUser.userType === "developer"){
                     return (
                         <div>
                             <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
@@ -178,7 +177,7 @@ const NavBar = (props) => {
                         </div>
                     )
                 }
-                else if(appCurrentUser.userType == "organization"){
+                else if(appCurrentUser.userType === "organization"){
                     return (
                         <div>
                             <MenuItem><Button className={classes.navButton} onClick={() => navClickHandler("codeeditor")}>Code Editor</Button></MenuItem>
@@ -214,7 +213,6 @@ const NavBar = (props) => {
     );
 
     return (
-        <Typography color="textPrimary">
             <Grid container>
             <Grid item xs={12} sm={12} md={12}>
                 <AppBar position="static" color="primary" elevation={0}>
@@ -222,17 +220,17 @@ const NavBar = (props) => {
                         <Grid container>
                             <Grid item xs={6} sm={3} md={2}>
                                 <IconButton
-                                    size="large"
+                                    size="medium"
                                     edge="start"
                                     color="inherit"
-                                    aria-lebel="web logo"
+                                    aria-label="web logo"
                                     disableRipple
                                     sx={{ mr: 0.1 }}
                                     className={classes.navIcon}
                                     href="/dashboard"
                                     style={{maxHeight: "50px", placeSelf: "center"}}
                                 >
-                                    <img src={getIcon("eduhack")} className={classes.appLogo}/>
+                                    <img src={getIcon("eduhack")} className={classes.appLogo} alt="Logo" />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={6} sm={9} md={10} className={classes.navButtons} style={{marginLeft: "auto", placeSelf: "center", display: "flex", placeContent: "end", paddingRight: "10px"}}>
@@ -283,7 +281,6 @@ const NavBar = (props) => {
                 </AppBar>
                 </Grid>
             </Grid>
-         </Typography>
     );
 };
 

@@ -101,7 +101,7 @@ const Hackathonsubmission = (props) => {
                     if (
                         !responses.data.currentUser ||
                         responses.data.currentUser === undefined ||
-                        Object.keys(responses.data.currentUser).length == 0
+                        Object.keys(responses.data.currentUser).length === 0
                     ) {
                         setShowBanner({
                             apiErrorResponse: "You must be Signed In!",
@@ -109,7 +109,7 @@ const Hackathonsubmission = (props) => {
                         return history.push("/auth/signin");
                     }
 
-                    if (responses.data.currentUser.userType == "organization") {
+                    if (responses.data.currentUser.userType === "organization") {
                         setShowBanner({
                             apiSuccessResponse:
                                 "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account.",
@@ -127,7 +127,7 @@ const Hackathonsubmission = (props) => {
                             }
                         )
                         .then((resp) => {
-                            if (resp.data.message == "already registered") {
+                            if (resp.data.message === "already registered") {
                                 axios
                                     .get(
                                         `http://localhost:4400/api/hackathon/get/id/${props.match.params.id}`,
@@ -175,14 +175,14 @@ const Hackathonsubmission = (props) => {
                                             setHackathonEndStatus(false);
                                         }
 
-                                        let hr = Math.ceil(
-                                            (hackStart - currentDate) /
-                                                (1000 * 60 * 60)
-                                        );
-                                        let mn = Math.floor(
-                                            (hackStart - currentDate) /
-                                                (1000 * 60 * 60)
-                                        );
+                                        // let hr = Math.ceil(
+                                        //     (hackStart - currentDate) /
+                                        //         (1000 * 60 * 60)
+                                        // );
+                                        // let mn = Math.floor(
+                                        //     (hackStart - currentDate) /
+                                        //         (1000 * 60 * 60)
+                                        // );
 
                                         setProblemStatements(
                                             responses.data
@@ -202,7 +202,7 @@ const Hackathonsubmission = (props) => {
                                             try{
                                                 let userSubmission = submissionResp.data.responses.get_user_submission.userSubmission;
                                                 console.log("User Submission", typeof userSubmission);
-                                                if(Object.keys(userSubmission).length != 0){
+                                                if(Object.keys(userSubmission).length !== 0){
                                                     console.log("User Sub to TRUE")
                                                     setUserSubmissionStatus(true);
                                                     setUserAlreadySubmittedSolutionLink(userSubmission.submissionLink)
@@ -220,7 +220,7 @@ const Hackathonsubmission = (props) => {
                                     })
                                     .catch((err) => {
                                         if (
-                                            err.response?.data == "Invalid user"
+                                            err.response?.data === "Invalid user"
                                         ) {
                                             setShowBanner({
                                                 apiErrorResponse:
@@ -229,7 +229,7 @@ const Hackathonsubmission = (props) => {
                                             return history.push("/auth/signin");
                                         }
                                         if (
-                                            err.response?.data ==
+                                            err.response?.data ===
                                             "Hackathon doesn't exists!"
                                         ) {
                                             setShowBanner({
@@ -291,7 +291,7 @@ const Hackathonsubmission = (props) => {
         let allExts = "";
         // console.log("Hackathon", hackathon)
         splitString(hackathon.submissionFormats, ",").map((format) => {
-            allExts += `.${format.toLowerCase()}, `;
+           return allExts += `.${format.toLowerCase()}, `;
         });
         return allExts;
     };
@@ -465,7 +465,7 @@ const Hackathonsubmission = (props) => {
                         splitString(
                             problemStatements.filter(
                                 (statement) =>
-                                    statement.id == currentProblemStatement
+                                    statement.id === currentProblemStatement
                             )[0].technologies,
                             ","
                         ).map((tech) => (
@@ -488,6 +488,7 @@ const Hackathonsubmission = (props) => {
                                         <img
                                             src={renderIcon(tech.trim())}
                                             style={{ width: "100%" }}
+                                            alt="Technology"
                                         />
                                     </Icon>
                                 </Avatar>
@@ -529,7 +530,7 @@ const Hackathonsubmission = (props) => {
                         splitString(
                             problemStatements.filter(
                                 (statement) =>
-                                    statement.id == currentProblemStatement
+                                    statement.id === currentProblemStatement
                             )[0].refMaterial,
                             ", "
                         ).map((refLink) => (
@@ -594,7 +595,7 @@ const Hackathonsubmission = (props) => {
                                         fontWeight="bold"
                                         fontFamily="Open Sans"
                                     >
-                                     ✔️ Your Submission: <a target="_blank" href={userAlreadySubmittedSolutionLink}>Click Here</a>
+                                     ✔️ Your Submission: <a target="_blank" rel="noreferrer" href={userAlreadySubmittedSolutionLink}>Click Here</a>
                                     </Typography>
                                 ): (
                                     <TextField
@@ -647,7 +648,7 @@ const Hackathonsubmission = (props) => {
                             size="large"
                             disabled={
                                 !hackathonSubmissionStatus ||
-                                currentProblemStatement == 0
+                                currentProblemStatement === 0
                             }
                             onClick={() => {
                                 handleSubmissionSubmit();

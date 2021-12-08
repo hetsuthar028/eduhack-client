@@ -1,19 +1,15 @@
 import React from "react";
 import {
-    Paper,
-    Card,
     Grid,
-    Container,
     Typography,
     Button,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
-import { borderRadius } from "@mui/system";
-import theme from "../ui/Theme";
 
 const useStyles = makeStyles((theme) => ({
     mainContainer: {
         marginBottom: "30px",
+        paddingRight: "15px"
     },
     articleImage: {
         border: `1px solid ${theme.palette.primary.main}`,
@@ -47,10 +43,6 @@ const Articlecard = (props) => {
         <div>
             <Grid
                 container
-                sm={12}
-                xs={12}
-                md={12}
-                spacing={{ xs: 1, md: 1 }}
                 className={classes.mainContainer}
             >
                 <Grid item xs={12} sm={12} md={12}>
@@ -64,15 +56,17 @@ const Articlecard = (props) => {
                 </Grid>
 
                 <Grid item xs={12} sm={12} md={12}>
-                    <Typography variant="body2" style={{ padding: "0px" }}>
+                    
                         {/* <span>JavaScript</span> <span style={{marginRight: "0px"}}>2 min Read</span> */}
                         <div className={classes.fieldName}>
-                            <b>JavaScript - Data Types & Loops</b>
+                        <Typography variant="body2" style={{ padding: "0px" }} fontWeight="bold">
+                            JavaScript - Data Types & Loops
+                        </Typography>
                         </div>
-                    </Typography>
+                    
                 </Grid>
-                <Grid item xs={12} sm={12} md={12}>
-                    <Typography variant="body2" style={{ padding: "0px" }}>
+                <Grid item xs={12} sm={12} md={12} style={{marginTop: "10px", marginBottom: "10px"}}>
+                    
                         {/* <span>JavaScript</span> <span style={{marginRight: "0px"}}>2 min Read</span> */}
                         <div
                             className={classes.description}
@@ -81,15 +75,15 @@ const Articlecard = (props) => {
                                 textJustify: "inner-word",
                             }}
                         >
-                            <p>
+                            <Typography variant="body2" style={{ padding: "0px" }}>
                                 Lorem ipsum dolor sit amet, consectetur
                                 adipiscing elit, sed do eiusmod tempor
                                 incididunt ut labore et dolore magna aliqua. Ut
                                 enim ad minim veniam, quis nostrud exercitation
                                 ullamco labor...
-                            </p>
+                            </Typography>
                         </div>
-                    </Typography>
+                    
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                     <Button

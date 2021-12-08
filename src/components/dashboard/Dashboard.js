@@ -69,13 +69,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // For Testing Purpose
-let upcomingHackathons = [1, 2, 3, 4];
+// let upcomingHackathons = [1, 2, 3, 4];
 
 const Dashboard = () => {
     const [currentUser, setCurrentUser] = useState({});
     const history = useHistory();
     const classes = useStyles();
-    const { appCurrentUser, updateAppCurrentUser, setShowBanner } =
+    const { setShowBanner } =
         useContext(AppContext);
     // For Code Editor
     const [html, setHTML] = useState("");
@@ -167,17 +167,13 @@ const Dashboard = () => {
                     <h1 style={{ paddingBottom: "15px" }}>Practice Coding!</h1>
                     <Grid
                         container
-                        sm={12}
-                        md={12}
-                        xs={12}
-                        spacing={{ xs: 2, md: 3 }}
                         style={{
                             alignItems: "center",
                             justifyItems: "center",
                         }}
                     >
                         <Grid item xs={12} sm={6} md={6}>
-                            <Card classes={classes.card}>
+                            <Card className={classes.card}>
                                 <CardActionArea>
                                     <CardMedia
                                         component="img"
@@ -187,7 +183,7 @@ const Dashboard = () => {
                                     />
 
                                     <CardContent>
-                                        <Grid container xs={12} sm={12} md={12}>
+                                        <Grid container>
                                             <Grid item xs={12} sm={12} md={12}>
                                                 <Typography
                                                     variant="h6"
@@ -241,7 +237,7 @@ const Dashboard = () => {
                                 </CardActionArea>
                             </Card>
                         </Grid>
-                        <Grid item xs={12} sm={6} md={6}>
+                        <Grid item xs={12} sm={6} md={6} style={{paddingLeft: "15px"}}>
                             <Grid container>
                                 <Grid item xs={4} style={{ margin: "10px 0" }}>
                                     <Card
@@ -305,9 +301,6 @@ const Dashboard = () => {
                                         <CardActionArea>
                                             <Grid
                                                 container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
                                                 style={{
                                                     alignItems: "center",
                                                     justifyItems: "center",
@@ -346,7 +339,7 @@ const Dashboard = () => {
                                     </Card>
                                 </Grid>
                             </Grid>
-                            <Grid container xs={12} sm={12} md={12}>
+                            <Grid container>
                                 <Grid
                                     item
                                     xs={4}
@@ -362,9 +355,6 @@ const Dashboard = () => {
                                         <CardActionArea>
                                             <Grid
                                                 container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
                                                 style={{
                                                     alignItems: "center",
                                                     justifyItems: "center",
@@ -405,7 +395,7 @@ const Dashboard = () => {
                                     style={{ margin: "10px 0" }}
                                 ></Grid>
                             </Grid>
-                            <Grid container xs={12} sm={12} md={12}>
+                            <Grid container>
                                 <Grid item xs={4} style={{ margin: "10px 0" }}>
                                     <Card
                                         sx={{ display: "flex" }}
@@ -416,9 +406,6 @@ const Dashboard = () => {
                                         <CardActionArea>
                                             <Grid
                                                 container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
                                                 style={{
                                                     alignItems: "center",
                                                     justifyItems: "center",
@@ -470,9 +457,6 @@ const Dashboard = () => {
                                         <CardActionArea>
                                             <Grid
                                                 container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
                                                 style={{
                                                     alignItems: "center",
                                                     justifyItems: "center",
@@ -517,9 +501,6 @@ const Dashboard = () => {
 
             <Grid
                 container
-                xs={12}
-                sm={12}
-                md={12}
                 className={classes.readArticlesGrid}
                 ref={articleRef}
             >
@@ -531,9 +512,6 @@ const Dashboard = () => {
 
             <Grid
                 container
-                xs={12}
-                sm={12}
-                md={12}
                 className={classes.codeEditorGrid}
                 ref={codeEditorRef}
             >

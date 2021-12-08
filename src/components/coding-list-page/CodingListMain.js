@@ -38,7 +38,7 @@ const Codinglistmain = (props) => {
                 if (
                     !responses.data.currentUser ||
                     responses.data.currentUser === undefined ||
-                    Object.keys(responses.data.currentUser).length == 0
+                    Object.keys(responses.data.currentUser).length === 0
                 ) {
                     setShowBanner({
                         apiErrorResponse: "You must be Signed In!",

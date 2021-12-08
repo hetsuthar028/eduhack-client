@@ -53,7 +53,7 @@ const Userprofile = () => {
                     if (
                         !userResp.data.currentUser ||
                         userResp.data.currentUser === undefined ||
-                        Object.keys(userResp.data.currentUser).length == 0
+                        Object.keys(userResp.data.currentUser).length === 0
                     ) {
                         setShowBanner({
                             apiErrorResponse: "You must be Signed In!",
@@ -65,7 +65,7 @@ const Userprofile = () => {
                     setCurrentUser(userResp.data.currentUser);
 
                     let queryLocation = "";
-                    if (userResp.data.currentUser.userType == "organization") {
+                    if (userResp.data.currentUser.userType === "organization") {
                         queryLocation = "org";
                     } else {
                         queryLocation = "dev";
@@ -85,7 +85,7 @@ const Userprofile = () => {
                                 !devUserResp.data.userProfile ||
                                 devUserResp.data.userProfile === undefined ||
                                 Object.keys(devUserResp.data.userProfile)
-                                    .length == 0
+                                    .length === 0
                             ) {
                                 setShowBanner({
                                     apiErrorResponse: "Invalid user",
@@ -190,6 +190,7 @@ const Userprofile = () => {
                                 width="150"
                                 src="https://source.unsplash.com/random"
                                 className={classes.profileImage}
+                                alt="Profile"
                             />
                             <Typography
                                 variant="subtitle1"
@@ -216,7 +217,7 @@ const Userprofile = () => {
                             >
                                 {currentUser.email}
                             </Typography>
-                            {currentUser.userType == "developer" ? (
+                            {currentUser.userType === "developer" ? (
                                 <>
                                     <div style={{display: "flex", marginTop: "10px"}}>
                                         <SchoolIcon height="30"/>
@@ -274,7 +275,7 @@ const Userprofile = () => {
                 </Grid>
 
                 
-                {currentUser.userType == "developer" && (
+                {currentUser.userType === "developer" && (
                     <>
                         <Grid
                             item
@@ -399,7 +400,7 @@ const Userprofile = () => {
                 >
                     <Formsectionheader
                         name={
-                            currentUser.userType == "organization"
+                            currentUser.userType === "organization"
                                 ? "Hackathons Organized"
                                 : "Participated in Hackathons"
                         }
@@ -419,14 +420,14 @@ const Userprofile = () => {
                             <Hackathoncard title={hack.title} id={hack.id} />
                         </Grid>
                     ))}
-                    {myHackathons.length == 0 && (
+                    {myHackathons.length === 0 && (
                         <Typography fontFamily="Open Sans" variant="h6">
                             No hackathons in your bag! 💼 &nbsp;
 
                             <Button
                                 variant="outlined"
                                 onClick={() => {
-                                    if(currentUser.userType == "developer"){
+                                    if(currentUser.userType === "developer"){
                                         return history.push("/dashboard");
                                     } else{
                                         return history.push('/hackathon/organize/overview')
@@ -435,7 +436,7 @@ const Userprofile = () => {
                                     
                                 }}
                             >
-                                {currentUser.userType == "developer" ? "View Upcoming Hackathons" : "Organize Hackathons"}
+                                {currentUser.userType === "developer" ? "View Upcoming Hackathons" : "Organize Hackathons"}
                             </Button>
                         </Typography>
                     )}

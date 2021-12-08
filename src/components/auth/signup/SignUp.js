@@ -128,7 +128,6 @@ const SignUp = (props) => {
     const [values, setValues] = useState(initialValues);
     const [errors, setErrors] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
-    const theme2 = useTheme();
 
     const classes = useStyles();
     const history = useHistory();
@@ -140,7 +139,7 @@ const SignUp = (props) => {
 
         const re =
             /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        if (name == "email" && !re.test(fieldValue.toLowerCase())) {
+        if (name === "email" && !re.test(fieldValue.toLowerCase())) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid Email
@@ -148,7 +147,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "userName" && fieldValue.length < 8) {
+        if (name === "userName" && fieldValue.length < 8) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 8
@@ -156,7 +155,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "fullName" && fieldValue.length < 8) {
+        if (name === "fullName" && fieldValue.length < 8) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 8
@@ -164,7 +163,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "password" && fieldValue.length < 8) {
+        if (name === "password" && fieldValue.length < 8) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 8
@@ -172,7 +171,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "conformPassword" && fieldValue != values.password) {
+        if (name === "conformPassword" && fieldValue !== values.password) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Password does not match
@@ -180,7 +179,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "college" && fieldValue.length < 2) {
+        if (name === "college" && fieldValue.length < 2) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Please add valid College name
@@ -189,7 +188,7 @@ const SignUp = (props) => {
         }
 
         if (
-            name == "graduationYear" &&
+            name === "graduationYear" &&
             (parseInt(fieldValue) < 2000 || parseInt(fieldValue) > 2026)
         ) {
             fieldErrors.push(
@@ -199,7 +198,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "contact" && fieldValue.toString().length < 10) {
+        if (name === "contact" && fieldValue.toString().length < 10) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 10
@@ -207,7 +206,7 @@ const SignUp = (props) => {
             );
         }
 
-        if (name == "address" && fieldValue.length < 10) {
+        if (name === "address" && fieldValue.length < 10) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid address
@@ -223,7 +222,7 @@ const SignUp = (props) => {
 
     const checkFormValidation = (formErrors) => {
         let valid = 1;
-        let tempErrors = {};
+        // let tempErrors = {};
 
         for (const [key, value] of Object.entries(formErrors)) {
             if (value.length) {
@@ -295,7 +294,7 @@ const SignUp = (props) => {
             axios
                 .post("http://localhost:4200/api/user/signup", values)
                 .then((response) => {
-                    if (response.data.message == "success") {
+                    if (response.data.message === "success") {
                         setShowBanner({
                             apiSuccessResponse: "Account created succesfully!",
                         });
@@ -474,7 +473,7 @@ const SignUp = (props) => {
                                     </Typography>
                                 </Box>
 
-                                {values.userType == "developer" ? (
+                                {values.userType === "developer" ? (
                                     <>
                                         <Box>
                                             <TextField
