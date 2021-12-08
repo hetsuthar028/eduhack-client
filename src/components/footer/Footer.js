@@ -69,7 +69,7 @@ const Footer = () => {
                             }}
                         >
                             <Typography
-                                variant="h6"
+                                variant="h5"
                                 style={{
                                     color: `${theme.palette.common.orangeColor}`,
                                 }}
@@ -77,16 +77,18 @@ const Footer = () => {
                                 <b>Commited to Quality</b>
                             </Typography>
                         </Typography>
-                        <p
+                        <Typography
                             style={{
                                 color: `${theme.palette.common.ternaryColor}`,
+                                marginTop: "20px"
                             }}
+                            fontFamily="Open Sans"
                         >
                             We believe in providing the best quality in any of
                             our service. We as a platform understands our users
                             very well and dedicate whole bunch of opporunities
                             to learn and grow.
-                        </p>
+                        </Typography>
                     </center>
                 </Grid>
                 
@@ -105,7 +107,7 @@ const Footer = () => {
                             }}
                         >
                             <Typography
-                                variant="h6"
+                                variant="h5"
                                 style={{
                                     color: `${theme.palette.common.orangeColor}`,
                                 }}
@@ -113,20 +115,20 @@ const Footer = () => {
                                 <b>Stay Connected</b>
                             </Typography>
                         </Typography>
-                        <IconButton>
+
+                        <IconButton style={{marginTop: "20px"}}>
                             <FacebookIcon color="primary" />
                         </IconButton>
-                        <IconButton>
-                            {" "}
+
+                        <IconButton style={{marginTop: "20px"}}>
                             <InstagramIcon color="primary" />
                         </IconButton>
 
-                        <IconButton>
-                            {" "}
-                            <MailIcon color="primary" />{" "}
+                        <IconButton style={{marginTop: "20px"}}>
+                            <MailIcon color="primary" />
                         </IconButton>
 
-                        <IconButton>
+                        <IconButton style={{marginTop: "20px"}}>
                             <TwitterIcon color="primary" />
                         </IconButton>
                     </center>
@@ -147,7 +149,7 @@ const Footer = () => {
                             }}
                         >
                             <Typography
-                                variant="h6"
+                                variant="h5"
                                 style={{
                                     color: `${theme.palette.common.orangeColor}`,
                                 }}
@@ -155,28 +157,32 @@ const Footer = () => {
                                 <b>Contact US</b>
                             </Typography>
                         </Typography>
-                        <p
+                        <Typography
                             style={{
                                 color: `${theme.palette.common.ternaryColor}`,
+                                marginTop: "20px"
                             }}
+                            fontFamily="Open Sans"
                         >
                             A B Developers, Suite 316, IT Road, Ahmedabad -
                             179236,
-                        </p>
-                        <p
+                        </Typography>
+                        <Typography
                             style={{
                                 color: `${theme.palette.common.ternaryColor}`,
                             }}
+                            fontFamily="Open Sans"
                         >
                             (Main) +918923419231,
-                        </p>
-                        <p
+                        </Typography>
+                        <Typography
                             style={{
                                 color: `${theme.palette.common.ternaryColor}`,
                             }}
+                            fontFamily="Open Sans"
                         >
                             (Support) +912734762835
-                        </p>
+                        </Typography>
                     </center>
                 </Grid>
 
@@ -185,9 +191,10 @@ const Footer = () => {
                         variant="subtitle1"
                         style={{
                             color: `${theme.palette.primary.main}`,
-                            margin: "auto",
+                            marginTop: "20px",
                             placeSelf: "center"
                         }}
+                        fontFamily="Open Sans"
                     >
                         <center><strong>Copyright Reserved © 2021 | <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" height="15" style={{placeSelf: "center"}}/> <a href="https://github.com/hetsuthar028" target="_blank" style={{color: 'inherit', textDecoration: 'none'}}>Het Suthar</a></strong></center>
                     </Typography>
