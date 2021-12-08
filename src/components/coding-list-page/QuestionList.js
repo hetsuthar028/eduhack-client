@@ -24,7 +24,7 @@ const Questionlist = (props) => {
     return (
         <div style={{ marginTop: "20px" }}>
             <Grid container>
-                {questions && questions.length != 0 ? (
+                {questions && questions.length !== 0 ? (
                     questions.map((question) => (
                         <Questioncard question={question} key={question._id} />
                     ))

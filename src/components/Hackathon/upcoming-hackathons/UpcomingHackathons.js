@@ -76,8 +76,8 @@ const Upcominghackathons = (props) => {
     };
 
     return (
-        <Grid container classes={classes.cardContainer}>
-            {upcomingHackathons.length == 0 && (
+        <Grid container className={classes.cardContainer}>
+            {upcomingHackathons.length === 0 && (
                 <Typography
                     variant="h6"
                     fontFamily="Open Sans"
@@ -92,10 +92,9 @@ const Upcominghackathons = (props) => {
                     xs={12}
                     sm={4}
                     md={3}
-                    key={hackathon.title}
                     key={hackathon.id}
                 >
-                    <Card classes={classes.card}>
+                    <Card className={classes.card}>
                         <CardActionArea
                             onClick={() => {
                                 handleCardClick(hackathon.id);
@@ -109,7 +108,7 @@ const Upcominghackathons = (props) => {
                             />
 
                             <CardContent>
-                                <Grid container xs={12} sm={12} md={12}>
+                                <Grid container>
                                     <Grid item xs={12} sm={12} md={12}>
                                         <Typography
                                             variant="h6"

@@ -12,7 +12,6 @@ const Footer = () => {
         footer: {
             backgroundColor: theme.palette.secondary.main,
             marginTop: "50px",
-            padding: "0",
             width: "100%",
             padding: "2rem",
             zIndex: "1302",
@@ -48,10 +47,6 @@ const Footer = () => {
             <Grid
                 container
                 className={classes.gridContainer}
-                xs={12}
-                sm={12}
-                md={12}
-                spacing={{ xs: 2, md: 3 }}
             >
                 <Grid
                     item
@@ -62,25 +57,26 @@ const Footer = () => {
                 >
                     <center>
                         <Typography
-                            variant="button"
+                            variant="h5"
                             style={{
                                 color: `${theme.palette.common.orangeColor}`,
-                                marginBottom: "15px"
+                                marginBottom: "15px",
                             }}
                         >
-                            <Typography
+                            {/* <Typography
                                 variant="h5"
                                 style={{
                                     color: `${theme.palette.common.orangeColor}`,
                                 }}
-                            >
-                                <b>Commited to Quality</b>
-                            </Typography>
+                            > */}
+                            <b>COMMITED TO QUALITY</b>
+                            {/* </Typography> */}
                         </Typography>
                         <Typography
                             style={{
                                 color: `${theme.palette.common.ternaryColor}`,
-                                marginTop: "20px"
+                                marginTop: "20px",
+                                marginBottom: "20px",
                             }}
                             fontFamily="Open Sans"
                         >
@@ -91,7 +87,7 @@ const Footer = () => {
                         </Typography>
                     </center>
                 </Grid>
-                
+
                 <Grid
                     item
                     xs={12}
@@ -101,34 +97,35 @@ const Footer = () => {
                 >
                     <center>
                         <Typography
-                            variant="button"
+                            variant="h5"
                             style={{
                                 color: `${theme.palette.common.orangeColor}`,
                             }}
                         >
-                            <Typography
-                                variant="h5"
-                                style={{
-                                    color: `${theme.palette.common.orangeColor}`,
-                                }}
-                            >
-                                <b>Stay Connected</b>
-                            </Typography>
+                            <b>STAY CONNECTED</b>
                         </Typography>
 
-                        <IconButton style={{marginTop: "20px"}}>
+                        <IconButton
+                            style={{ marginTop: "20px", marginBottom: "20px" }}
+                        >
                             <FacebookIcon color="primary" />
                         </IconButton>
 
-                        <IconButton style={{marginTop: "20px"}}>
+                        <IconButton
+                            style={{ marginTop: "20px", marginBottom: "20px" }}
+                        >
                             <InstagramIcon color="primary" />
                         </IconButton>
 
-                        <IconButton style={{marginTop: "20px"}}>
+                        <IconButton
+                            style={{ marginTop: "20px", marginBottom: "20px" }}
+                        >
                             <MailIcon color="primary" />
                         </IconButton>
 
-                        <IconButton style={{marginTop: "20px"}}>
+                        <IconButton
+                            style={{ marginTop: "20px", marginBottom: "20px" }}
+                        >
                             <TwitterIcon color="primary" />
                         </IconButton>
                     </center>
@@ -137,30 +134,23 @@ const Footer = () => {
                 <Grid
                     item
                     xs={12}
-                    sm={12}
+                    sm={6}
                     md={4}
                     className={classes.spaceBetween}
                 >
                     <center>
                         <Typography
-                            variant="button"
+                            variant="h5"
                             style={{
                                 color: `${theme.palette.common.orangeColor}`,
                             }}
                         >
-                            <Typography
-                                variant="h5"
-                                style={{
-                                    color: `${theme.palette.common.orangeColor}`,
-                                }}
-                            >
-                                <b>Contact US</b>
-                            </Typography>
+                            <b>CONTACT US</b>
                         </Typography>
                         <Typography
                             style={{
                                 color: `${theme.palette.common.ternaryColor}`,
-                                marginTop: "20px"
+                                marginTop: "20px",
                             }}
                             fontFamily="Open Sans"
                         >
@@ -186,17 +176,40 @@ const Footer = () => {
                     </center>
                 </Grid>
 
-                <Grid item xs={12} sm={12} md={12}>
-                    <Typography
-                        variant="subtitle1"
-                        style={{
-                            color: `${theme.palette.primary.main}`,
-                            marginTop: "20px",
-                            placeSelf: "center"
-                        }}
-                        fontFamily="Open Sans"
-                    >
-                        <center><strong>Copyright Reserved © 2021 | <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" height="15" style={{placeSelf: "center"}}/> <a href="https://github.com/hetsuthar028" target="_blank" style={{color: 'inherit', textDecoration: 'none'}}>Het Suthar</a></strong></center>
+                <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={12}
+                    style={{
+                        color: `${theme.palette.primary.main}`,
+                        marginTop: "20px",
+                        placeSelf: "center",
+                    }}
+                >
+                    <Typography variant="subtitle1" fontFamily="Open Sans">
+                        <center>
+                            <strong>
+                                Copyright Reserved © 2021 |{" "}
+                                <img
+                                    src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+                                    height="15"
+                                    style={{ placeSelf: "center" }}
+                                    alt="GitHub"
+                                />{" "}
+                                <a
+                                    href="https://github.com/hetsuthar028"
+                                    target="_blank"
+                                    style={{
+                                        color: "inherit",
+                                        textDecoration: "none",
+                                    }}
+                                    rel="noreferrer"
+                                >
+                                    Het Suthar
+                                </a>
+                            </strong>
+                        </center>
                     </Typography>
                 </Grid>
             </Grid>

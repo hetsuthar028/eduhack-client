@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
-import axios from "axios";
 import { makeStyles } from "@material-ui/core";
 import "./OverviewHackathon.css";
 
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Overviewhackathon = () => {
-    const [currentUser, setCurrentUser] = useState(null);
+    // const [currentUser, setCurrentUser] = useState(null);
 
     const classes = useStyles();
 
@@ -41,24 +40,24 @@ const Overviewhackathon = () => {
     ];
 
     useEffect(() => {
-        axios
-            .get("http://localhost:4200/api/user/currentuser", {
-                headers: {
-                    authentication: localStorage.getItem("session"),
-                },
-            })
-            .then((response) => {
-                if (response.data.currentUser) {
-                    setCurrentUser(response.data.currentUser);
-                } else {
-                    // Push outside of the application
-                }
-            })
-            .catch((err) => {
-                console.log(
-                    "Error in OverviewHackathon - While fetching current user"
-                );
-            });
+        // axios
+        //     .get("http://localhost:4200/api/user/currentuser", {
+        //         headers: {
+        //             authentication: localStorage.getItem("session"),
+        //         },
+        //     })
+        //     .then((response) => {
+        //         if (response.data.currentUser) {
+        //             setCurrentUser(response.data.currentUser);
+        //         } else {
+        //             // Push outside of the application
+        //         }
+        //     })
+        //     .catch((err) => {
+        //         console.log(
+        //             "Error in OverviewHackathon - While fetching current user"
+        //         );
+        //     });
     }, []);
 
     return (
@@ -67,22 +66,23 @@ const Overviewhackathon = () => {
             <Container style={{ marginTop: "20px" }}>
                 <Grid
                     container
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    spacing={{ xs: 2, md: 4 }}
+                    // xs={12}
+                    // sm={12}
+                    // md={12}
+                    // spacing={{ xs: 2, md: 4 }}
                     className={classes.overviewContainer}
                 >
                     {/* 1st Title Section */}
-                    <Grid item direction="column">
+                    <Grid item>
                         <img
                             src="https://source.unsplash.com/random"
                             height={150}
                             width={150}
                             style={{ borderRadius: "10px" }}
+                            alt="EduHack"
                         />
                     </Grid>
-                    <Grid item direction="column">
+                    <Grid item>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -140,12 +140,12 @@ const Overviewhackathon = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={7} sm={7} md={7}>
-                        <Typography
-                            variant="body1"
-                            className={classes.mainFont}
-                            fontFamily="Open Sans"
-                        >
-                            <ul>
+                        <ul>
+                            <Typography
+                                variant="body1"
+                                className={classes.mainFont}
+                                fontFamily="Open Sans"
+                            >
                                 <li> Easy to Use and Manage Hackathons </li>
                                 <li> Arrange Hackathons on the go... </li>
                                 <li> Less burden of handling records </li>
@@ -155,14 +155,15 @@ const Overviewhackathon = () => {
                                     Hackathon Summary/Statistics available{" "}
                                 </li>
                                 <li> Manage sponsors & prizes</li>
-                            </ul>
-                        </Typography>
+                            </Typography>
+                        </ul>
                     </Grid>
                     <Grid item xs={5} sm={5} md={5}>
                         <img
                             src="https://source.unsplash.com/random"
                             width="100%"
                             height={200}
+                            alt="Success Story"
                         />
                     </Grid>
 
@@ -182,6 +183,7 @@ const Overviewhackathon = () => {
                             width="40%"
                             height="65%"
                             style={{ borderRadius: "50%" }}
+                            alt="Success Story"
                         />
                     </Grid>
                     <Grid item xs={12} sm={7} md={7}>
@@ -216,7 +218,9 @@ const Overviewhackathon = () => {
                     <Grid item xs={12} sm={12} md={12}>
                         {/* <img src="https://source.unsplash.com/random"  width="100%" height={200} style={{borderRadius: "50px"}}/>  */}
 
-                        <Stepper style={{maxWidth: "100vw", overflow: "auto"}}>
+                        <Stepper
+                            style={{ maxWidth: "100vw", overflow: "auto" }}
+                        >
                             {steps.map((label, index) => {
                                 const stepProps = {};
                                 const labelProps = {};
@@ -244,12 +248,13 @@ const Overviewhackathon = () => {
                     </Grid>
                     <Grid item xs={12} sm={12} md={12}>
                         {/* <img src="https://source.unsplash.com/random"  width="100%" height={200} style={{borderRadius: "50px"}}/>  */}
-                        <Typography
-                            variant="body1"
-                            className={classes.mainFont}
-                            fontFamily="Open Sans"
-                        >
-                            <ul>
+
+                        <ul>
+                            <Typography
+                                variant="body1"
+                                className={classes.mainFont}
+                                fontFamily="Open Sans"
+                            >
                                 <li>
                                     The data provided by organizers is correct
                                     and they're take assurity for the same.
@@ -273,8 +278,8 @@ const Overviewhackathon = () => {
                                     share data with any third parties for any
                                     purpose.
                                 </li>
-                            </ul>
-                        </Typography>
+                            </Typography>
+                        </ul>
                     </Grid>
 
                     {/* Organize Hackathon Button */}
@@ -312,7 +317,7 @@ const Overviewhackathon = () => {
                             className={classes.mainFont}
                             fontFamily="Open Sans"
                         >
-                            Email : 
+                            Email :
                         </Typography>
                         <TextField />
                     </Grid>
@@ -328,7 +333,7 @@ const Overviewhackathon = () => {
                             className={classes.mainFont}
                             fontFamily="Open Sans"
                         >
-                            Description : 
+                            Description :
                         </Typography>
                         <TextField />
                     </Grid>
@@ -337,7 +342,7 @@ const Overviewhackathon = () => {
                         xs={12}
                         sm={4}
                         md={4}
-                        style={{ placeSelf: "center"}}
+                        style={{ placeSelf: "center" }}
                     >
                         <Button variant="contained">Submit Query</Button>
                     </Grid>

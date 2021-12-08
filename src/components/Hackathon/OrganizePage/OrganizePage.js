@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router";
 import NavBar from "../../navbar/NavBar";
 import Footer from "../../footer/Footer";
-import theme from "../../ui/Theme";
+// import theme from "../../ui/Theme";
 import { makeStyles } from "@material-ui/core";
 import {
     Grid,
@@ -141,7 +141,7 @@ const Organizepage = () => {
     const [isFormValid, setIsFormValid] = useState(false);
 
     const [probStatementCSV, setProbStatementCSV] = useState(null);
-    const [csvResult, setCsvResult] = useState([]);
+    // const [csvResult, setCsvResult] = useState([]);
 
     const { TblContainer, TblHead, TblPagination } = useTable(
         values.problemStatements,
@@ -185,7 +185,7 @@ const Organizepage = () => {
                         const multiErrors = err.response.data.errors;
                         let errorMessage = "";
                         multiErrors.map((er) => {
-                            errorMessage += `${er.column} ` + `${er.error}\n`;
+                            return errorMessage += `${er.column} ${er.error}\n`;
                         });
 
                         setShowBanner({ apiErrorResponse: errorMessage });
@@ -198,7 +198,7 @@ const Organizepage = () => {
             });
     };
 
-    const results = [];
+    // const results = [];
 
     useEffect(() => {
         try {
@@ -220,7 +220,7 @@ const Organizepage = () => {
                         });
                         return history.push("/auth/signin");
                     }
-                    if (responses.data.currentUser.userType == "developer") {
+                    if (responses.data.currentUser.userType === "developer") {
                         setShowBanner({
                             apiErrorResponse:
                                 "You're not allowed to create hackathons!\nPlease SignIn using an Organization account.",
@@ -259,7 +259,7 @@ const Organizepage = () => {
         const fieldErrors = [];
         const hErrors = { ...errors };
 
-        if (name == "hackTitle" && fieldValue.length < 8) {
+        if (name === "hackTitle" && fieldValue.length < 8) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 8
@@ -267,7 +267,7 @@ const Organizepage = () => {
             );
         }
 
-        if (name == "hackCompanyName" && fieldValue.length < 5) {
+        if (name === "hackCompanyName" && fieldValue.length < 5) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 8
@@ -275,7 +275,7 @@ const Organizepage = () => {
             );
         }
 
-        if (name == "regStart" && fieldValue) {
+        if (name === "regStart" && fieldValue) {
             let currentDate = new Date();
             let fieldDate = new Date(fieldValue);
 
@@ -288,7 +288,7 @@ const Organizepage = () => {
             }
         }
 
-        if (name == "regEnd" && fieldValue) {
+        if (name === "regEnd" && fieldValue) {
             let currentDate = new Date();
             let fieldDate = new Date(fieldValue);
             let startDate = new Date(values.regStart);
@@ -302,7 +302,7 @@ const Organizepage = () => {
             }
         }
 
-        if (name == "hackStart" && fieldValue) {
+        if (name === "hackStart" && fieldValue) {
             let fieldDate = new Date(fieldValue);
             let regEndDate = new Date(values.regEnd);
 
@@ -315,7 +315,7 @@ const Organizepage = () => {
             }
         }
 
-        if (name == "hackEnd" && fieldValue) {
+        if (name === "hackEnd" && fieldValue) {
             let fieldDate = new Date(fieldValue);
             let hackStartDate = new Date(values.hackStart);
 
@@ -328,7 +328,7 @@ const Organizepage = () => {
             }
         }
 
-        if (name == "totalApplications" && parseInt(fieldValue) <= 0) {
+        if (name === "totalApplications" && parseInt(fieldValue) <= 0) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid total number of applications.
@@ -336,7 +336,7 @@ const Organizepage = () => {
             );
         }
 
-        if (name == "hackDescription" && fieldValue.length < 50) {
+        if (name === "hackDescription" && fieldValue.length < 50) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 50 characters.
@@ -344,7 +344,7 @@ const Organizepage = () => {
             );
         }
 
-        if (name == "submissionGuidelines" && fieldValue.length < 10) {
+        if (name === "submissionGuidelines" && fieldValue.length < 10) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 10
@@ -353,11 +353,11 @@ const Organizepage = () => {
         }
 
         if (
-            (name == "companyWebsite" ||
-                name == "facebook" ||
-                name == "linkedIn" ||
-                name == "instagram" ||
-                name == "twitter") &&
+            (name === "companyWebsite" ||
+                name === "facebook" ||
+                name === "linkedIn" ||
+                name === "instagram" ||
+                name === "twitter") &&
             !validateURL(fieldValue)
         ) {
             fieldErrors.push(
@@ -368,9 +368,9 @@ const Organizepage = () => {
         }
 
         if (
-            (name == "firstPrizeDesc" ||
-                name == "secondPrizeDesc" ||
-                name == "thirdPrizeDesc") &&
+            (name === "firstPrizeDesc" ||
+                name === "secondPrizeDesc" ||
+                name === "thirdPrizeDesc") &&
             fieldValue.length < 10
         ) {
             fieldErrors.push(
@@ -913,11 +913,11 @@ const Organizepage = () => {
                                     <Button
                                         variant="contained"
                                         size="small"
-                                        style={{ marginLeft: "auto" }}
                                         onClick={() => setOpenPopup(true)}
                                         style={{
                                             display: "flex",
                                             float: "right",
+                                            marginLeft: "auto"
                                         }}
                                     >
                                         Add Problem Statement
@@ -926,7 +926,6 @@ const Organizepage = () => {
                                     <Button
                                         variant="contained"
                                         size="small"
-                                        style={{ marginLeft: "auto" }}
                                         onClick={() => {
                                             document
                                                 .getElementById("csvUpload")
@@ -936,6 +935,7 @@ const Organizepage = () => {
                                             display: "flex",
                                             float: "right",
                                             marginRight: "10px",
+                                            marginLeft: "auto"
                                         }}
                                     >
                                         Import from Excel
@@ -951,12 +951,12 @@ const Organizepage = () => {
                                     <Button
                                         variant="contained"
                                         size="small"
-                                        style={{ marginLeft: "auto" }}
                                         href="https://firebasestorage.googleapis.com/v0/b/eduhack-ea18b.appspot.com/o/hackathons%2Fdefault_files%2FProblem_Statements.xlsx?alt=media&token=fae5b021-f685-4d0b-9245-68e749bf65b6"
                                         style={{
                                             display: "flex",
                                             float: "right",
                                             marginRight: "10px",
+                                            marginLeft: "auto"
                                         }}
                                     >
                                         Excel Format
@@ -1086,7 +1086,7 @@ const Organizepage = () => {
                                     item
                                     sm={12}
                                     md={12}
-                                    sm={12}
+                                    xs={12}
                                     className={classes.innerGrid}
                                 >
                                     <TextField
@@ -1334,6 +1334,7 @@ const Organizepage = () => {
                                                         sponsor.sponsorWebLink
                                                     }
                                                     target="_blank"
+                                                    rel="noreferrer"
                                                 >
                                                     <img
                                                         src="https://source.unsplash.com/random"
@@ -1346,6 +1347,7 @@ const Organizepage = () => {
                                                         className={
                                                             classes.imageSponsor
                                                         }
+                                                        alt={sponsor.sponsorName}
                                                     />
                                                 </a>
                                             </div>
@@ -1424,6 +1426,7 @@ const Organizepage = () => {
                                                             classes.imageIcon
                                                         }
                                                         src={firstPrize}
+                                                        alt="First Prize"
                                                     />
                                                 </Icon>
                                             ),
@@ -1474,6 +1477,7 @@ const Organizepage = () => {
                                                             classes.imageIcon
                                                         }
                                                         src={secondPrize}
+                                                        alt="Second Prize"
                                                     />
                                                 </Icon>
                                             ),
@@ -1524,6 +1528,7 @@ const Organizepage = () => {
                                                             classes.imageIcon
                                                         }
                                                         src={thirdPrize}
+                                                        alt="Third Prize"
                                                     />
                                                 </Icon>
                                             ),

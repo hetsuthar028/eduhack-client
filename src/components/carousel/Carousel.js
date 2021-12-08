@@ -31,7 +31,7 @@ const Carousel = (props) => {
     return (
         <div className="slider-container">
             {defaultSliders && (
-                <>
+                <div>
                     <Slidercontent
                         activeIndex={activeIndex}
                         imageSlider={imageSlider}
@@ -53,10 +53,10 @@ const Carousel = (props) => {
                         imageSlider={imageSlider}
                         onclick={(activeIndex) => setActiveIndex(activeIndex)}
                     />
-                </>
+                </div>
             )}
             {!defaultSliders && (
-                <>
+                <div>
                     <Slidercontent
                         activeIndex={activeIndex}
                         imageSlider={sliders}
@@ -78,7 +78,7 @@ const Carousel = (props) => {
                         imageSlider={sliders}
                         onclick={(activeIndex) => setActiveIndex(activeIndex)}
                     />
-                </>
+                </div>
             )}
         </div>
     );

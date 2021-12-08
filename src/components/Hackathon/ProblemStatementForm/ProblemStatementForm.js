@@ -63,7 +63,7 @@ const Problemstatementform = (props) => {
         const fieldErrors = [];
         const hErrors = { ...errors };
 
-        if (name == "probTitle" && fieldValue.length < 10) {
+        if (name === "probTitle" && fieldValue.length < 10) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 10
@@ -71,7 +71,7 @@ const Problemstatementform = (props) => {
             );
         }
 
-        if (name == "probDescription" && fieldValue.length < 30) {
+        if (name === "probDescription" && fieldValue.length < 30) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     MinLength should be 30
@@ -79,7 +79,7 @@ const Problemstatementform = (props) => {
             );
         }
 
-        if (name == "probRefLinks" && fieldValue.length < 5) {
+        if (name === "probRefLinks" && fieldValue.length < 5) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid Input
@@ -87,7 +87,7 @@ const Problemstatementform = (props) => {
             );
         }
 
-        if (name == "probAcceptedTechs" && fieldValue.length < 5) {
+        if (name === "probAcceptedTechs" && fieldValue.length < 5) {
             fieldErrors.push(
                 <p className={classes.errorMessage} name={name}>
                     Invalid Input
@@ -142,7 +142,7 @@ const Problemstatementform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -171,7 +171,7 @@ const Problemstatementform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -248,7 +248,7 @@ const Problemstatementform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -283,7 +283,7 @@ const Problemstatementform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <TextField
@@ -313,7 +313,7 @@ const Problemstatementform = (props) => {
                         item
                         sm={12}
                         md={12}
-                        sm={12}
+                        xs={12}
                         className={classes.innerGrid}
                     >
                         <center>

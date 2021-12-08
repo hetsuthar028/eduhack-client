@@ -59,17 +59,17 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const tempPrizes = [1, 2, 3];
-const tempProblemStatements = [1, 2, 3, 4];
+// const tempPrizes = [1, 2, 3];
+// const tempProblemStatements = [1, 2, 3, 4];
 
 const formatDate = (date, t) => {
     let tempDate = new Date(date);
-    if (t == 1) {
+    if (t === 1) {
         tempDate.setDate(tempDate.getDate() - 1);
         return `${tempDate.getDate()}/${
             tempDate.getMonth() + 1
         }/${tempDate.getFullYear()}`;
-    } else if (t == 0) {
+    } else if (t === 0) {
         return `${tempDate.getDate()}/${
             tempDate.getMonth() + 1
         }/${tempDate.getFullYear()}`;
@@ -100,27 +100,27 @@ const Hackathonmain = (props) => {
         }, 4000);
     };
 
-    const checkregistration = () => {
-        axios
-            .post(
-                `http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`,
-                {
-                    currentUser: currentUser,
-                }
-            )
-            .then((responses) => {
-                if (responses.data.message == "already registered") {
-                    setRegistrationStatus(true);
-                    console.log("Already registered", registrationStatus);
-                } else {
-                    setRegistrationStatus(false);
-                    console.log("Not registered", registrationStatus);
-                }
-            })
-            .catch((err) => {
-                console.log("Error registration check", err);
-            });
-    };
+    // const checkregistration = () => {
+    //     axios
+    //         .post(
+    //             `http://localhost:4400/api/hackathon/get/checkregistration/${props.match.params.id}`,
+    //             {
+    //                 currentUser: currentUser,
+    //             }
+    //         )
+    //         .then((responses) => {
+    //             if (responses.data.message === "already registered") {
+    //                 setRegistrationStatus(true);
+    //                 console.log("Already registered", registrationStatus);
+    //             } else {
+    //                 setRegistrationStatus(false);
+    //                 console.log("Not registered", registrationStatus);
+    //             }
+    //         })
+    //         .catch((err) => {
+    //             console.log("Error registration check", err);
+    //         });
+    // };
 
     const handleParticipate = (e) => {
         e.preventDefault();
@@ -131,20 +131,20 @@ const Hackathonmain = (props) => {
                 return history.push("/auth/signin");
             }
 
-            if (currentUser.userType == "organization") {
+            if (currentUser.userType === "organization") {
                 return setShowBanner({
                     apiSuccessResponse:
                         "You can't register to a hackathon as an organization user! Kindly Sign In through developer's account.",
                 });
             }
 
-            if (regStartStatus == false) {
+            if (regStartStatus === false) {
                 return setShowBanner({
                     apiErrorResponse:
                         "Registrations haven't started yet! Kindly verify start date.",
                 });
             }
-            if (hackathonAllowParticipantStatus == false) {
+            if (hackathonAllowParticipantStatus === false) {
                 return setShowBanner({
                     apiErrorResponse:
                         "Hackathon is already ended! Can't register now.",
@@ -165,7 +165,7 @@ const Hackathonmain = (props) => {
                 )
                 .then((responses) => {
                     if (
-                        responses.data.register_user_db ==
+                        responses.data.register_user_db ===
                         "registered successfully"
                     ) {
                         setShowBanner({
@@ -181,20 +181,20 @@ const Hackathonmain = (props) => {
                 })
                 .catch((err) => {
                     console.log("ERROR MESSAGE =", err.response?.data);
-                    if (err.response?.data == "Not Authorized") {
+                    if (err.response?.data === "Not Authorized") {
                         setShowBanner({ apiErrorResponse: err.response?.data });
                         return history.push("/dashboard");
                     }
-                    if (err.response?.data == "Not Authenticated") {
+                    if (err.response?.data === "Not Authenticated") {
                         setShowBanner({ apiErrorResponse: err.response?.data });
                         return history.push("/auth/signin");
                     }
-                    if (err.response?.data == "Already registered") {
+                    if (err.response?.data === "Already registered") {
                         return setShowBanner({
                             apiErrorResponse: err.response?.data,
                         });
                     }
-                    if (err.response?.data == "Participant limit exceeded") {
+                    if (err.response?.data === "Participant limit exceeded") {
                         return setShowBanner({
                             apiErrorResponse: err.response?.data,
                         });
@@ -232,7 +232,7 @@ const Hackathonmain = (props) => {
                     if (
                         !response.data.currentUser ||
                         response.data.currentUser === undefined ||
-                        Object.keys(response.data.currentUser).length == 0
+                        Object.keys(response.data.currentUser).length === 0
                     ) {
                         setShowBanner({
                             apiErrorResponse: "You must be Signed In!",
@@ -249,7 +249,7 @@ const Hackathonmain = (props) => {
                         )
                         .then((responses) => {
                             if (
-                                responses.data.message == "already registered"
+                                responses.data.message === "already registered"
                             ) {
                                 setRegistrationStatus(true);
                                 console.log(
@@ -355,7 +355,7 @@ const Hackathonmain = (props) => {
                                                 );
                                                 if (
                                                     winnerResp.data.data
-                                                        .length != 0
+                                                        .length !== 0
                                                 ) {
                                                     console.log(
                                                         "SEtting winners"
@@ -387,7 +387,7 @@ const Hackathonmain = (props) => {
                                     );
                                     // setShowBanner({apiErrorResponse: err.response?.data})
                                     if (
-                                        err.response?.data ==
+                                        err.response?.data ===
                                         "Hackathon doesn't exists!"
                                     ) {
                                         setShowBanner({
@@ -397,7 +397,7 @@ const Hackathonmain = (props) => {
                                         return history.push("/dashboard");
                                     }
 
-                                    if (err.response?.data == "Invalid user") {
+                                    if (err.response?.data === "Invalid user") {
                                         return history.push("/auth/signin");
                                     } else {
                                         console.log(
@@ -430,8 +430,7 @@ const Hackathonmain = (props) => {
                 <NavBar location="dashboard" />
 
                 {/* Parent Container */}
-                <Typography fontFamily="Open Sans">
-                    <Grid container sm={12} xs={12} md={12}>
+                    <Grid container>
                         {/* Carousel */}
                         <Grid item xs={12} sm={12} md={12}>
                             <Carousel
@@ -448,7 +447,7 @@ const Hackathonmain = (props) => {
                             md={4}
                             className={classes.innerGrid}
                         >
-                            <Grid container sm={12} xs={12} md={12}>
+                            <Grid container>
                                 <Grid item xs={12} sm={12} md={12}>
                                     <center>
                                         <Typography
@@ -527,7 +526,7 @@ const Hackathonmain = (props) => {
                             md={4}
                             className={classes.innerGrid}
                         >
-                            <Grid container sm={12} xs={12} md={12}>
+                            <Grid container>
                                 <Grid item xs={12} sm={12} md={12}>
                                     <center>
                                         <Typography
@@ -703,7 +702,7 @@ const Hackathonmain = (props) => {
 
                         {/* Winning Prizes Details */}
                         <Container>
-                            <Grid container sm={12} xs={12} md={12}>
+                            <Grid container>
                                 {[
                                     "firstPrizeDesc",
                                     "secondPrizeDesc",
@@ -715,8 +714,9 @@ const Hackathonmain = (props) => {
                                         sm={6}
                                         md={4}
                                         className={classes.innerGrid}
+                                        key={tempPrize}
                                     >
-                                        <Card classes={classes.card}>
+                                        <Card>
                                             <CardActionArea>
                                                 <CardMedia
                                                     component="div"
@@ -729,7 +729,8 @@ const Hackathonmain = (props) => {
                                                 >
                                                     <img
                                                         src={getIcon(tempPrize)}
-                                                        maxHeight="100%"
+                                                        maxheight="100%"
+                                                        alt="Icon"
                                                     />
                                                 </CardMedia>
                                                 <CardContent
@@ -756,7 +757,7 @@ const Hackathonmain = (props) => {
                                                                         (
                                                                             winner
                                                                         ) =>
-                                                                            winner.prize ==
+                                                                            winner.prize ===
                                                                             tempPrize.substring(
                                                                                 0,
                                                                                 tempPrize.length -
@@ -779,7 +780,7 @@ const Hackathonmain = (props) => {
                                                                 ?.split(", ")
                                                                 .map(
                                                                     (prize) => (
-                                                                        <li>
+                                                                        <li key={prize}>
                                                                             {
                                                                                 prize
                                                                             }
@@ -824,7 +825,7 @@ const Hackathonmain = (props) => {
                                     borderColor: theme.palette.secondary.main,
                                 }}
                             >
-                                <Grid container sm={12} md={12} xs={12}>
+                                <Grid container>
                                     <Grid
                                         item
                                         xs={6}
@@ -940,6 +941,7 @@ const Hackathonmain = (props) => {
                                 md={12}
                                 sm={12}
                                 className={classes.probStatementGrid}
+                                key={problemStatement.id}
                             >
                                 <Paper
                                     elevation={5}
@@ -950,9 +952,6 @@ const Hackathonmain = (props) => {
                                 >
                                     <Grid
                                         container
-                                        sm={12}
-                                        md={12}
-                                        xs={12}
                                         className={classes.justifiedText}
                                     >
                                         <Grid
@@ -1053,11 +1052,13 @@ const Hackathonmain = (props) => {
                                 sm={6}
                                 md={3}
                                 className={classes.innerGrid}
+                                key={sponsor.webLink}
                             >
                                 <a
                                     key={sponsor}
                                     href={sponsor.webLink}
                                     target="_blank"
+                                    rel="noreferrer"
                                 >
                                     <img
                                         src={sponsor.imageLink}
@@ -1068,12 +1069,12 @@ const Hackathonmain = (props) => {
                                             boxShadow: "5px 5px 10px #ccc",
                                             padding: "5px",
                                         }}
+                                        alt="Sponsor"
                                     />
                                 </a>
                             </Grid>
                         ))}
                     </Grid>
-                </Typography>
 
                 <Footer />
             </div>

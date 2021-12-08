@@ -54,13 +54,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const tableHeadCells = [
-    { id: "userEmail", label: "Email" },
-    { id: "fullName", label: "Full Name" },
-    { id: "userName", label: "Username" },
-    { id: "submissionLink", label: "Submission Link" },
-    { id: "timeStamp", label: "Timestamp" },
-];
+// const tableHeadCells = [
+//     { id: "userEmail", label: "Email" },
+//     { id: "fullName", label: "Full Name" },
+//     { id: "userName", label: "Username" },
+//     { id: "submissionLink", label: "Submission Link" },
+//     { id: "timeStamp", label: "Timestamp" },
+// ];
 
 const defaultWinners = {
     firstPrize: "",
@@ -82,10 +82,10 @@ const Hackathonsummary = (props) => {
     const [winnersInput, setWinnersInput] = useState(defaultWinners);
     const [hasWinners, setHasWinners] = useState(null);
 
-    const { TblContainer, TblHead, TblPagination } = useTable(
-        submissions,
-        tableHeadCells
-    );
+    // const { TblContainer, TblHead, TblPagination } = useTable(
+    //     submissions,
+    //     tableHeadCells
+    // );
 
     const [
         selectedProblemStatementSubmissions,
@@ -103,17 +103,17 @@ const Hackathonsummary = (props) => {
     const handleSelectChange = (e) => {
         setCurrentProblemStatement(e.target.value);
         setSelectedProblemStatementSubmissions(
-            submissions.filter((sub) => sub.problemStatID == e.target.value)
+            submissions.filter((sub) => sub.problemStatID === e.target.value)
         );
         filterSubmissionsOnChange(e.target.value);
     };
 
     const getUserFromLocal = (email) => {
-        return submittedUsers.filter((user) => email == user.email);
+        return submittedUsers.filter((user) => email === user.email);
     };
 
     const filterSubmissionsOnChange = (probID) => {
-        return filteredSubmissions.filter((sub) => sub.problemStatID == probID);
+        return filteredSubmissions.filter((sub) => sub.problemStatID === probID);
     };
 
     const handleWinnersChange = (e) => {
@@ -142,7 +142,7 @@ const Hackathonsummary = (props) => {
     const announceWinnersHandler = (e) => {
         e.preventDefault();
         try {
-            let { firstPrize, secondPrize, thirdPrize } = winnersInput;
+            // let { firstPrize, secondPrize, thirdPrize } = winnersInput;
             console.log("Winners", winnersInput);
             axios
                 .post(`http://localhost:4400/api/hackathon/announce/winners`, {
@@ -151,7 +151,7 @@ const Hackathonsummary = (props) => {
                 })
                 .then((resp) => {
                     console.log("Winners Resp", resp);
-                    if (resp.data.success == true) {
+                    if (resp.data.success === true) {
                         return setShowBanner({
                             apiSuccessResponse:
                                 "Winners added Successfully! 🤩👨‍🎓",
@@ -180,7 +180,7 @@ const Hackathonsummary = (props) => {
                     if (
                         !responses.data.currentUser ||
                         responses.data.currentUser === undefined ||
-                        Object.keys(responses.data.currentUser).length == 0
+                        Object.keys(responses.data.currentUser).length === 0
                     ) {
                         setShowBanner({
                             apiErrorResponse: "You must be signed in!",
@@ -188,7 +188,7 @@ const Hackathonsummary = (props) => {
                         return history.push("/auth/signin");
                     }
 
-                    if (responses.data.currentUser.userType == "developer") {
+                    if (responses.data.currentUser.userType === "developer") {
                         setShowBanner({
                             apiSuccessResponse: "You're not authorized!",
                         });
@@ -251,7 +251,7 @@ const Hackathonsummary = (props) => {
                                                 winnerResp
                                             );
                                             if (
-                                                winnerResp.data.data.length != 0
+                                                winnerResp.data.data.length !== 0
                                             ) {
                                                 setHasWinners(true);
                                                 changeDefaultWinners(
@@ -282,7 +282,7 @@ const Hackathonsummary = (props) => {
                         .catch((err) => {
                             console.log("Summary Catch", err);
                             if (
-                                err.response?.data ==
+                                err.response?.data ===
                                 "Hackathon doesn't exists!"
                             ) {
                                 setShowBanner({
@@ -291,7 +291,7 @@ const Hackathonsummary = (props) => {
                                 return history.push("/dashboard");
                             }
 
-                            if (err.response?.data == "Invalid user") {
+                            if (err.response?.data === "Invalid user") {
                                 return history.push("/auth/login");
                             } else {
                                 console.log("Error connecting to Server!");
@@ -310,13 +310,12 @@ const Hackathonsummary = (props) => {
         filteredSubmissions &&
         hasWinners != null && (
             <div>
-                <Typography fontFamily="Open Sans">
                     <NavBar location="dashboard" />
 
                     {/* Body Container Grid */}
-                    <Grid container sm={12} xs={12} md={12}>
+                    <Grid container>
                         {/* Top Carousel */}
-                        <Carousel defaultSliders={true} />
+                        <Carousel sliders={sliders} />
 
                         {/* Submission Status Title */}
                         <Grid item xs={12} md={12} sm={12} />
@@ -410,7 +409,7 @@ const Hackathonsummary = (props) => {
                             style={{ maxHeight: "80vh", overflow: "auto" }}
                         >
                             {/* Validating if User has selected any current problem statement */}
-                            {currentProblemStatement && filteredSubmissions.length !=0 ? (
+                            {currentProblemStatement && filteredSubmissions.length !== 0 ? (
                                 <>
                                     {/* Table Header */}
                                     <Grid
@@ -435,9 +434,6 @@ const Hackathonsummary = (props) => {
                                         >
                                             <Grid
                                                 container
-                                                sm={12}
-                                                md={12}
-                                                xs={12}
                                             >
                                                 <Grid
                                                     item
@@ -594,9 +590,6 @@ const Hackathonsummary = (props) => {
                                             >
                                                 <Grid
                                                     container
-                                                    sm={12}
-                                                    md={12}
-                                                    xs={12}
                                                 >
                                                     <Grid
                                                         item
@@ -769,7 +762,7 @@ const Hackathonsummary = (props) => {
                                 style={{ padding: "20px 0" }}
                             >
                                 <form onSubmit={announceWinnersHandler}>
-                                    <Grid container xs={12} md={12} sm={12}>
+                                    <Grid container>
                                         {/* 1st Row */}
                                         <Grid item xs={3} sm={3} md={3}></Grid>
                                         <Grid
@@ -799,6 +792,7 @@ const Hackathonsummary = (props) => {
                                                                     classes.imageIcon
                                                                 }
                                                                 src={firstPrize}
+                                                                alt="1st"
                                                             />
                                                         </Icon>
                                                     ),
@@ -840,6 +834,7 @@ const Hackathonsummary = (props) => {
                                                                 src={
                                                                     secondPrize
                                                                 }
+                                                                alt="2nd"
                                                             />
                                                         </Icon>
                                                     ),
@@ -879,6 +874,7 @@ const Hackathonsummary = (props) => {
                                                                     classes.imageIcon
                                                                 }
                                                                 src={thirdPrize}
+                                                                alt="3rd"
                                                             />
                                                         </Icon>
                                                     ),
@@ -915,7 +911,6 @@ const Hackathonsummary = (props) => {
                     </Grid>
 
                     <Footer />
-                </Typography>
             </div>
         )
     );

@@ -48,7 +48,7 @@ export default function BasicTabs() {
     };
 
     return (
-        <Box sx={{ width: "100%" }}>
+        <Grid container sx={{ width: "100%" }}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs
                     value={value}
@@ -65,10 +65,6 @@ export default function BasicTabs() {
             <TabPanel value={value} index={0}>
                 <Grid
                     container
-                    sm={12}
-                    xs={12}
-                    md={12}
-                    spacing={{ xs: 2, md: 2 }}
                 >
                     <Grid item xs={12} sm={6} md={2.4}>
                         <Articlecard />
@@ -108,6 +104,6 @@ export default function BasicTabs() {
             <TabPanel value={value} index={4}>
                 Data Structures
             </TabPanel>
-        </Box>
+        </Grid>
     );
 }

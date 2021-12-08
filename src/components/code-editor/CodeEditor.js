@@ -6,7 +6,6 @@ import "codemirror/mode/javascript/javascript";
 import "codemirror/mode/clike/clike";
 import { Controlled as ControlledEditor } from "react-codemirror2";
 import {
-    Box,
     Grid,
     Paper,
     FormControl,
@@ -19,10 +18,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import "./CodeEditor.css";
-import theme from "../ui/Theme";
 import axios from "axios";
-import getIcon from "../../static/Icons/getIcon";
-import CircleIcon from "@mui/icons-material/Circle";
 import stub from "./defaultStub";
 
 const useStyles = makeStyles((theme) => ({
@@ -105,12 +101,12 @@ const Codeeditor = (props) => {
         stub["javascript"] = "";
         stub["python"] = "";
 
-        if (props.defaultCode != undefined || props.defaultCode) {
+        if (props.defaultCode !== undefined || props.defaultCode) {
             console.log("Def code", props.defaultCode);
             setCode(props.defaultCode);
         }
 
-        if (props.question != undefined && props.question) {
+        if (props.question !== undefined && props.question) {
             console.log("Question inside CodeEditor", props.question);
             setTempQuestionData(props.question);
         }
@@ -137,7 +133,7 @@ const Codeeditor = (props) => {
             content: code,
         };
 
-        if (Object.keys(tempQuestionData).length != 0 && tempQuestionData) {
+        if (Object.keys(tempQuestionData).length !== 0 && tempQuestionData) {
             console.log();
             payload["questionId"] = tempQuestionData["_id"];
 
@@ -199,10 +195,9 @@ const Codeeditor = (props) => {
 
     return (
         <div className="editor-container">
-            <Grid container xs={12} sm={12} md={12}>
+            <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
                     <Paper
-                        variant="outlined"
                         elevation={3}
                         className={classes.codeEditorHeader}
                     >

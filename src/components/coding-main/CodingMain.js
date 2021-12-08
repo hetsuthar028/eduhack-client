@@ -66,7 +66,7 @@ const Codingmain = (props) => {
                 if (
                     !responses.data.currentUser ||
                     responses.data.currentUser === undefined ||
-                    Object.keys(responses.data.currentUser).length == 0
+                    Object.keys(responses.data.currentUser).length === 0
                 ) {
                     setShowBanner({
                         apiErrorResponse: "You must be Signed In!",
@@ -632,7 +632,7 @@ const Codingmain = (props) => {
                         md={6.5}
                         style={{ padding: "30px 10px" }}
                     >
-                        {Object.keys(question).length != 0 ? (
+                        {Object.keys(question).length !== 0 ? (
                             <Codeeditor
                                 defaultCode={defaultCode}
                                 question={question}

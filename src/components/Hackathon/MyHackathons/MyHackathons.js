@@ -45,7 +45,7 @@ const Myhackathons = () => {
                 })
                 .then((responses) => {
                     setCurrentUser(responses.data.currentUser);
-                    if(responses.data.currentUser.userType == "developer"){
+                    if(responses.data.currentUser.userType === "developer"){
                         setShowBanner({apiErrorResponse: "You must be an organization user to view this page!"})
                         return history.push('/dashboard')
                     }
@@ -170,7 +170,7 @@ const Myhackathons = () => {
                         </Card>
                     </Grid>
                 ))}
-                {myHackathons.length == 0 && (
+                {myHackathons.length === 0 && (
                 <Typography variant="h6" fontFamily="Open Sans">
                     You've not organized any hackathon yet! Please Navigation to &nbsp;
                     <Button variant="contained" href="/hackathon/organize/overview">Organize Page</Button>
