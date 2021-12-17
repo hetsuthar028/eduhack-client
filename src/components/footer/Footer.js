@@ -6,6 +6,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import MailIcon from "@mui/icons-material/Mail";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import getIcon from "../../static/Icons/getIcon";
 
 const Footer = () => {
     const useStyles = makeStyles((theme) => ({
@@ -108,25 +109,25 @@ const Footer = () => {
                         <IconButton
                             style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
-                            <FacebookIcon color="primary" />
+                            <img src={getIcon('facebook')} style={{height: "40px"}} alt="Facebook" />
                         </IconButton>
 
                         <IconButton
                             style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
-                            <InstagramIcon color="primary" />
+                            <img src={getIcon('instagram')} style={{height: "40px"}} alt="Instagram" />
                         </IconButton>
 
                         <IconButton
                             style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
-                            <MailIcon color="primary" />
+                            <img src={getIcon('mail')} style={{height: "40px"}} alt="EMail" />
                         </IconButton>
 
                         <IconButton
                             style={{ marginTop: "20px", marginBottom: "20px" }}
                         >
-                            <TwitterIcon color="primary" />
+                            <img src={getIcon('twitter')} style={{height: "40px"}} alt="Twitter" />
                         </IconButton>
                     </center>
                 </Grid>
@@ -187,14 +188,14 @@ const Footer = () => {
                         placeSelf: "center",
                     }}
                 >
-                    <Typography variant="subtitle1" fontFamily="Open Sans">
+                    <Typography variant="subtitle1" fontFamily="Open Sans" style={{placeSelf: "center"}}>
                         <center>
                             <strong>
-                                Copyright Reserved © 2021 |{" "}
+                                Copyright Reserved © 2021 |
                                 <img
                                     src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
-                                    height="15"
-                                    style={{ placeSelf: "center" }}
+                                    height="20"
+                                    
                                     alt="GitHub"
                                 />{" "}
                                 <a

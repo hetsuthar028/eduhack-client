@@ -48,7 +48,7 @@ export default function BasicTabs() {
     };
 
     return (
-        <Grid container sx={{ width: "100%" }}>
+        <Grid container>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <Tabs
                     value={value}
