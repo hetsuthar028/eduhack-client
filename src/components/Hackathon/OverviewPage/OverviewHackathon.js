@@ -22,6 +22,9 @@ const useStyles = makeStyles((theme) => ({
     mainFont: {
         fontFamily: "Open Sans",
     },
+    innerGridItem: {
+        marginTop: "20px"
+    }
 }));
 
 const Overviewhackathon = () => {
@@ -63,17 +66,13 @@ const Overviewhackathon = () => {
     return (
         <div>
             <NavBar location="dashboard" />
-            <Container style={{ marginTop: "20px" }}>
+            <Container style={{ marginTop: "10px" }}>
                 <Grid
                     container
-                    // xs={12}
-                    // sm={12}
-                    // md={12}
-                    // spacing={{ xs: 2, md: 4 }}
                     className={classes.overviewContainer}
                 >
                     {/* 1st Title Section */}
-                    <Grid item>
+                    <Grid item xs={12} sm={4} md={2}>
                         <img
                             src="https://source.unsplash.com/random"
                             height={150}
@@ -82,7 +81,7 @@ const Overviewhackathon = () => {
                             alt="EduHack"
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} sm={8} md={10}>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -99,7 +98,7 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* T2nd Introduction Section */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{marginTop: "30px"}}>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -108,7 +107,7 @@ const Overviewhackathon = () => {
                             Introduction
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{ marginTop: "10px" }}>
                         <Typography
                             variant="body1"
                             className={classes.mainFont}
@@ -130,7 +129,7 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* Benefits or Organizing with EduHack Section */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{marginTop: "30px"}}>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -139,7 +138,7 @@ const Overviewhackathon = () => {
                             Benefits of Organizing with EduHack
                         </Typography>
                     </Grid>
-                    <Grid item xs={7} sm={7} md={7}>
+                    <Grid item xs={7} sm={7} md={7} style={{ marginTop: "10px" }}>
                         <ul>
                             <Typography
                                 variant="body1"
@@ -158,7 +157,7 @@ const Overviewhackathon = () => {
                             </Typography>
                         </ul>
                     </Grid>
-                    <Grid item xs={5} sm={5} md={5}>
+                    <Grid item xs={5} sm={5} md={5} style={{ marginTop: "10px" }}>
                         <img
                             src="https://source.unsplash.com/random"
                             width="100%"
@@ -168,7 +167,7 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* Success Story */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{marginTop: "30px"}}>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -177,16 +176,16 @@ const Overviewhackathon = () => {
                             🤝 Success Story
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={5} md={5}>
+                    <Grid item xs={12} sm={5} md={5} style={{ marginTop: "10px" }}>
                         <img
                             src="https://source.unsplash.com/random"
                             width="40%"
-                            height="65%"
+                            height="100%"
                             style={{ borderRadius: "50%" }}
                             alt="Success Story"
                         />
                     </Grid>
-                    <Grid item xs={12} sm={7} md={7}>
+                    <Grid item xs={12} sm={7} md={7} style={{ marginTop: "10px" }}>
                         <Typography
                             variant="body1"
                             className={classes.mainFont}
@@ -206,7 +205,7 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* Process of creating and managing a hackathon */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{marginTop: "30px"}}>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -215,7 +214,7 @@ const Overviewhackathon = () => {
                             Process for creating and managing a hackathon
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{ marginTop: "10px" }}>
                         {/* <img src="https://source.unsplash.com/random"  width="100%" height={200} style={{borderRadius: "50px"}}/>  */}
 
                         <Stepper
@@ -237,7 +236,7 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* Terms & Conditions */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{marginTop: "30px"}}>
                         <Typography
                             fontFamily="Bebas Neue"
                             variant="h4"
@@ -246,7 +245,7 @@ const Overviewhackathon = () => {
                             Terms & Conditions
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{ marginTop: "10px" }}>
                         {/* <img src="https://source.unsplash.com/random"  width="100%" height={200} style={{borderRadius: "50px"}}/>  */}
 
                         <ul>
@@ -283,7 +282,7 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* Organize Hackathon Button */}
-                    <Grid item xs={12} sm={12} md={12}>
+                    <Grid item xs={12} sm={12} md={12} style={{marginTop: "20px"}}>
                         <center>
                             <Button
                                 variant="contained"
@@ -296,56 +295,6 @@ const Overviewhackathon = () => {
                     </Grid>
 
                     {/* Help? Contact Us */}
-                    <Grid item xs={12} sm={12} md={12}>
-                        <Typography
-                            fontFamily="Bebas Neue"
-                            variant="h4"
-                            letterSpacing="1px"
-                        >
-                            Need Help? Feel free to reach us!
-                        </Typography>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={4}
-                        md={4}
-                        style={{ placeSelf: "center" }}
-                    >
-                        <Typography
-                            variant="body1"
-                            className={classes.mainFont}
-                            fontFamily="Open Sans"
-                        >
-                            Email :
-                        </Typography>
-                        <TextField />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={4}
-                        md={4}
-                        style={{ placeSelf: "center" }}
-                    >
-                        <Typography
-                            variant="body1"
-                            className={classes.mainFont}
-                            fontFamily="Open Sans"
-                        >
-                            Description :
-                        </Typography>
-                        <TextField />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={12}
-                        sm={4}
-                        md={4}
-                        style={{ placeSelf: "center" }}
-                    >
-                        <Button variant="contained">Submit Query</Button>
-                    </Grid>
                 </Grid>
             </Container>
 

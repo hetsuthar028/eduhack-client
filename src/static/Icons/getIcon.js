@@ -28,6 +28,10 @@ import TensorflowSvg from './Tensorflow.svg';
 import MySQLSvg from './MySQL.svg';
 import MongoDBSvg from './MongoDB.svg';
 import CompanyLogo from './Eduhack3.svg';
+import FacebookSvg from './Facebook.svg';
+import InstagramSvg from './Instagram.svg';
+import TwitterSvg from './Twitter.svg';
+import MailSvg from './Mail.svg';
 
 export default function getIcon(iconName){
 
@@ -102,7 +106,14 @@ export default function getIcon(iconName){
             return AWSSvg
         case 'eduhack':
             return CompanyLogo
-
+        case 'facebook':
+            return FacebookSvg
+        case 'instagram':
+            return InstagramSvg
+        case 'twitter':
+            return TwitterSvg
+        case 'mail':
+            return MailSvg
         default:
             return TechnologySvg
         
